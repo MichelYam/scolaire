@@ -1,0 +1,215 @@
+.chat {
+    width: 100%;
+    height: 76vh;
+    display: flex;
+    margin: auto;
+}
+
+.chat-container {
+    width: 100%;
+    max-height: 100%;
+    box-shadow: 0px 8px 16px 0px rgb(0 0 0 / 20%);
+    border-radius: 10px;
+    display: flex;
+}
+
+.contacts {
+    width: 25%;
+    /* height: 100%; */
+    border: 1px solid transparent;
+    padding: 25px 10px;
+    background: #ffffff;
+    border-right: 1px solid #ccc;
+    max-height: 100%;
+    overflow: hidden;
+    border-radius: 10px 0 0 10px;
+}
+
+.contacts h3 {
+    padding: 0 18px;
+}
+
+.contact-list {
+    display: flex;
+    height: 73%;
+    flex-direction: column;
+    row-gap: 10px;
+    overflow-y: auto;
+    /* padding: 15px; */
+    position: relative;
+    flex: 1 1 auto;
+    padding: 1rem
+}
+
+.contact-info p {
+    margin: 0;
+}
+
+.contact-conversation {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    border-radius: 0 10px 10px 0;
+
+}
+
+.conversation-header {
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+}
+
+.conversation-header-contact {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.conversation-header-contact-info {
+    display: flex;
+    align-items: center;
+}
+
+
+.conversation-header-contact img {
+    width: 30px;
+    height: 30px;
+}
+
+.conversation-header-contact p {
+    margin: 0 0 0 10px;
+}
+
+.conversation-header-contact-call {
+    width: 20%;
+}
+
+.conversation-header-contact-call i {
+    margin: 0 15px;
+    cursor: pointer;
+}
+
+.conversation-content {
+    overflow-y: auto;
+    position: relative;
+    flex: 1 1 auto;
+    padding: 1rem;
+}
+
+.conversation-content .msg-body ul {
+    margin: 0;
+    padding: 0;
+}
+
+.msg-body ul li.sender {
+    display: block;
+    width: 100%;
+    position: relative;
+}
+
+.msg-body ul li.repaly {
+    display: block;
+    width: 100%;
+    text-align: right;
+    position: relative;
+}
+
+li.repaly .time {
+    margin-right: 20px;
+}
+
+.time {
+    display: block;
+    color: #000;
+    font-size: 12px;
+    line-height: 1.5;
+    font-weight: 400;
+}
+
+.conversation-send {
+    display: flex;
+    padding: 15px;
+    border-top: 1px solid #ccc;
+}
+
+.divider {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+.divider:after {
+    display: block;
+    content: "";
+    clear: both;
+    position: absolute;
+    top: 12px;
+    left: 0;
+    border-top: 1px solid #ebebeb;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.msg-body h6 {
+    margin: 0;
+    text-align: center;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #222;
+    background: #fff;
+    display: inline-block;
+    padding: 0 5px;
+    margin-bottom: 0;
+}
+
+.conversation-footer {
+    width: 100%;
+    height: 70px;
+    bottom: 0;
+}
+
+
+.conversation-send-container {
+    width: 100%;
+    height: 40px;
+    background-color: #D9D9D9;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+
+}
+
+.conversation-add {
+    padding: 10px;
+}
+
+.conversation-add i, .conversation-option i {
+    color: #000000;
+}
+
+.conversation-send input {
+    width: 100%;
+    border: none;
+    color: #000000;
+    height: 35px;
+    font-size: 20px;
+    background-color: #D9D9D9;
+}
+
+.conversation-send input:focus {
+    outline: none;
+}
+
+.conversation-option {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    width: 10%;
+}
+
+.conversation-option i {}

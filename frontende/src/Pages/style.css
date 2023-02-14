@@ -1,0 +1,46 @@
+.content {
+    position: relative;
+    background: #f3f6ff;
+    height: 100vh;
+    left: 260px;
+    width: calc(100% - 260px);
+    transition: all 0.5s ease;
+}
+
+.menu-top {
+    width: 100%;
+    justify-content: space-between;
+    box-shadow: 0px 8px 16px 0px rgb(0 0 0 / 20%);
+    display: flex;
+    background: #ffffff;
+}
+
+.sidebar.close~.content {
+    left: 78px;
+    width: calc(100% - 78px);
+}
+
+/*  */
+.home-content {
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.home-content .bx-menu,
+.home-content .text {
+    color: #233044;
+    font-size: 35px;
+}
+
+.home-content .bx-menu {
+    margin: 0 15px;
+    cursor: pointer;
+}
+
+.home-content .text {
+    font-size: 26px;
+    font-weight: 600;
+}
+
+/* page notFound */

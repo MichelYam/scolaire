@@ -1,0 +1,120 @@
+.table {
+    width: 95%;
+    height: 100%;
+    border: 1px solid #233044;
+    border-radius: 5px;
+}
+
+.table-header {
+    width: 100%;
+    display: flex;
+    border-bottom: 1px solid #233044;
+    padding: 16px;
+}
+
+.table-header-status {
+    width: 25%;
+    display: flex;
+}
+
+.table-header-status input {
+    margin-left: 5px;
+}
+
+.table-header-status .link {
+    margin-left: 10px;
+}
+
+.table-header-label {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.table-header-label span {
+    padding: 0 10px;
+}
+
+.issue-list {}
+
+.issue {
+    display: flex;
+    padding: 16px;
+    border-bottom: 1px solid #233044;
+    align-items: center;
+}
+
+.issue label {
+    margin: 0 5px;
+}
+
+.issue:nth-last-child(1) {
+    border-bottom: none;
+}
+
+.issue-header {
+    flex-direction: column;
+    margin-left: 5px;
+}
+
+.issue-header span {
+    font-size: 13px;
+    color: darkgray;
+}
+
+.issue-title {
+    display: flex;
+    align-items: center;
+}
+
+.issue-title .badge {
+    margin: 0 10px;
+}
+
+.badge {
+    border: 1px solid gray;
+    border-radius: 15px;
+    padding: 5px;
+    font-size: 11px;
+    background: #1f6feb;
+    color: #ffffff;
+}
+
+.issue-title .issue-link:hover {
+    color: #1f6feb;
+
+}
+
+
+
+/* table with react-table */
+
+
+table {
+    border-spacing: 0;
+    border: 1px solid black;
+}
+
+tr:last-child td {
+    border-bottom: 0;
+}
+
+th,
+td {
+    margin: 0;
+    padding: 0.5rem;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+}
+
+td:last-child {
+    border-right: 0;
+}
+
+.pagination {
+    display: flex;
+    padding: 0.5rem;
+    gap: 5px;
+}
+
+.navigation {}
