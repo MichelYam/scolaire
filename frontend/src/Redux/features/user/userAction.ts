@@ -5,11 +5,12 @@ import { saveStorage } from "../../../utils/TokenStorage";
 const BASE_URL = "http://localhost:3001/api/v1/user";
 
 export interface IUser {
-    email?: string,
-    password?: string,
-    firstName?: string;
-    lastName?: string;
-    remember?: boolean;
+    id?: string
+    email?: string
+    password?: string
+    firstName?: string
+    lastName?: string
+    remember?: boolean
 }
 export const userLogin = createAsyncThunk("user/login", async ({ email, password, remember }: IUser, { rejectWithValue }) => {
     try {
@@ -115,23 +116,20 @@ export const getAllUsers = createAsyncThunk('user/getAllUsers', async (arg, { re
         }
     }
 })
-// export const userDelete = createAsyncThunk('user/delete', async (id, { rejectWithValue, getState }) => {
-//     try {
-//         const config = {
-//             method: "POST",
-//             headers: {
-//                 "Content-Type": "application/json",
-//             },
-//         }
-//         const { data } = await axios.de(`${BASE_URL}/signup`, id, config);
-//         // console.log("login", data)
-//         sessionStorage.setItem("userToken", data.body.token)
-//         return data;
-//     } catch (error: any) {
-//         if (error.response && error.response.data.message) {
-//             return rejectWithValue(error.response.data.message)
-//         } else {
-//             return rejectWithValue(error.message)
-//         }
-//     }
-// })
+export const userDelete = createAsyncThunk('user/delete', async ({ id }: IUser, { rejectWithValue, getState }) => {
+    try {
+        const config = {
+            data: {
+                id: id
+            }
+        }
+        const { data } = await axios.delete(`${BASE_URL}/delete/${id}`);
+        // return data;
+    } catch (error: any) {
+        if (error.response && error.response.data.message) {
+            return rejectWithValue(error.response.data.message)
+        } else {
+            return rejectWithValue(error.message)
+        }
+    }
+})

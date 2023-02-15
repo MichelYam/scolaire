@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo } from 'react'
 import Table from "../../../Components/Table/Table"
-import { getAllUsers } from '../../../Redux/features/user/userAction'
+import { getAllUsers, userDelete } from '../../../Redux/features/user/userAction'
 import { useAppDispatch, useAppSelector } from '../../../Redux/store'
 import { selectUser } from '../../../utils/selector'
 import { redirect } from "react-router-dom";
+import { IUser } from '../../../Interfaces'
 const columns = [
     {
         title: 'First Name',
@@ -30,7 +31,10 @@ const Index = () => {
         if (userInfo?.role !== "admin") redirect("./dashboard");
         dispatch(getAllUsers())
     }, [])
-
+    const removeUser = (user: IUser) => {
+        console.log(user)
+        dispatch(userDelete(user))
+    }
     const Tablecolumns = useMemo(() => {
         const newColumns: any[] = []
         for (let column of columns) {
@@ -43,7 +47,7 @@ const Index = () => {
     }, [])
     return (
         <>
-            <Table columns={Tablecolumns} data={allUsers}></Table>
+            <Table columns={Tablecolumns} data={allUsers} removeUser={removeUser} />
         </>
     )
 }

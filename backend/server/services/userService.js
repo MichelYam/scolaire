@@ -100,22 +100,21 @@ module.exports.updateUserProfile = async serviceData => {
   }
 }
 
-// module.exports.deleteUser= async serviceData => {
-//   try {
-//       const jwtToken = serviceData.headers.authorization.split('Bearer')[1].trim()
-//       const decodedJwtToken = jwt.decode(jwtToken)
-//       const user = await User.findByIdAndDelete(decodedJwtToken._id)
+module.exports.deleteUser = async serviceData => {
+  try {
+    const { id } = serviceData.params
+    const user = await User.findByIdAndDelete(id)
 
-//       if (!user) {
-//           throw new Error('Task not found!')
-//       }
+    if (!user) {
+      throw new Error('User not found!')
+    }
 
-//       return user.toObject()
-//   } catch (error) {
-//       console.error('Error in userService.js', error)
-//       throw new Error(error)
-//   }
-// }
+    // return user.toObject()
+  } catch (error) {
+    console.error('Error in userService.js', error)
+    throw new Error(error)
+  }
+}
 
 
 module.exports.getAllUsers = async () => {

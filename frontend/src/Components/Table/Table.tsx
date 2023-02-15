@@ -1,6 +1,29 @@
-import React, { forwardRef, useEffect, useRef, useState } from 'react'
+import React, { forwardRef, HTMLProps, useEffect, useRef, useState } from 'react'
 import { useAsyncDebounce, useGlobalFilter, usePagination, useSortBy, useTable, useRowSelect } from 'react-table'
 import './style.css'
+// import IndeterminateCheckbox from './test'
+
+interface IIndeterminateInputProps {
+    indeterminate?: boolean;
+    // name: string;
+}
+
+const IndeterminateCheckbox = forwardRef<HTMLInputElement, IIndeterminateInputProps>(
+    ({ indeterminate, ...rest }, ref) => {
+        const defaultRef = useRef(null);
+        const resolvedRef: any = ref || defaultRef;
+
+        useEffect(() => {
+            resolvedRef.current.indeterminate = indeterminate;
+        }, [resolvedRef, indeterminate]);
+        return (
+            <>
+                <input type="checkbox" ref={resolvedRef} {...rest} />
+            </>
+        );
+    }
+);
+
 const Index = ({ columns, data }: any) => {
     const {
         getTableProps,
@@ -26,13 +49,20 @@ const Index = ({ columns, data }: any) => {
                 // Let's make a column for selection
                 {
                     id: 'selection',
+                    // The header can use the table's getToggleAllRowsSelectedProps method
+                    // to render a checkbox
+                    Header: ({ getToggleAllPageRowsSelectedProps }) => (
+                        <div>
+                            <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
+                        </div>
+                    ),
                     // The cell can use the individual row's getToggleRowSelectedProps method
                     // to the render a checkbox
-                    // Cell: ({ row }) => (
-                    //     <div>
-                    //         <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-                    //     </div>
-                    // ),
+                    Cell: ({ row }) => (
+                        <div>
+                            <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+                        </div>
+                    ),
                 },
                 ...columns,
             ])
@@ -86,20 +116,15 @@ const Index = ({ columns, data }: any) => {
     }, 200)
     return (
         <div>
-            <div className=''>
+            <div className='table-search'>
+                <input className="form-control" type="search" id='search' value={value || ""} placeholder="Search employee"
+                    onChange={e => {
+                        setValue(e.target.value);
+                        onChange(e.target.value);
+                    }}
+                    aria-controls='employee-table'
+                />
                 <div className=''>
-                    {/* <SearchLabel className='mr-2' htmlFor='search'>
-                        Search:
-                    </SearchLabel> */}
-                    <input className="form-control" type="search" id='search' value={value || ""} placeholder="Search employee"
-                        onChange={e => {
-                            setValue(e.target.value);
-                            onChange(e.target.value);
-                        }}
-                        aria-controls='employee-table'
-                    />
-                </div>
-                <div >
                     <label className='d-flex align-items-center'>
                         Show{' '}
                         <select className="form-select form-select-sm"
@@ -191,6 +216,20 @@ const Index = ({ columns, data }: any) => {
                     </ul>
                 </nav>
             </div>
+            <pre>
+                <code>
+                    {JSON.stringify(
+                        {
+                            selectedRowIds: selectedRowIds,
+                            'selectedFlatRows[].original': selectedFlatRows.map(
+                                d => d.original
+                            ),
+                        },
+                        null,
+                        2
+                    )}
+                </code>
+            </pre>
         </div >
     )
 }

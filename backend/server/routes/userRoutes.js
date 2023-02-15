@@ -28,5 +28,9 @@ router.get(
   // authorize(Role.Admin),
   userController.getAllUsers
 )
+router.get(
+  "/delete/:id",
+  userController.deleteUser
+)
 
 module.exports = router

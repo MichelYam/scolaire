@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IUser } from "../../../Interfaces";
 import { clearStorage } from "../../../utils/TokenStorage";
-import { userLogin, userRegister, getUserDetails, updateUserProfile, getAllUsers } from './userAction'
+import { userLogin, userRegister, getUserDetails, updateUserProfile, getAllUsers, userDelete } from './userAction'
 
 
 
@@ -11,7 +11,7 @@ export interface IDataAPI {
     userInfo: IUser | null,
     userToken: string | null,
     error: string | null,
-    allUsers: [],
+    allUsers: IUser[],
 }
 
 const initialState: IDataAPI = {
@@ -20,7 +20,7 @@ const initialState: IDataAPI = {
     userInfo: null,
     userToken: sessionStorage.getItem('userToken') || localStorage.getItem('userToken') || null,
     error: null,
-    allUsers : [],
+    allUsers: [],
 }
 const userSlice = createSlice({
     name: 'user',
@@ -92,7 +92,7 @@ const userSlice = createSlice({
                 state.error = payload
             })
 
-            //Get all  users
+            //Get all users
             .addCase(getAllUsers.pending, (state) => {
                 state.loading = true
             })
@@ -104,6 +104,21 @@ const userSlice = createSlice({
                 state.loading = false
                 state.error = payload
             })
+
+            //Delete user
+            .addCase(userDelete.pending, (state) => {
+                state.loading = true
+            })
+            .addCase(userDelete.fulfilled, (state, { payload }) => {
+                const { id }: any = payload;
+                state.loading = false
+                state.allUsers = state.allUsers.filter(user => user.id !== id)
+            })
+            .addCase(userDelete.rejected, (state, { payload }: any) => {
+                state.loading = false
+                state.error = payload
+            })
+
 
     }
 });

@@ -20,6 +20,7 @@ export default function defineRulesFor(role: string) {
 
     if (role === "admin") {
         can("view", "UserList");
+        can(["read", "create"], "Task");
     } else if (role === "tutor") {
         can(["read", "create"], "Task");
         can(["update", "delete"], "Task", { assignee: "me" });
