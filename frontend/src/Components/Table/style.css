@@ -71,14 +71,14 @@
     margin: 0 10px;
 }
 
-.badge {
+/* .badge {
     border: 1px solid gray;
     border-radius: 15px;
     padding: 5px;
     font-size: 11px;
     background: #1f6feb;
     color: #ffffff;
-}
+} */
 
 .issue-title .issue-link:hover {
     color: #1f6feb;
