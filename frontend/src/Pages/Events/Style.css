@@ -72,10 +72,13 @@
 
 .event-list {
     /* height: 100%; */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     overflow-y: auto;
 }
 
-.event-card {
+.card {
     width: 350px;
     height: 80px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
@@ -87,22 +90,22 @@
     overflow: hidden;
 }
 
-.event-card .event-card-header {
+.card .card-header {
     display: flex;
     justify-content: space-between;
 }
 
-.event-card .event-card-header h2 {
+.card .card-header h2 {
     font-size: 20px;
     margin: 0;
 }
 
-.event-card-badge {
+.card-badge {
     display: flex;
     gap: 10px;
 }
 
-.event-card-badge .badge {
+.card-badge .badge {
     border: 1px solid transparent;
     border-radius: 15px;
     padding: 5px 15px;
@@ -111,35 +114,31 @@
     color: #ffffff;
 }
 
-.event-card .event-card-body p, .event-card-footer p {
+.card .card-body p, .card-footer p {
     width: 100%;
     font-size: 14px;
     margin-top: 10px;
     margin-bottom: 0;
 }
 
-.event-card-footer {
+.card-footer {
     width: 100%;
-    /* position: relative; */
 }
 
-.event-card-footer p {
-    /* position: relative; */
+.card-footer p {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.event-card-footer p::before {
+.card-footer p::before {
     content: "";
     display: block;
     border-top: 2px solid black;
     width: 25px;
     height: 1px;
-    /* position: absolute; */
     top: 50%;
     z-index: 1;
-    /* flex: 1; */
 }
 
 .calendar {

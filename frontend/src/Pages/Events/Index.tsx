@@ -61,18 +61,18 @@ const Index = () => {
             <h2> évènements</h2>
             <div className='event-list'>
               {example.map((item, index) => (
-                <div key={index} className='event-card'>
-                  <div className='event-card-header'>
+                <div key={index} className='card'>
+                  <div className='card-header'>
                     <h2>Informatiques</h2>
-                    <div className='event-card-badge'>
+                    <div className='card-badge'>
                       <span className='badge'>12h00</span>
                       <span className='badge'>{item.date}</span>
                     </div>
                   </div>
-                  <div className='event-card-body'>
+                  <div className='card-body'>
                     <p>{item.description}</p>
                   </div>
-                  <div className="event-card-footer">
+                  <div className="card-footer">
                     <p>avec {item.createdBy}</p>
                   </div>
                 </div>
