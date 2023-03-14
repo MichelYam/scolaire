@@ -27,14 +27,17 @@ const UserSchema = new Schema({
     required: true,
     unique: true
   },
+  dateOfBirth: {
+    type: String,
+    required: true
+  },
   password: {
     type: String,
     required: true
   },
   role: {
     type: String,
-    default: 'member',
-    enum: ['admin', 'student', "tutor", "member"]
+    enum: ['admin', 'student', "tutor"]
   },
   friendList: {
     type: [Schema.Types.ObjectId],

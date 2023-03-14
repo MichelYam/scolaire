@@ -12,10 +12,12 @@ module.exports.createUser = async serviceData => {
     const hashPassword = await bcrypt.hash(serviceData.password, 12)
 
     const newUser = new User({
-      email: serviceData.email,
-      password: hashPassword,
       firstName: serviceData.firstName,
       lastName: serviceData.lastName,
+      dateOfBirth: serviceData.dateOfBirth,
+      email: serviceData.email,
+      password: hashPassword,
+      role: serviceData.role
     })
 
     let result = await newUser.save()

@@ -43,11 +43,11 @@ const Index = ({ title, isLogin }: IForm) => {
     }
     return (
         <form onSubmit={handleSubmit}>
-            <div className="control-input">
+            <div className="form-group">
                 <label htmlFor="email">Email: </label>
                 <input type="email" id="email" name='email' onChange={handleChangeValue} value={data.email} required />
             </div>
-            <div className="control-input">
+            <div className="form-group">
                 <label htmlFor="email">Password </label>
                 <input type="password" id="password" name='password' onChange={handleChangeValue} value={data.password} required />
                 <span className='message-help'>Mot de passe oublié ?</span>
@@ -56,7 +56,7 @@ const Index = ({ title, isLogin }: IForm) => {
                 <input type="checkbox" id="remember" onChange={handleChangeValue} />
                 <label htmlFor="remember"> Remember me</label>
             </div>
-            <div className='control-input-btn'>
+            <div className='form-group-btn'>
                 <button className='btn'>{title}</button>
             </div>
         </form>

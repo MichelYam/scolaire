@@ -21,6 +21,7 @@ const AppLayout = () => {
             dispatch(getUserDetails())
         }
     }, [userToken, dispatch])
+
     return (
         <>
             <SideBar logout={logOut} sidebarOpen={sidebarOpen} appRoutes={appRoutes} />

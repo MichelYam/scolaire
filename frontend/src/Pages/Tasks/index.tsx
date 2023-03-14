@@ -63,7 +63,9 @@ const Index = () => {
                     <p>{task.dateDue}</p>
                     <span className='task-status'>{task.status}</span>
                   </div>
-                  <button onClick={() => deleteTaskByID(task._id)}>delete</button>
+                  <Can I="delete" a="Task">
+                    <button onClick={() => deleteTaskByID(task._id)}>delete</button>
+                  </Can>
                 </div>
               ))}
             </div>
@@ -71,27 +73,30 @@ const Index = () => {
         </div>
         <div className='task-view'>
           {/* component */}
-          <div className='task-view-header'>
-            <h2>Mathématique</h2>
-          </div>
-          <div className='task-view-body'>
-            <div className='task-view-description'>
-              <label htmlFor="description">Description</label>
-              <div>
-                <p>Faire 5 exercices de la page 255 de votre livre</p>
-              </div>
-              {/* <textarea name="" id="" cols="30" rows="10"></textarea> */}
+          <h2>Tets</h2>
+          <div className='task-container'>
+            <div className='task-view-header'>
+              <h2>Mathématique</h2>
             </div>
-            <div className='task-view-assigne'>
-              <div className='task-assigned'>
-                <p>Assigné par :</p>
-                <p>avatar KEKW</p>
+            <div className='task-view-body'>
+              <div className='task-view-description'>
+                <label htmlFor="description">Description</label>
+                <div>
+                  <p>Faire 5 exercices de la page 255 de votre livre</p>
+                </div>
+                {/* <textarea name="" id="" cols="30" rows="10"></textarea> */}
               </div>
-              <p>Donné le :  <span>en cours</span> </p>
-            </div>
-            <div className='task-view-date'>
-              <p>Date limite: <span>22 février 2021 à 16h30</span> </p>
-              <p>Statut: <span>22 février 2021 à 16h30</span> </p>
+              <div className='task-view-assigne'>
+                <div className='task-assigned'>
+                  <p>Assigné par :</p>
+                  <p>avatar KEKW</p>
+                </div>
+                <p>Donné le :  <span>en cours</span> </p>
+              </div>
+              <div className='task-view-date'>
+                <p>Date limite: <span>22 février 2021 à 16h30</span> </p>
+                <p>Statut: <span>22 février 2021 à 16h30</span> </p>
+              </div>
             </div>
           </div>
         </div>

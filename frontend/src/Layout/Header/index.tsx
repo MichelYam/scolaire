@@ -33,13 +33,12 @@ const Index = ({ firstName, sidebarOnClose }: IProps) => {
                 </li>
                 <li className='topmenu-item' onClick={() => setIsOpen(!isOpen)}>
                     <Link className="nav-link" to="#">
+                        <span>
+                            <span className="account-user-name">{firstName}</span>
+                        </span>
                         <div className="account-user-avatar">
                             <img src="./assets/img/avatar.png" alt="" />
                         </div>
-                        <span>
-                            <span className="account-user-name">{firstName}</span>
-                            {/* <span className="account-position">Employee</span> */}
-                        </span>
                     </Link>
                     <div className={`dropdown-menu dropdown-content ${isOpen ? "show" : ""}`}>
                         <div className=" dropdown-header noti-title">

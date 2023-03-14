@@ -11,7 +11,9 @@ export interface IUser {
     firstName?: string
     lastName?: string
     remember?: boolean
+    role?: string
 }
+
 export const userLogin = createAsyncThunk("user/login", async ({ email, password, remember }: IUser, { rejectWithValue }) => {
     try {
         const config = {
@@ -76,7 +78,7 @@ export const updateUserProfile = createAsyncThunk("user/updateUserProfile", asyn
 )
 
 
-export const userRegister = createAsyncThunk('user/userRegister', async ({ lastName, firstName, email, password }: IUser, { rejectWithValue }) => {
+export const userRegister = createAsyncThunk('user/userRegister', async (userData: IUser, { rejectWithValue }) => {
     try {
         const config = {
             method: "POST",
@@ -84,8 +86,8 @@ export const userRegister = createAsyncThunk('user/userRegister', async ({ lastN
                 "Content-Type": "application/json",
             },
         }
-        const { data } = await axios.post(`${BASE_URL}/signup`, { lastName, firstName, email, password }, config);
-        // console.log("login", data)
+        const { data } = await axios.post(`${BASE_URL}/signup`, userData, config);
+        console.log("login", data)
         sessionStorage.setItem("userToken", data.body.token)
         return data;
     } catch (error: any) {

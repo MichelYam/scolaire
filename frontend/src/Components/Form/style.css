@@ -3,19 +3,19 @@ form {
     padding: 10px;
 }
 
-.control-input, .control-input-btn {
+.form-group, .form-group-btn {
     display: flex;
     flex-direction: column;
     width: 100%;
     margin-bottom: 10px;
 }
 
-.control-input label {
+.form-group label {
     margin-bottom: 10px;
     font-size: 24px;
 }
 
-.control-input input {
+.form-group input {
     height: 60px;
     padding: 0 10px;
     font-size: 24px;
@@ -24,11 +24,11 @@ form {
     background-color: #ffffff;
 }
 
-.control-input input:focus {
+.form-group input:focus {
     outline: none;
 }
 
-.control-input-btn {
+.form-group-btn {
     align-items: center;
     margin: 20px 0;
 }
