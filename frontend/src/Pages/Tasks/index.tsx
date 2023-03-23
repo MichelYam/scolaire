@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Modal } from '../../Components/Modal'
 import { useAppDispatch, useAppSelector } from '../../Redux/store'
-import { createTask, deleteTask, getMyTasks } from "../../Redux/features/task/taskAction"
-import { selectTask } from '../../utils/selector'
+import { createTask, deleteTask, getMyTasks, getMyTasksAssignee } from "../../Redux/features/task/taskAction"
+import { selectTask, selectUser } from '../../utils/selector'
 
 import "./style.css"
 import Can from '../../Components/Can'
@@ -10,19 +10,20 @@ import { Task } from '../../Redux/features/task/taskSlice'
 
 const Index = () => {
   const dispatch = useAppDispatch()
+  const { userInfo } = useAppSelector(selectUser)
   const { tasks } = useAppSelector(selectTask)
   const [edit, setEdit] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
-  const [openTaskView, setOpenTaskView] = useState(false)
+  const [inputText, setInputText] = useState("");
   const [taskData, setTaskData] = useState({
     title: "",
     description: "",
     assignee: "",
     dateDue: '',
   })
-
+  const test = userInfo?.role === "Tutor" ? getMyTasksAssignee() : getMyTasks()
   useEffect(() => {
-    dispatch(getMyTasks())
+    dispatch(test)
   }, [tasks])
 
   const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,6 +51,9 @@ const Index = () => {
       <div className = 'task-container'>
         <div className='task-view-header'>
           <h2>${task.title}</h2>
+          <Can I="update" a="Task">
+            <button onClick={() => deleteTaskByID(task._id)}>Edit</button>
+          </Can>
           </div>
           <div className='task-view-body'>
           <div className='task-view-description'>
@@ -61,11 +65,11 @@ const Index = () => {
               <p>Assigné par :</p>
               <p>${task.createdBy}</p>
             </div>
-            <p>Donné le :  <span>${task.createdBy}</span> </p>
+            <p>Donné a <span>${task.assignee}</span> le : <span>${task.date}</span> </p>
           </div>
           <div className='task-view-date'>
             <p>Date limite: <span>${task.dateDue}</span> </p>
-            <p>Statut: <span>${task.statut}0</span> </p>
+            <p>Statut: <span>${task.statut}</span> </p>
           </div>
         </div >
       </div > `;
@@ -76,6 +80,17 @@ const Index = () => {
     }
     return container
   }
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    var lowerCase = event.target.value.toLowerCase();
+    setInputText(lowerCase);
+  }
+  const filteredData = tasks.filter((el) => {
+    if (inputText === '') {
+      return el;
+    } else {
+      return el.title.toLowerCase().includes(inputText)
+    }
+  })
   return (
     <>
       <div className='section_task'>
@@ -83,7 +98,7 @@ const Index = () => {
           <h2>tâches en cours</h2>
           <div className='task-progress-container'>
             <div className='task-progress-search'>
-              <input type="text" name="searchTask" id="searchTask" />
+              <input type="text" name="searchTask" id="searchTask" onChange={(event) => handleSearch(event)} placeholder="Search task...." />
               <Can I="create" a="Task">
                 <div className='task-add' onClick={() => setIsOpen(true)}>
                   <i className='bx bx-plus'></i>
@@ -91,7 +106,7 @@ const Index = () => {
               </Can>
             </div>
             <div className='task-list'>
-              {tasks.map((task, index) => (
+              {filteredData.map((task, index) => (
                 <div key={index} className='task' onClick={() => showTicket(index, task)}>
                   <div className='task-description'>
                     <p>{task.title}</p>
@@ -111,32 +126,8 @@ const Index = () => {
         </div>
         <div className='task-view'>
           {/* view task */}
-          <h2>Tets</h2>
-          <div className='task-container' id='task-container'>
-            {/* <div className='task-view-header'>
-              <h2>Mathématique</h2>
-            </div>
-            <div className='task-view-body'>
-              <div className='task-view-description'>
-                <label htmlFor="description">Description</label>
-                <div>
-                  <p>Faire 5 exercices de la page 255 de votre livre</p>
-                </div>
-                <textarea name="" id="" cols="30" rows="10"></textarea>
-              </div>
-              <div className='task-view-assigne'>
-                <div className='task-assigned'>
-                  <p>Assigné par :</p>
-                  <p>avatar KEKW</p>
-                </div>
-                <p>Donné le :  <span>en cours</span> </p>
-              </div>
-              <div className='task-view-date'>
-                <p>Date limite: <span>22 février 2021 à 16h30</span> </p>
-                <p>Statut: <span>22 février 2021 à 16h30</span> </p>
-              </div>
-            </div>*/}
-          </div>
+          <h2>Tâche</h2>
+          <div className='task-container' id='task-container'></div>
         </div>
         {/* task done */}
         <div className='task-done'>

@@ -18,6 +18,12 @@ router.post(
     taskController.getUserTasks
 )
 
+router.post(
+    '/myTasksAssignee',
+    tokenValidation.validateToken,
+    taskController.getUserTasksAssignee
+)
+
 router.put(
     '/:_id',
     tokenValidation.validateToken,

@@ -33,6 +33,21 @@ module.exports.getUserTasks = async (req) => {
     }
 }
 
+module.exports.getUserTasksAssignee = async (req) => {
+    const jwtToken = req.headers.authorization.split('Bearer')[1].trim()
+    const decodedJwtToken = jwt.decode(jwtToken)
+    try {
+        const tasks = await Task.find({ createdBy: decodedJwtToken.email })
+        if (!tasks) {
+            throw new Error('Tasks not found!')
+        }
+        return tasks
+    } catch (error) {
+        console.error('Error in userService.js', error)
+        throw new Error(error)
+    }
+}
+
 module.exports.updateTask = async serviceData => {
     try {
         const jwtToken = serviceData.headers.authorization.split('Bearer')[1].trim()

@@ -19,12 +19,12 @@ export const appAbility = Ability as AbilityClass<AppAbility>;
 export default function defineRulesFor(role: string) {
     const { can, rules } = new AbilityBuilder(appAbility);
 
-    if (role === "admin") {
+    if (role === "Admin") {
         can("view", "UserList");
         can(["read", "create"], "Task");
-    } else if (role === "tutor") {
+    } else if (role === "Tutor") {
         can(["read", "create"], "Task");
-        can(["update", "delete"], "Task", { assignee: "me" });
+        can(["update", "delete"], "Task");
     } else {
         can("view", "Task", { assignee: "me" });
         can("view", "Event", { assignee: "me" });

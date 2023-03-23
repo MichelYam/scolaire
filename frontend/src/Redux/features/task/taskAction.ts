@@ -9,6 +9,7 @@ interface ITaskParams {
     description?: string,
     assignee?: string;
     dateDue?: string;
+    date?: string;
 }
 
 export const createTask = createAsyncThunk("task/create", async ({ title, description, assignee, dateDue }: ITaskParams, { rejectWithValue, getState }) => {
@@ -43,6 +44,27 @@ export const getMyTasks = createAsyncThunk('task/myTasks', async (arg, { rejectW
             },
         }
         const { data } = await axios.post(`${BASE_URL}/myTasks`, arg, config)
+        // console.log(data);
+
+        return data
+    } catch (error: any) {
+        if (error.response && error.response.data.message) {
+            return rejectWithValue(error.response.data.message)
+        } else {
+            return rejectWithValue(error.message)
+        }
+    }
+})
+
+export const getMyTasksAssignee = createAsyncThunk('task/myTasksAssignee', async (arg, { rejectWithValue, getState }) => {
+    const { user }: any = getState()
+    try {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${user.userToken}`
+            },
+        }
+        const { data } = await axios.post(`${BASE_URL}/myTasksAssignee`, arg, config)
         // console.log(data);
 
         return data
