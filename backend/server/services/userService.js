@@ -106,6 +106,7 @@ module.exports.updateUserProfile = async serviceData => {
 module.exports.deleteUser = async serviceData => {
   try {
     const { id } = serviceData.params
+    console.log(id);
     const user = await User.findByIdAndDelete(id)
 
     if (!user) {

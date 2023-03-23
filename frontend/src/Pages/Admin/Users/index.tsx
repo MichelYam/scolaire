@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react'
 import Table from "../../../Components/Table/Table"
-import { getAllUsers, userDelete } from '../../../Redux/features/user/userAction'
+import { getAllUsers, deleteUser } from '../../../Redux/features/user/userAction'
 import { useAppDispatch, useAppSelector } from '../../../Redux/store'
 import { selectUser } from '../../../utils/selector'
 import { redirect } from "react-router-dom";
@@ -26,14 +26,14 @@ const columns = [
 const Index = () => {
     const dispatch = useAppDispatch()
     const { allUsers, userInfo } = useAppSelector(selectUser)
-    
+
     useEffect(() => {
         if (userInfo?.role !== "Admin") redirect("./dashboard");
         dispatch(getAllUsers())
-    }, [])
+    }, [allUsers])
     const removeUser = (user: IUser) => {
         console.log(user)
-        dispatch(userDelete(user))
+        dispatch(deleteUser(user))
     }
     const Tablecolumns = useMemo(() => {
         const newColumns: any[] = []

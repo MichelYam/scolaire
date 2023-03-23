@@ -28,7 +28,7 @@ router.get(
   // authorize(Role.Admin),
   userController.getAllUsers
 )
-router.get(
+router.delete(
   "/delete/:id",
   userController.deleteUser
 )

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IUser } from "../../../Interfaces";
 import { clearStorage } from "../../../utils/TokenStorage";
-import { userLogin, userRegister, getUserDetails, updateUserProfile, getAllUsers, userDelete } from './userAction'
+import { userLogin, userRegister, getUserDetails, updateUserProfile, getAllUsers, deleteUser } from './userAction'
 
 
 
@@ -106,15 +106,15 @@ const userSlice = createSlice({
             })
 
             //Delete user
-            .addCase(userDelete.pending, (state) => {
+            .addCase(deleteUser.pending, (state) => {
                 state.loading = true
             })
-            .addCase(userDelete.fulfilled, (state, { payload }) => {
+            .addCase(deleteUser.fulfilled, (state, { payload }) => {
                 const { id }: any = payload;
                 state.loading = false
                 state.allUsers = state.allUsers.filter(user => user.id !== id)
             })
-            .addCase(userDelete.rejected, (state, { payload }: any) => {
+            .addCase(deleteUser.rejected, (state, { payload }: any) => {
                 state.loading = false
                 state.error = payload
             })

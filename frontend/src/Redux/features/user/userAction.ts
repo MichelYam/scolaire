@@ -116,15 +116,12 @@ export const getAllUsers = createAsyncThunk('user/getAllUsers', async (arg, { re
         }
     }
 })
-export const userDelete = createAsyncThunk('user/delete', async ({ id }: IUser, { rejectWithValue, getState }) => {
+export const deleteUser = createAsyncThunk('user/delete', async ({ id }: IUser, { rejectWithValue, getState }) => {
+    console.log(id);
+    
     try {
-        const config = {
-            data: {
-                id: id
-            }
-        }
         const { data } = await axios.delete(`${BASE_URL}/delete/${id}`);
-        // return data;
+        return data;
     } catch (error: any) {
         if (error.response && error.response.data.message) {
             return rejectWithValue(error.response.data.message)

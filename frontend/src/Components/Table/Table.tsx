@@ -3,28 +3,28 @@ import { useAsyncDebounce, useGlobalFilter, usePagination, useSortBy, useTable, 
 import './style.css'
 // import IndeterminateCheckbox from './test'
 
-interface IIndeterminateInputProps {
-    indeterminate?: boolean;
-    // name: string;
-}
+// interface IIndeterminateInputProps {
+//     indeterminate?: boolean;
+//     // name: string;
+// }
 
-const IndeterminateCheckbox = forwardRef<HTMLInputElement, IIndeterminateInputProps>(
-    ({ indeterminate, ...rest }, ref) => {
-        const defaultRef = useRef(null);
-        const resolvedRef: any = ref || defaultRef;
+// const IndeterminateCheckbox = forwardRef<HTMLInputElement, IIndeterminateInputProps>(
+//     ({ indeterminate, ...rest }, ref) => {
+//         const defaultRef = useRef(null);
+//         const resolvedRef: any = ref || defaultRef;
 
-        useEffect(() => {
-            resolvedRef.current.indeterminate = indeterminate;
-        }, [resolvedRef, indeterminate]);
-        console.log(resolvedRef);
+//         useEffect(() => {
+//             resolvedRef.current.indeterminate = indeterminate;
+//         }, [resolvedRef, indeterminate]);
+//         console.log(resolvedRef);
 
-        return (
-            <>
-                <input type="checkbox" ref={resolvedRef} {...rest} />
-            </>
-        );
-    }
-);
+//         return (
+//             <>
+//                 <input type="checkbox" ref={resolvedRef} {...rest} />
+//             </>
+//         );
+//     }
+// );
 
 const Index = ({ columns, data, removeUser }: any) => {
     const {
@@ -51,27 +51,14 @@ const Index = ({ columns, data, removeUser }: any) => {
                 // Let's make a column for selection
                 {
                     id: 'selection',
-                    // The header can use the table's getToggleAllRowsSelectedProps method
-                    // to render a checkbox
                     Header: ({ getToggleAllPageRowsSelectedProps }) => (
                         <div>
-                            <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
+                            {/* <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} /> */}
                         </div>
                     ),
-                    // The cell can use the individual row's getToggleRowSelectedProps method
-                    // to the render a checkbox
                     Cell: ({ row }) => (
-
                         <div>
-                            {/* <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} /> */}
-                            <button onClick={() => {
-                                const dataCopy = [...data];
-                                // It should not matter what you name tableProps. It made the most sense to me.
-                                dataCopy.splice(row.index, 1);
-                                    console.log(data)
-                                    // removeUser()
-                            }
-                            }>
+                            <button onClick={() => { removeUser(row.original) }}>
                                 Delete
                             </button>
                         </div>
@@ -229,7 +216,7 @@ const Index = ({ columns, data, removeUser }: any) => {
                     </ul>
                 </nav>
             </div>
-            <pre>
+            {/* <pre>
                 <code>
                     {JSON.stringify(
                         {
@@ -242,7 +229,7 @@ const Index = ({ columns, data, removeUser }: any) => {
                         2
                     )}
                 </code>
-            </pre>
+            </pre> */}
         </div >
     )
 }
