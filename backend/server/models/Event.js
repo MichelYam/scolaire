@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // Create Schema
-const TaskSchema = new Schema({
+const EventSchema = new Schema({
   title: {
     type: String,
     required: true
@@ -20,14 +20,10 @@ const TaskSchema = new Schema({
   createdBy: {
     type: String,
   },
-  statut: {
-    type: String,
-    default: "en cours"
-  },
   date: {
     type: Date,
     default: Date.now
   }
 });
 
-module.exports = Task = mongoose.model("tasks", TaskSchema);
+module.exports = Event = mongoose.model("events", EventSchema);

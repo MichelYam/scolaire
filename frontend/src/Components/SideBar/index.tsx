@@ -29,7 +29,8 @@ const Index = ({ logout, sidebarOpen, appRoutes }: IProps) => {
                 </Link>
             </div>
             <ul className="nav-links">
-                {appRoutes.map((item, index) => (
+
+                {userInfo?.role !== "Admin" ? appRoutes.map((item, index) => (
                     <li key={index} className={splitLocation[1] === item.state ? 'active' : ''}>
                         < Link to={item.path} >
                             <i className={`bx ${item.sidebarProps?.icon}`} />
@@ -37,16 +38,19 @@ const Index = ({ logout, sidebarOpen, appRoutes }: IProps) => {
                         </Link>
                     </li>
                 ))
+                    :
+                    // <Can I="view" a="UserList">
+                    <>
+                        {/* <p className='sidebar-title'>Management</p> */}
+                        <li className={splitLocation[1] === "users" ? 'active' : ''}>
+                            <Link to="/users">
+                                <i className='bx bx-check-shield'></i>
+                                <span className="link_name">Users</span>
+                            </Link>
+                        </li>
+                    </>
+                    // </Can>
                 }
-                <Can I="view" a="UserList">
-                    <p className='sidebar-title'>Management</p>
-                    <li className={splitLocation[1] === "users" ? 'active' : ''}>
-                        <Link to="/users">
-                            <i className='bx bx-check-shield'></i>
-                            <span className="link_name">Users</span>
-                        </Link>
-                    </li>
-                </Can>
                 {/* {
                     userInfo?.role === "admin" ? <>
                         <p className='sidebar-title'>Management</p>

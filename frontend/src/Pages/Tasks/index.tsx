@@ -3,15 +3,17 @@ import { Modal } from '../../Components/Modal'
 import { useAppDispatch, useAppSelector } from '../../Redux/store'
 import { createTask, deleteTask, getMyTasks } from "../../Redux/features/task/taskAction"
 import { selectTask } from '../../utils/selector'
+
 import "./style.css"
 import Can from '../../Components/Can'
+import { Task } from '../../Redux/features/task/taskSlice'
 
 const Index = () => {
   const dispatch = useAppDispatch()
   const { tasks } = useAppSelector(selectTask)
-
+  const [edit, setEdit] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
-  const [myTasks, setMyTasks] = useState(false)
+  const [openTaskView, setOpenTaskView] = useState(false)
   const [taskData, setTaskData] = useState({
     title: "",
     description: "",
@@ -37,7 +39,43 @@ const Index = () => {
   const deleteTaskByID = (_id: string) => {
     dispatch(deleteTask({ _id }))
   }
+  const showTicket = (index: number, task: Task) => {
+    let counter = 0
+    if (counter === undefined || index !== index) counter = 0
+    if (index === undefined || index !== index) index = index
+    const container = document.getElementById("task-container") as HTMLInputElement
+    if (counter % 2 === 0) {
 
+      container.innerHTML = `
+      <div className = 'task-container'>
+        <div className='task-view-header'>
+          <h2>${task.title}</h2>
+          </div>
+          <div className='task-view-body'>
+          <div className='task-view-description'>
+            <label htmlFor="description">Description</label>
+            ${edit ? <textarea name="" id="" cols={30} rows={10}>${task.description}</textarea> : <p>${task.description}</p>}
+          </div >
+          <div className='task-view-assigne'>
+            <div className='task-assigned'>
+              <p>Assigné par :</p>
+              <p>${task.createdBy}</p>
+            </div>
+            <p>Donné le :  <span>${task.createdBy}</span> </p>
+          </div>
+          <div className='task-view-date'>
+            <p>Date limite: <span>${task.dateDue}</span> </p>
+            <p>Statut: <span>${task.statut}0</span> </p>
+          </div>
+        </div >
+      </div > `;
+      counter++
+    } else {
+      counter++
+      return container.innerHTML = ""
+    }
+    return container
+  }
   return (
     <>
       <div className='section_task'>
@@ -54,14 +92,14 @@ const Index = () => {
             </div>
             <div className='task-list'>
               {tasks.map((task, index) => (
-                <div key={index} className='task'>
+                <div key={index} className='task' onClick={() => showTicket(index, task)}>
                   <div className='task-description'>
                     <p>{task.title}</p>
-                    <span>{`par ${task.createdBy}`}</span>
+                    <span>{`par ${task.createdBy} `}</span>
                   </div>
                   <div className='task-date'>
                     <p>{task.dateDue}</p>
-                    <span className='task-status'>{task.status}</span>
+                    <span className='task-status'>{task.statut}</span>
                   </div>
                   <Can I="delete" a="Task">
                     <button onClick={() => deleteTaskByID(task._id)}>delete</button>
@@ -72,10 +110,10 @@ const Index = () => {
           </div>
         </div>
         <div className='task-view'>
-          {/* component */}
+          {/* view task */}
           <h2>Tets</h2>
-          <div className='task-container'>
-            <div className='task-view-header'>
+          <div className='task-container' id='task-container'>
+            {/* <div className='task-view-header'>
               <h2>Mathématique</h2>
             </div>
             <div className='task-view-body'>
@@ -84,7 +122,7 @@ const Index = () => {
                 <div>
                   <p>Faire 5 exercices de la page 255 de votre livre</p>
                 </div>
-                {/* <textarea name="" id="" cols="30" rows="10"></textarea> */}
+                <textarea name="" id="" cols="30" rows="10"></textarea>
               </div>
               <div className='task-view-assigne'>
                 <div className='task-assigned'>
@@ -97,9 +135,10 @@ const Index = () => {
                 <p>Date limite: <span>22 février 2021 à 16h30</span> </p>
                 <p>Statut: <span>22 février 2021 à 16h30</span> </p>
               </div>
-            </div>
+            </div>*/}
           </div>
         </div>
+        {/* task done */}
         <div className='task-done'>
           <h2>tâches terminées</h2>
           <div className='task-done-list'>
@@ -109,7 +148,7 @@ const Index = () => {
                   <h2>Informatiques</h2>
                   <div className='card-badge'>
                     <span className='badge'>2023-01-27</span>
-                    <span className='badge'>{task.status}</span>
+                    <span className='badge'>{task.statut}</span>
                   </div>
                 </div>
                 <div className='card-body'>

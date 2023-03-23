@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { createTask, deleteTask, getMyTasks } from "./taskAction"
+import { createEvent, deleteEvent, getMyEvents } from "./eventAction"
 
 
-export interface Task {
+export interface Event {
     _id: string,
     title: string,
     description?: string,
@@ -10,69 +10,70 @@ export interface Task {
     dateDue: string,
     createdBy: string,
     statut: string,
-    type: 'Task'
+    type: 'Event'
 }
-interface ITask {
+
+interface IEvent {
     loading: boolean,
     error: string | null;
-    tasks: Task[]
+    events: IEvent[]
 }
 
-const initialState: ITask = {
+const initialState: IEvent = {
     loading: false,
     error: null,
-    tasks: [],
+    events: [],
 }
 
-const taskSlice = createSlice({
-    name: 'task',
+const eventSlice = createSlice({
+    name: 'event',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder
-            //create task
-            .addCase(createTask.pending, (state) => {
+            //create event
+            .addCase(createEvent.pending, (state) => {
                 state.loading = true
                 state.error = null
             })
-            .addCase(createTask.fulfilled, (state, { payload }) => {
+            .addCase(createEvent.fulfilled, (state, { payload }) => {
                 state.loading = false
-                state.tasks.push(payload)
+                state.events.push(payload)
                 state.error = null
             })
-            .addCase(createTask.rejected, (state, { payload }: any) => {
+            .addCase(createEvent.rejected, (state, { payload }: any) => {
                 state.loading = false
                 state.error = payload
             })
-            // get user tasks
-            .addCase(getMyTasks.pending, (state) => {
+            // get user events
+            .addCase(getMyEvents.pending, (state) => {
                 state.loading = true
                 state.error = null
             })
-            .addCase(getMyTasks.fulfilled, (state, { payload }: any) => {
+            .addCase(getMyEvents.fulfilled, (state, { payload }: any) => {
                 state.loading = false
-                state.tasks = payload?.body
+                state.events = payload?.body
                 state.error = null
             })
-            .addCase(getMyTasks.rejected, (state, { payload }: any) => {
+            .addCase(getMyEvents.rejected, (state, { payload }: any) => {
                 state.loading = false
                 state.error = payload
             })
             //delete taks
-            .addCase(deleteTask.pending, (state) => {
+            .addCase(deleteEvent.pending, (state) => {
                 state.loading = true
                 state.error = null
             })
-            .addCase(deleteTask.fulfilled, (state, { payload }: any) => {
+            .addCase(deleteEvent.fulfilled, (state, { payload }: any) => {
                 state.loading = false
-                state.tasks = state.tasks.filter(item => item._id !== payload.body.id)
+                // state.events = state.events.filter(item => item._id !== payload.body.id)
                 state.error = null
             })
-            .addCase(deleteTask.rejected, (state, { payload }: any) => {
+            .addCase(deleteEvent.rejected, (state, { payload }: any) => {
                 state.loading = false
                 state.error = payload
             })
     }
 })
 
-export default taskSlice.reducer
+export default eventSlice.reducer

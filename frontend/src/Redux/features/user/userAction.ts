@@ -100,12 +100,10 @@ export const userRegister = createAsyncThunk('user/userRegister', async (userDat
 })
 
 export const getAllUsers = createAsyncThunk('user/getAllUsers', async (arg, { rejectWithValue }) => {
+    const token = localStorage.getItem("userToken")
     try {
         const config = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
+            headers: { Authorization: `Bearer ${token}` }
         }
         const { data } = await axios.get(`${BASE_URL}/users`, config);
         // console.log("login", data)

@@ -5,8 +5,8 @@
   "dependencies": {
     "@casl/ability": "^6.3.3",
     "@casl/react": "^3.1.0",
-    "@emotion/react": "^11.10.5",
-    "@emotion/styled": "^11.10.5",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
     "@fortawesome/free-brands-svg-icons": "^6.2.1",
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
@@ -16,7 +16,7 @@
     "@fullcalendar/interaction": "^6.1.4",
     "@fullcalendar/react": "^6.1.4",
     "@mui/icons-material": "^5.11.0",
-    "@mui/material": "^5.11.3",
+    "@mui/material": "^5.11.14",
     "@reduxjs/toolkit": "^1.9.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -28,6 +28,7 @@
     "@types/react-dom": "^18.0.10",
     "@types/react-table": "^7.7.14",
     "axios": "^1.2.2",
+    "env-cmd": "^10.1.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -40,6 +41,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start:development": "env-cmd -f --environments development react-scripts start",
+    "start:staging": "env-cmd -f --environments staging react-scripts start",
+    "start:production": "env-cmd -f --environments production react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

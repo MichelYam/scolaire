@@ -16,6 +16,8 @@ const IndeterminateCheckbox = forwardRef<HTMLInputElement, IIndeterminateInputPr
         useEffect(() => {
             resolvedRef.current.indeterminate = indeterminate;
         }, [resolvedRef, indeterminate]);
+        console.log(resolvedRef);
+
         return (
             <>
                 <input type="checkbox" ref={resolvedRef} {...rest} />
@@ -24,7 +26,7 @@ const IndeterminateCheckbox = forwardRef<HTMLInputElement, IIndeterminateInputPr
     }
 );
 
-const Index = ({ columns, data }: any) => {
+const Index = ({ columns, data, removeUser }: any) => {
     const {
         getTableProps,
         getTableBodyProps,
@@ -59,8 +61,19 @@ const Index = ({ columns, data }: any) => {
                     // The cell can use the individual row's getToggleRowSelectedProps method
                     // to the render a checkbox
                     Cell: ({ row }) => (
+
                         <div>
-                            <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+                            {/* <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} /> */}
+                            <button onClick={() => {
+                                const dataCopy = [...data];
+                                // It should not matter what you name tableProps. It made the most sense to me.
+                                dataCopy.splice(row.index, 1);
+                                    console.log(data)
+                                    // removeUser()
+                            }
+                            }>
+                                Delete
+                            </button>
                         </div>
                     ),
                 },

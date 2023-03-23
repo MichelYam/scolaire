@@ -13,6 +13,7 @@ module.exports.validateToken = (req, res, next) => {
       userToken,
       process.env.SECRET_KEY || 'default-secret-key'
     )
+    req.user = decodedToken
     return next()
   } catch (error) {
     console.error('Error in tokenValidation.js', error)

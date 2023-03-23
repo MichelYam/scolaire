@@ -1,5 +1,6 @@
 import { AbilityBuilder, Ability, AbilityClass } from "@casl/ability";
 import { Task } from "../Redux/features/task/taskSlice";
+import { Event } from "../Redux/features/event/eventSlice";
 import store from "../Redux/store";
 
 export type Actions =
@@ -10,7 +11,7 @@ export type Actions =
     | "update"
     | "delete";
 
-type Subjects = "Task" | Task | "TaskList" | "UserList";
+type Subjects = "Task" | Task | "TaskList" | Event | "Event" | "EventList" | "UserList";
 
 export type AppAbility = Ability<[Actions, Subjects]>;
 export const appAbility = Ability as AbilityClass<AppAbility>;
@@ -26,6 +27,7 @@ export default function defineRulesFor(role: string) {
         can(["update", "delete"], "Task", { assignee: "me" });
     } else {
         can("view", "Task", { assignee: "me" });
+        can("view", "Event", { assignee: "me" });
     }
 
     // const routePermissionsFromApi: string[] = [];

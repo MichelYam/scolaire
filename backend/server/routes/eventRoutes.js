@@ -1,34 +1,35 @@
 const express = require('express')
 const router = express.Router()
-const taskController = require('../controllers/taskController')
+const eventController = require('../controllers/eventController')
 const tokenValidation = require('../middleware/tokenValidation')
 const verifyRoles = require('../middleware/verifyRoles');
 const { ROLES } = require("../models/User")
+
 
 router.post(
     '/create',
     tokenValidation.validateToken,
     verifyRoles(ROLES.Tutor, ROLES.Admin),
-    taskController.createTask,
+    eventController.createEvent,
 )
 
-router.post(
-    '/myTasks',
-    tokenValidation.validateToken,
-    taskController.getUserTasks
+router.get(
+    '/myEvents',
+    // tokenValidation.validateToken,
+    eventController.getUserEvents
 )
 
 router.put(
     '/:_id',
     tokenValidation.validateToken,
     verifyRoles(ROLES.Tutor, ROLES.Admin),
-    taskController.updateTask
+    eventController.updateEvent
 )
 
 router.delete(
     "/delete/:id",
     // tokenValidation.validateToken,
     verifyRoles(ROLES.Tutor, ROLES.Admin),
-    taskController.deleteTask,
+    eventController.deleteEvent,
 )
 module.exports = router

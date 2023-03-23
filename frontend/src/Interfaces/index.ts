@@ -13,8 +13,6 @@ export interface IEvents {
     description: string;
     assigned: string;
     date: string;
-    priority: string;
-    status: string;
     createdBy: string;
 }
 
@@ -25,6 +23,6 @@ export interface ITicket {
     assigned: string;
     date: string;
     priority: string;
-    status: string;
+    statut: string;
     createdBy: string;
 }

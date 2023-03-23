@@ -6,7 +6,7 @@ export const ticketMockData = [
         assigned: "user ID",
         date: "10/10/2021",
         priority: "medium",
-        status: "Open",
+        statut: "Open",
         createdBy: "Objet de l'user: nom, prénom et date de création"
     }
 ]

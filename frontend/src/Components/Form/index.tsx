@@ -45,11 +45,11 @@ const Index = ({ title, isLogin }: IForm) => {
         <form onSubmit={handleSubmit}>
             <div className="form-group">
                 <label htmlFor="email">Email: </label>
-                <input type="email" id="email" name='email' onChange={handleChangeValue} value={data.email} required />
+                <input type="email" id="email" name='email' onChange={handleChangeValue} value={data.email} autoComplete="on" required />
             </div>
             <div className="form-group">
                 <label htmlFor="email">Password </label>
-                <input type="password" id="password" name='password' onChange={handleChangeValue} value={data.password} required />
+                <input type="password" id="password" name='password' onChange={handleChangeValue} value={data.password} autoComplete="on" required />
                 <span className='message-help'>Mot de passe oublié ?</span>
             </div>
             <div className="input-remember">

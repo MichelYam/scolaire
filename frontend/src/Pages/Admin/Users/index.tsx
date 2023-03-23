@@ -26,9 +26,9 @@ const columns = [
 const Index = () => {
     const dispatch = useAppDispatch()
     const { allUsers, userInfo } = useAppSelector(selectUser)
-
+    
     useEffect(() => {
-        if (userInfo?.role !== "admin") redirect("./dashboard");
+        if (userInfo?.role !== "Admin") redirect("./dashboard");
         dispatch(getAllUsers())
     }, [])
     const removeUser = (user: IUser) => {
