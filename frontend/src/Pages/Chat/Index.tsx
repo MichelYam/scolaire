@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import SideBar from '../../Components/SideBar/index';
 
 import { contactMockData } from '../../data/mockData'
@@ -6,13 +6,25 @@ import Contact from '../../Components/Contact/index'
 import '../style.css'
 import SearchBar from '../../Components/SearchBar';
 import { useAppDispatch, useAppSelector } from '../../Redux/store';
-import { selectUser } from '../../utils/selector';
+import { selectRoom, selectUser } from '../../utils/selector';
+import { getMyRooms } from '../../Redux/features/room/roomAction';
 
 import "./style.css"
 
 const Index = () => {
-    // const { userInfo } = useAppSelector(selectUser)
-    // const dispatch = useAppDispatch()
+    const { userInfo } = useAppSelector(selectUser)
+    const dispatch = useAppDispatch()
+    const { rooms } = useAppSelector(selectRoom)
+    const lastMessage = rooms?.messages[rooms?.messages?.length - 1]
+    // console.log(dispatch(getMyRooms()))
+    // const test = dispatch(getMyRooms())
+    useEffect(() => {
+        dispatch(getMyRooms())
+        console.log("rooms", rooms);
+    }, [])
+
+    // const otherUser = rooms?.users.filter((user) => user.id !== userInfo?.id)
+
     return (
         <>
             <h2>Chat</h2>
@@ -23,9 +35,9 @@ const Index = () => {
                         <SearchBar />
                         <div className='contact-list'>
                             {
-                                contactMockData.map((contact, index) => {
-                                    return <Contact key={index} {...contact} />
-                                })
+                                // rooms.map((contact, index) => {
+                                //     return <Contact key={index} firstName={''} lastName={''} lastMessage={''} />
+                                // })
                             }
                         </div>
                     </div>

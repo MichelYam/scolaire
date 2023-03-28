@@ -5,12 +5,14 @@ import appStateSlice from "./features/appStateSlice";
 import userReducer from "./features/user/userSlice"
 import taskReducer from "./features/task/taskSlice"
 import eventReducer from "./features/event/eventSlice"
+import roomReducer from "./features/room/roomSlice"
 
 const store = configureStore({
     reducer: {
         user: userReducer,
         task: taskReducer,
         event: eventReducer,
+        room: roomReducer,
         appState: appStateSlice,
     }
 })

@@ -5,7 +5,7 @@ import { createTask, deleteTask, getMyTasks, getMyTasksAssignee } from "./taskAc
 export interface Task {
     _id: string,
     title: string,
-    description?: string,
+    description: string,
     assignee: string,
     dateDue: string,
     createdBy: string,

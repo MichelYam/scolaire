@@ -1,71 +1,53 @@
-const Task = require('../models/task')
+const Room = require('../models/room')
 const jwt = require('jsonwebtoken')
 
 module.exports.createRoom = async (req) => {
+
+    // const chatExists = await Chat.findOne({
+    //     users: {
+    //         $all: [req.user._id, req.body.receiverId]
+    //     }
+    // });
+
+    // if (chatExists) {
+    //     return res.status(200).json({
+    //         success: true,
+    //         newChat: chatExists
+    //     });
+    // }
     try {
-        const newTask = new Task({
-            title: req.body.title,
-            description: req.body.description,
-            assignee: req.body.assignee,
-            dateDue: req.body.dateDue,
-            createdBy: req.body.createdBy,
+        // console.log(req.user)
+        // console.log(req.body)
+        const newRoom = new Room({
+            users: [req.user.id, req.body.receiverId],
         })
-        let result = await newTask.save()
+        let result = await newRoom.save()
         return result
     } catch (error) {
-        console.error('Error in taskService.js', error)
+        console.error('Error in roomService.js', error)
         throw new Error(error)
     }
 }
-// roomName: {
-//     type: String,
-// },
-// people: {
-//     type: [
-//         {
-//             type: mongoose.Schema.Types.ObjectId,
-//             ref: 'user'
-//         }
-//     ],
-//     default: []
-// },
-// pfpUrl: {
-//     type: String,
-//     default: ''
-// },
-// messages: {
-//     type: [
-//         {
-//             type: mongoose.Schema.Types.ObjectId,
-//             ref: 'message',
-//             required: true
-//         }
-//     ],
-//     default: []
-// },
-// createdBy: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: 'user'
-// }
+
 module.exports.getUserRooms = async (req) => {
-    const jwtToken = req.headers.authorization.split('Bearer')[1].trim()
-    const decodedJwtToken = jwt.decode(jwtToken)
+
     try {
-        console.log('/api/rooms/user', req.user)
-        let allRooms = [];
-        for (let roomId of req.user.rooms) {
-            const room = await Room.findById(roomId)
-            if (room) allRooms.push(room);
-        }
-        console.log('/api/rooms/user rooms', allRooms);
-        res.status(200).json({ rooms: allRooms })
+        let rooms = await Room.find(
+            {
+                users: {
+                    $in: [req.user.id]
+                }
+            }
+        ).sort({ updatedAt: -1 }).populate("users latestMessage");
+
+        return rooms
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ errorMessage: 'error while joining rooms', error })
+        console.error('Error in roomService.js', error)
+        throw new Error(error)
     }
 }
 
-module.exports.updateTask = async serviceData => {
+module.exports.updateRoom = async serviceData => {
     try {
         const jwtToken = serviceData.headers.authorization.split('Bearer')[1].trim()
         const decodedJwtToken = jwt.decode(jwtToken)
@@ -79,7 +61,7 @@ module.exports.updateTask = async serviceData => {
         )
 
         if (!task) {
-            throw new Error('Task not found!')
+            throw new Error('Room not found!')
         }
 
         return task.toObject()
@@ -89,12 +71,12 @@ module.exports.updateTask = async serviceData => {
     }
 }
 
-module.exports.deleteTask = async req => {
+module.exports.deleteRoom = async req => {
     try {
-        const task = await Task.findByIdAndDelete(req.body._id)
+        const task = await Room.findByIdAndDelete(req.body._id)
 
         if (!task) {
-            throw new Error('Task not found!')
+            throw new Error('Room not found!')
         }
 
         return task.toObject()

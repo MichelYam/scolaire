@@ -7,12 +7,15 @@ import { selectTask, selectUser } from '../../utils/selector'
 import "./style.css"
 import Can from '../../Components/Can'
 import { Task } from '../../Redux/features/task/taskSlice'
+import TaskView from './task'
+
 
 const Index = () => {
   const dispatch = useAppDispatch()
   const { userInfo } = useAppSelector(selectUser)
   const { tasks } = useAppSelector(selectTask)
   const [edit, setEdit] = useState(false)
+  const [openTask, setOpenTask] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [inputText, setInputText] = useState("");
   const [taskData, setTaskData] = useState({
@@ -21,10 +24,10 @@ const Index = () => {
     assignee: "",
     dateDue: '',
   })
-  const test = userInfo?.role === "Tutor" ? getMyTasksAssignee() : getMyTasks()
-  useEffect(() => {
-    dispatch(test)
-  }, [tasks])
+  // const taskList = userInfo?.role === "Tutor" ? dispatch(getMyTasksAssignee()) : dispatch(getMyTasks())
+  // useEffect(() => {
+  //   dispatch(taskList)
+  // }, [])
 
   const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTaskData({
@@ -42,38 +45,39 @@ const Index = () => {
   }
   const showTicket = (index: number, task: Task) => {
     let counter = 0
-    if (counter === undefined || index !== index) counter = 0
-    if (index === undefined || index !== index) index = index
+    // if (counter === undefined || index !== index) counter = 0
+    // if (index === undefined || index !== index) index = index
+    const ticketView = <TaskView edit={edit} setEdit={setEdit} userRole={userInfo?.role} {...task} />
     const container = document.getElementById("task-container") as HTMLInputElement
     if (counter % 2 === 0) {
 
-      container.innerHTML = `
-      <div className = 'task-container'>
-        <div className='task-view-header'>
-          <h2>${task.title}</h2>
-          <Can I="update" a="Task">
-            <button onClick={() => deleteTaskByID(task._id)}>Edit</button>
-          </Can>
-          </div>
+      container.innerHTML =
+        //  `${ticketView}`
+        `
+          <div className = 'task-container'>
+            <div className='task-view-header'>
+              <h2>${task.title}</h2>
+                ${userInfo?.role === "Tutor" ? `<button onclick={()=>console.log("test")}> Edit</button > ` : ""}
+            </div >
           <div className='task-view-body'>
-          <div className='task-view-description'>
-            <label htmlFor="description">Description</label>
-            ${edit ? <textarea name="" id="" cols={30} rows={10}>${task.description}</textarea> : <p>${task.description}</p>}
-          </div >
-          <div className='task-view-assigne'>
-            <div className='task-assigned'>
-              <p>Assigné par :</p>
-              <p>${task.createdBy}</p>
+            <div className='task-view-description'>
+              <label htmlFor="description">Description</label>
+              ${edit ? <textarea name="" id="" cols={30} rows={10}>${task.description}</textarea> : <p>${task.description}</p>}
+            </div >
+            <div className='task-view-assigne'>
+              <div className='task-assigned'>
+                <p>Assigné par :</p>
+                <p>${task.createdBy}</p>
+              </div>
+              <p>Donné a <span>${task.assignee}</span> le : <span>${task.date}</span> </p>
             </div>
-            <p>Donné a <span>${task.assignee}</span> le : <span>${task.date}</span> </p>
-          </div>
-          <div className='task-view-date'>
-            <p>Date limite: <span>${task.dateDue}</span> </p>
-            <p>Statut: <span>${task.statut}</span> </p>
-          </div>
-        </div >
-      </div > `;
-      counter++
+            <div className='task-view-date'>
+              <p>Date limite: <span>${task.dateDue}</span> </p>
+              <p>Statut: <span>${task.statut}</span> </p>
+            </div>
+          </div >
+          </div > `;
+      // counter++
     } else {
       counter++
       return container.innerHTML = ""
@@ -108,6 +112,7 @@ const Index = () => {
             <div className='task-list'>
               {filteredData.map((task, index) => (
                 <div key={index} className='task' onClick={() => showTicket(index, task)}>
+                  {/* <div key={index} className='task' onClick={() => { setOpenTask(!openTask) }}> */}
                   <div className='task-description'>
                     <p>{task.title}</p>
                     <span>{`par ${task.createdBy} `}</span>
@@ -119,6 +124,7 @@ const Index = () => {
                   <Can I="delete" a="Task">
                     <button onClick={() => deleteTaskByID(task._id)}>delete</button>
                   </Can>
+                  {/* {openTask && <TaskView edit={edit} setEdit={setEdit} userRole={userInfo?.role} {...task} />} */}
                 </div>
               ))}
             </div>

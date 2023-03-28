@@ -1,9 +1,9 @@
 const roomService = require('../services/roomService')
 
-module.exports.getUserRoom = async (req, res) => {
+module.exports.getUserRooms = async (req, res) => {
     let response = {}
     try {
-        const responseFromService = await roomService.getUserRoom(req)
+        const responseFromService = await roomService.getUserRooms(req)
         response.status = 200
         response.message = 'Get successfully all user rooms'
         response.body = responseFromService
@@ -21,7 +21,7 @@ module.exports.createRoom = async (req, res) => {
     try {
         const responseFromService = await roomService.createRoom(req)
         response.status = 200
-        response.message = 'Successfully got user tasks'
+        response.message = 'Successfully create room'
         response.body = responseFromService
     } catch (error) {
         console.log('Error in roomController.js')

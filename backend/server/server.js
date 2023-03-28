@@ -25,6 +25,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use('/api/v1/user', require('./routes/userRoutes'))
 app.use('/api/v1/task', require('./routes/taskRoutes'))
 app.use('/api/v1/event', require('./routes/eventRoutes'))
+app.use('/api/v1/room', require('./routes/roomRoutes'))
 
 // API Documentation
 // if (process.env.NODE_ENV !== 'production') {
