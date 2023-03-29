@@ -3,8 +3,8 @@ import { IUser } from "../user/userAction";
 import { createRoom, deleteRoom, getMyRooms } from "./roomAction"
 
 
-interface Room {
-    id: string,
+export interface Room {
+    _id: string,
     users: IUser[]
     messages: string[]
     type: 'Room'

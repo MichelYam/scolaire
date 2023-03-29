@@ -139,3 +139,21 @@ module.exports.getAllUsers = async () => {
     throw new Error(error)
   }
 }
+
+
+module.exports.getFriendList = async (req) => {
+  try {
+    // const usersFromDB = await User.find()
+    const user = await User.find({ _id: req.user.id })
+
+    return user.map(user => {
+      return {
+        id: user._id,
+        friendList: user.friendList
+      }
+    })
+  } catch (error) {
+    console.error('Error in userService.js', error)
+    throw new Error(error)
+  }
+}

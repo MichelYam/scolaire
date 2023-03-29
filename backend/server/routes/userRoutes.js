@@ -28,6 +28,14 @@ router.get(
   // authorize(Role.Admin),
   userController.getAllUsers
 )
+
+router.get(
+  '/friends',
+  tokenValidation.validateToken,
+  // authorize(Role.Admin),
+  userController.getFriendList
+)
+
 router.delete(
   "/delete/:id",
   userController.deleteUser

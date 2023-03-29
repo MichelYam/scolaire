@@ -16,8 +16,6 @@ module.exports.createRoom = async (req) => {
     //     });
     // }
     try {
-        // console.log(req.user)
-        // console.log(req.body)
         const newRoom = new Room({
             users: [req.user.id, req.body.receiverId],
         })
@@ -30,6 +28,24 @@ module.exports.createRoom = async (req) => {
 }
 
 module.exports.getUserRooms = async (req) => {
+
+    try {
+        let rooms = await Room.find(
+            {
+                users: {
+                    $in: [req.user.id]
+                }
+            }
+        ).sort({ updatedAt: -1 }).populate("users latestMessage");
+
+        return rooms
+    } catch (error) {
+        console.error('Error in roomService.js', error)
+        throw new Error(error)
+    }
+}
+
+module.exports.getUserRoomByID = async (req) => {
 
     try {
         let rooms = await Room.find(

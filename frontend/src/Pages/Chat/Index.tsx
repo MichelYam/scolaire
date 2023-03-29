@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import SideBar from '../../Components/SideBar/index';
 
 import { contactMockData } from '../../data/mockData'
-import Contact from '../../Components/Contact/index'
+import Conversation from '../../Components/Conversation/index'
 import '../style.css'
 import SearchBar from '../../Components/SearchBar';
 import { useAppDispatch, useAppSelector } from '../../Redux/store';
@@ -10,33 +10,136 @@ import { selectRoom, selectUser } from '../../utils/selector';
 import { getMyRooms } from '../../Redux/features/room/roomAction';
 
 import "./style.css"
+import { Modal } from '../../Components/Modal';
+import InputField from '../../Components/Form/inputField';
+import { io, Socket } from 'socket.io-client';
+import { ChangeEvent } from 'preact/compat';
+import { getMessages } from '../../Redux/features/message/messageAction';
 
 const Index = () => {
     const { userInfo } = useAppSelector(selectUser)
     const dispatch = useAppDispatch()
     const { rooms } = useAppSelector(selectRoom)
-    const lastMessage = rooms?.messages[rooms?.messages?.length - 1]
-    // console.log(dispatch(getMyRooms()))
-    // const test = dispatch(getMyRooms())
+    const [email, setEmail] = useState("")
+    const [newMessage, setNewMessage] = useState("")
+    const [messages, setMessages] = useState([]);
+    const [arrivalMessage, setArrivalMessage] = useState(null);
+    const [conversations, setConversations] = useState([]);
+    // const [onlineUsers, setOnlineUsers] = useState([]);
+    const [isOpen, setIsOpen] = useState(false)
+    const [currentChat, setCurrentChat] = useState(null);
+    const [error, setError] = useState("");
+    const socket = useRef<Socket>();
+
+    // useEffect(() => {
+    //     dispatch(getMyRooms())
+    // }, [])
+
+    // useEffect(() => {
+    //     socket.current = io("wb://localhost:8900");
+    //     socket.current.on("getMessage", (data) => {
+    //         setArrivalMessage({
+    //             sender: data.senderId,
+    //             text: data.text,
+    //             createdAt: Date.now(),
+    //         });
+    //     });
+    // }, []);
+
+    // useEffect(() => {
+    //     arrivalMessage &&
+    //         currentChat?.members.includes(arrivalMessage.sender) &&
+    //         setMessages((prev) => [...prev, arrivalMessage]);
+    // }, [arrivalMessage, currentChat]);
+
+    // useEffect(() => {
+    //     socket.current?.emit("addUser", user._id);
+    //     socket.current?.on("getUsers", (users) => {
+    //         setOnlineUsers(
+    //             user.followings.filter((f) => users.some((u) => u.userId === f))
+    //         );
+    //     });
+    // }, [user]);
+
     useEffect(() => {
-        dispatch(getMyRooms())
-        console.log("rooms", rooms);
-    }, [])
+        const getConversations = async () => {
+            try {
+                // const res = await axios.get("/conversations/" + user._id);
+                const data = dispatch(getMyRooms())
+                setConversations(data);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        getConversations();
+    }, [userInfo?.id]);
 
-    // const otherUser = rooms?.users.filter((user) => user.id !== userInfo?.id)
+    useEffect(() => {
+        const getAllMessages = async () => {
+            try {
+                const messages = dispatch(getMessages(currentChat?._id))
+                
+                setMessages(messages);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        getAllMessages();
+    }, [currentChat]);
 
+    const submit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        const message = {
+            sender: userInfo?.id,
+            text: newMessage,
+            // conversationId: currentChat._id,
+        }
+        const receiverId = currentChat?.users.find(
+            (user) => user !== userInfo?.id
+        );
+
+        socket.current.emit("sendMessage", {
+            senderId: user._id,
+            receiverId,
+            text: newMessage,
+        });
+
+        try {
+            const res = await axios.post("/messages", message);
+            setMessages([...messages, res.data]);
+            setNewMessage("");
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setEmail(event.currentTarget.value)
+    }
     return (
         <>
             <h2>Chat</h2>
             <section className='chat'>
                 <div className='chat-container'>
                     <div className='contacts'>
-                        <h3>Liste des contacts</h3>
+                        <div className='contacts-header'>
+                            <h3>Liste des contacts</h3>
+                            <button>add Friend</button>
+                            <Modal open={isOpen} onClose={() => setIsOpen(false)}>
+                                <div className='modal-title'>
+                                    <h3>Ajouter une personne</h3>
+
+                                </div>
+                                <form action="" onSubmit={submit}>
+                                    <InputField name="search" label='Email' type='text' onChange={() => handleChange} />
+                                    <button type="submit">Ajouter</button>
+                                </form>
+                            </Modal>
+                        </div>
                         <SearchBar />
                         <div className='contact-list'>
                             {
-                                // rooms.map((contact, index) => {
-                                //     return <Contact key={index} firstName={''} lastName={''} lastMessage={''} />
+                                // conversations.map((contact, index) => {
+                                //     return <Conversation key={index} firstName={''} lastName={''} lastMessage={''} onChange = {()=>{setCurrentChat(c)}} />
                                 // })
                             }
                         </div>
@@ -105,7 +208,11 @@ const Index = () => {
                                     <div className='conversation-add'>
                                         <i className='bx bx-sm bxs-plus-circle'></i>
                                     </div>
-                                    <input type="text" name="message" id="message" placeholder='Send a message' />
+                                    <form onSubmit={submit}>
+                                        <input type="text" name="message" id="message" placeholder='Send a message'
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMessage(e.currentTarget.value)} />
+                                        <button>Send</button>
+                                    </form>
                                     <div className='conversation-option'>
                                         <i className='bx bx-sm bxs-smile' ></i>
                                         <i className='bx bx-sm bxs-send' ></i>

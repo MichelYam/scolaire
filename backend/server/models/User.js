@@ -7,10 +7,6 @@ const ROLES = {
 }
 // Create Schema
 const UserSchema = new Schema({
-  // name: {
-  //   type: String,
-  //   required: true
-  // },
   firstName: {
     type: String,
     required: true
@@ -40,10 +36,13 @@ const UserSchema = new Schema({
     type: String,
     enum: ['Admin', 'Student', "Tutor"]
   },
-  friendList: {
-    type: [Schema.Types.ObjectId],
-    ref: 'User'
-  },
+  friendList: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'user'
+    }
+  ]
+  ,
   date: {
     type: Date,
     default: Date.now
