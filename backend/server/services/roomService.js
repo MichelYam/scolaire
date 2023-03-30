@@ -26,7 +26,15 @@ module.exports.createRoom = async (req) => {
         throw new Error(error)
     }
 }
-
+// return usersFromDB.filter(user => user.email !== 'not-set').map(user => {
+//     return {
+//       id: user._id,
+//       firstName: user.firstName,
+//       lastName: user.lastName,
+//       email: user.email,
+//       role: user.role
+//     }
+//   })
 module.exports.getUserRooms = async (req) => {
 
     try {
@@ -36,7 +44,7 @@ module.exports.getUserRooms = async (req) => {
                     $in: [req.user.id]
                 }
             }
-        ).sort({ updatedAt: -1 }).populate("users latestMessage");
+        ).sort({ updatedAt: -1 }).populate("users latestMessage").select('-password')
 
         return rooms
     } catch (error) {

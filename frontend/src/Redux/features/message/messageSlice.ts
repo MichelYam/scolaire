@@ -2,16 +2,16 @@ import { createSlice } from "@reduxjs/toolkit"
 import { createMessage, getMessages } from "./messageAction"
 
 
-export interface Message {
+export interface INMessage {
     _id: string,
     sender: string
     content: string
     type: 'Message'
 }
-interface IMessage {
+export interface IMessage {
     loading: boolean,
     error: string | null;
-    messages: Message[]
+    messages: INMessage[]
 }
 
 const initialState: IMessage = {

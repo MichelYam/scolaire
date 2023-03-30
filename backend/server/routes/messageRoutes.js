@@ -10,7 +10,7 @@ router.post(
     messageController.createMessage
 )
 router.get(
-    '/roomID',
+    '/:roomID',
     tokenValidation.validateToken,
     messageController.getMessages
 )

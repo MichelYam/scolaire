@@ -5,7 +5,7 @@ import { saveStorage } from "../../../utils/TokenStorage";
 const BASE_URL = "http://localhost:3001/api/v1/user";
 
 export interface IUser {
-    id?: string
+    _id?: string
     email?: string
     password?: string
     firstName?: string
@@ -116,11 +116,11 @@ export const getAllUsers = createAsyncThunk('user/getAllUsers', async (arg, { re
         }
     }
 })
-export const deleteUser = createAsyncThunk('user/delete', async ({ id }: IUser, { rejectWithValue, getState }) => {
-    console.log(id);
+export const deleteUser = createAsyncThunk('user/delete', async ({ _id }: IUser, { rejectWithValue, getState }) => {
+    // console.log(_id);
     
     try {
-        const { data } = await axios.delete(`${BASE_URL}/delete/${id}`);
+        const { data } = await axios.delete(`${BASE_URL}/delete/${_id}`);
         return data;
     } catch (error: any) {
         if (error.response && error.response.data.message) {

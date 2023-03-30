@@ -27,6 +27,7 @@ app.use('/api/v1/user', require('./routes/userRoutes'))
 app.use('/api/v1/task', require('./routes/taskRoutes'))
 app.use('/api/v1/event', require('./routes/eventRoutes'))
 app.use('/api/v1/room', require('./routes/roomRoutes'))
+app.use('/api/v1/message', require('./routes/messageRoutes'))
 
 // API Documentation
 // if (process.env.NODE_ENV !== 'production') {

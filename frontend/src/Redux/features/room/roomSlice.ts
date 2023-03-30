@@ -48,8 +48,6 @@ const roomSlice = createSlice({
                 state.error = null
             })
             .addCase(getMyRooms.fulfilled, (state, { payload }: any) => {
-                console.log(payload?.body);
-
                 state.loading = false
                 state.rooms = payload?.body
                 state.error = null

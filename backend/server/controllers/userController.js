@@ -2,7 +2,6 @@ const userService = require('../services/userService')
 
 module.exports.createUser = async (req, res) => {
   let response = {}
-  console.log(req.body)
   try {
     const responseFromService = await userService.createUser(req.body)
     response.status = 200
@@ -19,7 +18,6 @@ module.exports.createUser = async (req, res) => {
 
 module.exports.loginUser = async (req, res) => {
   let response = {}
-
   try {
     const responseFromService = await userService.loginUser(req.body)
     response.status = 200

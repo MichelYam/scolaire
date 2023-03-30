@@ -5,7 +5,7 @@ import { IUser } from "../user/userAction";
 const BASE_URL = "http://localhost:3001/api/v1/room";
 
 interface IRoomParams {
-    _id?: string
+    _id: string
     users: IUser[]
     messages: string[]
 }
@@ -41,7 +41,6 @@ export const getMyRooms = createAsyncThunk('room/myRooms', async (arg, { rejectW
             },
         }
         const { data } = await axios.get(`${BASE_URL}/`, config)
-        console.log("data:", data);
 
         return data
     } catch (error: any) {

@@ -4,7 +4,7 @@ import axios from "axios";
 const BASE_URL = "http://localhost:3001/api/v1/message";
 
 interface IMessageParams {
-    _id?: string
+    _id: string
     sender: string
     content: string
 }
@@ -31,7 +31,7 @@ export const createMessage = createAsyncThunk("task/create", async ({ sender, co
     }
 })
 
-export const getMessages = createAsyncThunk('message/getMessages', async ({ _id}: IMessageParams, { rejectWithValue, getState }) => {
+export const getMessages = createAsyncThunk('message/getMessages', async (_id: string, { rejectWithValue, getState }) => {
     const { user }: any = getState()
     try {
         const config = {

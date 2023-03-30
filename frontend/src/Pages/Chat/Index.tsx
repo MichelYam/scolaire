@@ -15,6 +15,10 @@ import InputField from '../../Components/Form/inputField';
 import { io, Socket } from 'socket.io-client';
 import { ChangeEvent } from 'preact/compat';
 import { getMessages } from '../../Redux/features/message/messageAction';
+import { Room } from '../../Redux/features/room/roomSlice';
+import Message from '../../Components/Message';
+import { IMessage, INMessage } from '../../Redux/features/message/messageSlice';
+
 
 const Index = () => {
     const { userInfo } = useAppSelector(selectUser)
@@ -22,19 +26,15 @@ const Index = () => {
     const { rooms } = useAppSelector(selectRoom)
     const [email, setEmail] = useState("")
     const [newMessage, setNewMessage] = useState("")
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState<any>([]);
     const [arrivalMessage, setArrivalMessage] = useState(null);
     const [conversations, setConversations] = useState([]);
     // const [onlineUsers, setOnlineUsers] = useState([]);
     const [isOpen, setIsOpen] = useState(false)
-    const [currentChat, setCurrentChat] = useState(null);
+    const [currentChat, setCurrentChat] = useState<Room>();
     const [error, setError] = useState("");
     const socket = useRef<Socket>();
-
-    // useEffect(() => {
-    //     dispatch(getMyRooms())
-    // }, [])
-
+    const scrollRef = useRef<null | HTMLDivElement>(null);
     // useEffect(() => {
     //     socket.current = io("wb://localhost:8900");
     //     socket.current.on("getMessage", (data) => {
@@ -62,56 +62,44 @@ const Index = () => {
     // }, [user]);
 
     useEffect(() => {
-        const getConversations = async () => {
-            try {
-                // const res = await axios.get("/conversations/" + user._id);
-                const data = dispatch(getMyRooms())
-                setConversations(data);
-            } catch (err) {
-                console.log(err);
-            }
-        };
-        getConversations();
-    }, [userInfo?.id]);
+        dispatch(getMyRooms())
+    }, [userInfo?._id]);
 
     useEffect(() => {
-        const getAllMessages = async () => {
-            try {
-                const messages = dispatch(getMessages(currentChat?._id))
-                
-                setMessages(messages);
-            } catch (err) {
-                console.log(err);
-            }
-        };
-        getAllMessages();
+        if (currentChat) {
+            dispatch(getMessages(currentChat?._id))
+        }
     }, [currentChat]);
 
     const submit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const message = {
-            sender: userInfo?.id,
+            sender: userInfo?._id,
             text: newMessage,
             // conversationId: currentChat._id,
         }
-        const receiverId = currentChat?.users.find(
-            (user) => user !== userInfo?.id
-        );
+        // const receiverId = currentChat.users.find(
+        //     (user) => user !== userInfo?.id
+        // );
 
-        socket.current.emit("sendMessage", {
-            senderId: user._id,
-            receiverId,
-            text: newMessage,
-        });
+        // socket.current.emit("sendMessage", {
+        //     senderId: user._id,
+        //     receiverId,
+        //     text: newMessage,
+        // });
 
-        try {
-            const res = await axios.post("/messages", message);
-            setMessages([...messages, res.data]);
-            setNewMessage("");
-        } catch (err) {
-            console.log(err);
-        }
+        // try {
+        //     const res = await axios.post("/messages", message);
+        //     setMessages([...messages, res.data]);
+        //     setNewMessage("");
+        // } catch (err) {
+        //     console.log(err);
+        // }
     }
+    useEffect(() => {
+        scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
+
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         setEmail(event.currentTarget.value)
     }
@@ -138,89 +126,61 @@ const Index = () => {
                         <SearchBar />
                         <div className='contact-list'>
                             {
-                                // conversations.map((contact, index) => {
-                                //     return <Conversation key={index} firstName={''} lastName={''} lastMessage={''} onChange = {()=>{setCurrentChat(c)}} />
-                                // })
+                                rooms.map((room, index) => {
+                                    return <Conversation key={index} conversation={room} currentUser={userInfo} onChange={() => setCurrentChat(room)} />
+                                })
                             }
                         </div>
                     </div>
-                    <div className='contact-conversation'>
-                        <div className='conversation-header'>
-                            <div className='conversation-header-contact'>
-                                <div className='conversation-header-contact-info'>
-                                    <img src="../assets/img/avatar.png" alt="" />
-                                    <p>Nom du destinataire</p>
-                                </div>
-                                <div className='conversation-header-contact-call'>
-                                    <i className='bx bx-sm bxs-phone-call'></i>
-                                    <i className='bx bx-sm bxs-video' ></i>
+                    {currentChat &&
+                        <div className='contact-conversation'>
+                            <div className='conversation-header'>
+                                <div className='conversation-header-contact'>
+                                    <div className='conversation-header-contact-info'>
+                                        <img src="../assets/img/avatar.png" alt="" />
+                                        <p>Nom du destinataire</p>
+                                    </div>
+                                    <div className='conversation-header-contact-call'>
+                                        <i className='bx bx-sm bxs-phone-call'></i>
+                                        <i className='bx bx-sm bxs-video' ></i>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className='conversation-content'>
-                            <div className="msg-body">
-                                <ul>
-                                    <li className="sender">
-                                        <p> Hey, Are you there? </p>
-                                        <span className="time">10:06 am</span>
-                                    </li>
-                                    <li className="sender">
-                                        <p> Hey, Are you there? </p>
-                                        <span className="time">10:16 am</span>
-                                    </li>
-                                    <li className="repaly">
-                                        <p> Last Minute Festive Packages From Superbreak</p>
-                                        <span className="time">10:20 am</span>
-                                    </li>
-                                    <li className="sender">
-                                        <p> Hey, Are you there? </p>
-                                        <span className="time">10:26 am</span>
-                                    </li>
-                                    <li className="sender">
-                                        <p> Hey, Are you there? </p>
-                                        <span className="time">10:32 am</span>
-                                    </li>
-                                    <li className="repaly">
-                                        <p>Last Minute Festive Packages From Superbreak</p>
-                                        <span className="time">10:35 am</span>
-                                    </li>
-                                    <li>
-                                        <div className="divider">
-                                            <h6>Today</h6>
+                            <div className='conversation-content'>
+                                <div className="msg-body">
+                                    <ul>
+                                        <>
+                                            {messages?.map((message: { content: string; sender: string | undefined; }) => (
+                                                <div ref={scrollRef}>
+                                                    {/* <Message message={message.content} own={message.sender === userInfo?._id} /> */}
+                                                    <Message message={message.content} own={message.sender === userInfo?._id} />
+                                                </div>
+                                            ))}
+                                        </>
+
+                                    </ul>
+                                </div>
+                            </div>
+                            <div className='conversation-footer'>
+                                <div className='conversation-send'>
+                                    <div className='conversation-send-container'>
+                                        <div className='conversation-add'>
+                                            <i className='bx bx-sm bxs-plus-circle'></i>
                                         </div>
-                                    </li>
-
-                                    <li className="repaly">
-                                        <p> Last Minute Festive Packages From Superbreak</p>
-                                        <span className="time">10:36 am</span>
-                                    </li>
-                                    <li className="repaly">
-                                        <p>Last Minute Festive Packages From Superbreak</p>
-                                        <span className="time">junt now</span>
-                                    </li>
-
-                                </ul>
-                            </div>
-                        </div>
-                        <div className='conversation-footer'>
-                            <div className='conversation-send'>
-                                <div className='conversation-send-container'>
-                                    <div className='conversation-add'>
-                                        <i className='bx bx-sm bxs-plus-circle'></i>
-                                    </div>
-                                    <form onSubmit={submit}>
-                                        <input type="text" name="message" id="message" placeholder='Send a message'
-                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMessage(e.currentTarget.value)} />
-                                        <button>Send</button>
-                                    </form>
-                                    <div className='conversation-option'>
-                                        <i className='bx bx-sm bxs-smile' ></i>
-                                        <i className='bx bx-sm bxs-send' ></i>
+                                        <form onSubmit={submit}>
+                                            <input type="text" name="message" id="message" placeholder='Send a message'
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMessage(e.currentTarget.value)} />
+                                            <button type='submit'><i className='bx bx-sm bxs-send' ></i></button>
+                                            <i className='bx bx-sm bxs-smile' ></i>
+                                            {/* <div className='conversation-option'>
+                                            <i className='bx bx-sm bxs-send' ></i>
+                                        </div> */}
+                                        </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    }
                 </div>
             </section>
         </>
