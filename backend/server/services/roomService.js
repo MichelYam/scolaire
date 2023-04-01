@@ -54,16 +54,8 @@ module.exports.getUserRooms = async (req) => {
 }
 
 module.exports.getUserRoomByID = async (req) => {
-
     try {
-        let rooms = await Room.find(
-            {
-                users: {
-                    $in: [req.user.id]
-                }
-            }
-        ).sort({ updatedAt: -1 }).populate("users latestMessage");
-
+        let rooms = await Room.find({ _id: req.params.roomId })
         return rooms
     } catch (error) {
         console.error('Error in roomService.js', error)

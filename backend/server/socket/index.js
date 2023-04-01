@@ -1,0 +1,164 @@
+// list of object of users which are online
+/**
+ * [
+ *      {
+ *          id: (username),
+ *          sockets: [ (id), (id), (id) ]
+ *      }
+ * ]
+ */
+// let onlineUsers = [];
+
+// const Message = require('../models/message');
+// const Room = require('../models/room');
+
+// module.exports = (server) => {
+//     // Initialize sockets
+//     const socketCORSConfig = {
+//         cors: {
+//             origin: "http://localhost:3000",
+//             methods: ["GET", "POST"],
+//         }
+//     };
+//     let io;
+//     if (process.env.NODE_ENV === 'production') {
+//         io = require("socket.io")(server);
+//     } else {
+//         io = require("socket.io")(server, socketCORSConfig);
+//     }
+//     io.on("connection", (socket) => {
+//         console.log("A user has connected");
+
+//         socket.on('online', ({ userId }) => {
+//             // check if user is already online
+//             const userAlreadyOnline = onlineUsers.some((onlineuser) => (onlineuser.id === userId))
+
+//             if (userAlreadyOnline) {
+//                 // if user is already online, then that would mean that the user has logged in from a new device.
+//                 // push it's socket id to the sockets list
+//                 onlineUsers.forEach(onlineuser => {
+//                     if (onlineuser.id === userId) {
+//                         onlineuser.sockets = onlineuser.sockets ? [...onlineuser.sockets] : []
+//                         onlineuser.sockets.push(socket.id)
+//                     }
+//                 })
+//             } else {
+//                 // if the user is not already online, then create a new onlineuser
+//                 const onlineuser = [ userId, socket.id ]
+//                 onlineUsers.push(onlineuser)
+//             }
+
+//             console.log("online user", onlineUsers);
+
+//             // broadcast to everyone about the status of a particular user
+//             io.sockets.emit('userOnlineStatus', onlineUsers)
+//         })
+
+//         socket.on('connectToRoom', ({ room }) => {
+//             console.log(room);
+//             // console.log(room._id, room.roomName);
+//             socket.join(room._id)
+//         })
+
+//         socket.on('createdChatRoom', ({ room }) => {
+//             // if the users in the room are online, they should get connected
+//             onlineUsers.forEach(onlineuser => {
+//                 const personIsOnline = room.people.some(person => onlineuser.id === person)
+//                 if (personIsOnline) {
+//                     // send to every instance of the user
+//                     onlineuser.sockets.forEach(socketId => {
+//                         io.to(socketId).emit('addToRoom', { room })
+//                     })
+//                 }
+//             })
+//             // if the users are offline, they will get connected to the room automatically (when they come back to the site)
+//         })
+
+//         socket.on('exitRoom', ({ room, userId, name }) => {
+//             console.log('user exits the room', { room, userId, name });
+//             socket.to(room).emit('exitRoom', { user: { userId, name }, room })
+//             socket.leave(room);
+//         })
+
+//         socket.on("message", async ({ room, messageObject }) => {
+//             console.log('room ', room)
+//             console.log('message ', messageObject)
+//             console.log(io.to(room))
+//             io.to(room).emit('message', messageObject)
+
+//             const content = {
+//                 text: messageObject.content.text || '',
+//                 fileURL: messageObject.content.fileURL || null,
+//                 isImage: messageObject.content.isImage,
+//                 fileName: messageObject.content.fileName
+//             }
+//             console.log(content);
+//             // Add the message to the database
+//             const newMessage = new Message({
+//                 senderId: messageObject.senderId,
+//                 roomId: messageObject.room,
+//                 name: messageObject.by,
+//                 timeStamp: new Date(messageObject.time),
+//                 content: content
+//             })
+
+//             console.log('new message', newMessage);
+//             console.log('room', room);
+
+//             try {
+//                 await Room.findByIdAndUpdate(room, { $push: { messages: newMessage._id } });
+//                 await newMessage.save();
+//             } catch (err) {
+//                 console.log(err);
+//             }
+//         })
+
+//         socket.on('pfpChange', (data) => {
+//             console.log('pfp CHANGED')
+//             if (data.isGroupImg) {
+//                 io.to(data.payload.roomId).sockets.emit('pfpChange', data);
+//             } else {
+//                 socket.broadcast.emit('pfpChange', data);
+//             }
+//         })
+
+//         socket.on('pfpRemove', (data) => {
+//             console.log('pfp REMOVED')
+//             if (data.isGroupImg) {
+//                 io.to(data.payload.roomId).sockets.emit('pfpRemove', data);
+//             } else {
+//                 io.sockets.emit('pfpRemove', data);
+//             }
+//         })
+
+//         socket.on("typing", ({ user, roomId }) => {
+//             // console.log(user)
+//             // console.log(roomId)
+//             // io.to(roomId).sockets.emit('typing', { user, roomId })
+//             socket.to(roomId).emit('typing', { user, roomId })
+//         })
+
+//         socket.on("disconnect", () => {
+
+//             // remove the socket from the online user's list
+//             onlineUsers.forEach(onlineuser => {
+//                 onlineuser.sockets = onlineuser.sockets.filter(socketId => {
+//                     return (socketId !== socket.id)
+//                 })
+//             })
+
+//             console.log(onlineUsers)
+
+//             // if an user has no sockets, remove him from current user list
+//             onlineUsers = onlineUsers.filter(onlineuser => {
+//                 return (onlineuser.sockets.length !== 0);
+//             })
+
+//             console.log(onlineUsers);
+//             console.log("User has disconnected");
+
+//             // broadcast to everyone about the status of a particular user
+//             io.sockets.emit('userOnlineStatus', onlineUsers)
+//         });
+//     });
+// };

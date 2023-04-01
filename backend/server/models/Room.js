@@ -57,8 +57,8 @@ const roomSchema = new mongoose.Schema({
 },
     { timestamps: true }
 );
-roomSchema.query.byRoomId = function (roomid) {
-    return this.where({ roomId: roomid })
+roomSchema.query.byRoomId = function (roomID) {
+    return this.where({ roomID: roomID })
 }
 
 module.exports = Room = mongoose.model('room', roomSchema);

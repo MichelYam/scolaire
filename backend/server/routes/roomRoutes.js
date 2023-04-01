@@ -11,6 +11,11 @@ router.get(
     tokenValidation.validateToken,
     roomController.getUserRooms
 )
+router.get(
+    '/:roomId',
+    tokenValidation.validateToken,
+    roomController.getUserRoomByID
+)
 router.post(
     '/new',
     tokenValidation.validateToken,

@@ -15,6 +15,21 @@ module.exports.getUserRooms = async (req, res) => {
 
     return res.status(response.status).send(response)
 }
+module.exports.getUserRoomByID = async (req, res) => {
+    let response = {}
+    try {
+        const responseFromService = await roomService.getUserRoomByID(req)
+        response.status = 200
+        response.message = 'Get successfully room'
+        response.body = responseFromService
+    } catch (error) {
+        console.error('Something went wrong in roomController.js', error)
+        response.status = 400
+        response.message = error.message
+    }
+
+    return res.status(response.status).send(response)
+}
 
 module.exports.createRoom = async (req, res) => {
     let response = {}

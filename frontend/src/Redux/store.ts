@@ -6,6 +6,7 @@ import userReducer from "./features/user/userSlice"
 import taskReducer from "./features/task/taskSlice"
 import eventReducer from "./features/event/eventSlice"
 import roomReducer from "./features/room/roomSlice"
+import messageReducer from "./features/message/messageSlice"
 
 const store = configureStore({
     reducer: {
@@ -13,6 +14,7 @@ const store = configureStore({
         task: taskReducer,
         event: eventReducer,
         room: roomReducer,
+        message: messageReducer,
         appState: appStateSlice,
     }
 })

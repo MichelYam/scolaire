@@ -8,11 +8,14 @@ const MessageSchema = new Schema({
     //     ref: 'user',
     //     required: true
     // },
+    roomId: {
+        type: String,
+    },
     sender: {
         type: String,
-        required: true
     },
     content: {
+        type: String,
         text: String,
         fileURL: String,
         isImage: Boolean,

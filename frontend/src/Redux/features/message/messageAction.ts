@@ -4,12 +4,13 @@ import axios from "axios";
 const BASE_URL = "http://localhost:3001/api/v1/message";
 
 interface IMessageParams {
-    _id: string
-    sender: string
-    content: string
+    _id?: string
+    roomId?: string
+    sender?: string
+    content?: string
 }
 
-export const createMessage = createAsyncThunk("task/create", async ({ sender, content }: IMessageParams, { rejectWithValue, getState }) => {
+export const createMessage = createAsyncThunk("task/create", async ({ roomId, sender, content }: IMessageParams, { rejectWithValue, getState }) => {
 
     const { user }: any = getState()
     try {
@@ -18,7 +19,7 @@ export const createMessage = createAsyncThunk("task/create", async ({ sender, co
                 Authorization: `Bearer ${user.userToken}`
             },
         }
-        const { data } = await axios.post(`${BASE_URL}/create`, { sender, content }, config)
+        const { data } = await axios.post(`${BASE_URL}/new`, { roomId, sender, content }, config)
         // console.log(data);
 
         return data
