@@ -7,7 +7,7 @@ interface IMessage {
 
 const Index = ({ message, own }: IMessage) => {
     return (
-        <li className={own ? "sender" : "repaly"}>
+        <li className={own ? "repaly" : "sender"}>
             <p>{message}</p>
         </li>
     )

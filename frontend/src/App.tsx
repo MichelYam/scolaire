@@ -22,7 +22,6 @@ import { buildAbilityFor } from "./config/ability";
 import ProtectedRoute from './Pages/PrivateRoute';
 import AdminRoute from './Pages/AdminRoute';
 
-
 function App() {
   const { userInfo } = useAppSelector(selectUser)
   const role = userInfo?.role || "member"

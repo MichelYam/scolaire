@@ -17,8 +17,6 @@ import { ChangeEvent } from 'preact/compat';
 import { createMessage, getMessages } from '../../Redux/features/message/messageAction';
 import { Room } from '../../Redux/features/room/roomSlice';
 import Message from '../../Components/Message';
-import { IMessage, INMessage } from '../../Redux/features/message/messageSlice';
-import { create } from 'domain';
 
 interface test {
     sender: string | number,
@@ -43,16 +41,17 @@ const Index = () => {
     const socket = useRef<Socket>();
     const scrollRef = useRef<null | HTMLDivElement>(null);
 
-    // useEffect(() => {
-    //     socket.current = io("wb://localhost:8900");
-    //     socket.current.on("getMessage", (data) => {
-    //         setArrivalMessage({
-    //             sender: data.senderId,
-    //             content: data.content,
-    //             createdAt: Date.now(),
-    //         });
-    //     });
-    // }, []);
+    useEffect(() => {
+
+        socket.current = io("ws://localhost:8900");
+        socket.current.on("getMessage", (data) => {
+            setArrivalMessage({
+                sender: data.senderId,
+                content: data.content,
+                createdAt: Date.now(),
+            });
+        });
+    }, []);
 
     // useEffect(() => {
     //     arrivalMessage &&
@@ -77,22 +76,19 @@ const Index = () => {
         if (currentChat) {
             // setMessages(dispatch(getMessages(currentChat?._id)))
             dispatch(getMessages(currentChat?._id))
-            console.log(messages)
         }
     }, [currentChat]);
 
-    // console.log(currentChat)
     const submit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const message = {
             sender: userInfo?._id,
             content: newMessage,
-            roomID: currentChat?._id,
+            roomId: currentChat?._id,
         }
         const receiverId = currentChat?.users.find(
-            (user) => user !== userInfo?._id
+            (user) => user._id !== userInfo?._id
         );
-
         socket?.current?.emit("sendMessage", {
             senderId: userInfo?._id,
             receiverId,
@@ -108,9 +104,9 @@ const Index = () => {
             console.log(err);
         }
     }
-    // useEffect(() => {
-    //     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-    // }, [messages]);
+    useEffect(() => {
+        scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         setEmail(event.currentTarget.value)
@@ -138,9 +134,11 @@ const Index = () => {
                         <SearchBar />
                         <div className='contact-list'>
                             {
-                                rooms.map((room, index) => {
-                                    return <Conversation key={index} conversation={room} currentUser={userInfo} onChange={() => setCurrentChat(room)} />
-                                })
+                                rooms.map((room, index) =>
+                                    <div key={index}>
+                                        <Conversation key={index} conversation={room} currentUser={userInfo} onChange={() => setCurrentChat(room)} />
+                                    </div>
+                                )
                             }
                         </div>
                     </div>
@@ -163,9 +161,9 @@ const Index = () => {
                                     <ul>
                                         <>
                                             {messages?.map((message: { content: string; sender: string | undefined; }, index) => (
-                                                <div ref={scrollRef}>
+                                                <div key={index} ref={scrollRef}>
                                                     {/* <Message message={message.content} own={message.sender === userInfo?._id} /> */}
-                                                    <Message key={index} message={message.content} own={message.sender === userInfo?._id} />
+                                                    <Message message={message.content} own={message.sender === userInfo?._id} />
                                                 </div>
                                             ))}
                                         </>
@@ -181,7 +179,7 @@ const Index = () => {
                                         </div>
                                         <form onSubmit={submit}>
                                             <input type="text" name="message" id="message" placeholder='Send a message'
-                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMessage(e.currentTarget.value)} />
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMessage(e.currentTarget.value)} value={newMessage} />
                                             <button type='submit'><i className='bx bx-sm bxs-send' ></i></button>
                                             <i className='bx bx-sm bxs-smile' ></i>
                                             {/* <div className='conversation-option'>

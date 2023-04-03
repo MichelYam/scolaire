@@ -26,7 +26,7 @@ const Index = ({ conversation, currentUser, onChange }: IProps) => {
     }
     return (
         // <div key={user?.id} className={`contact ${isActive === user.id ? "active" : ""}`} onClick={() => handleClick(user.id)}>
-        <div className={`contact ${isActive === user?._id ? "active" : ""}`} onClick={onChange}>
+        <div key={currentUser?._id} className={`contact ${isActive === user?._id ? "active" : ""}`} onClick={onChange}>
             <div className="contact-img">
                 <img src="../assets/img/avatar.png" alt="profile de l'utilisateur" />
             </div>
