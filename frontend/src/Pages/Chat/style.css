@@ -195,9 +195,11 @@ li.repaly .time {
     border: none;
     background: transparent;
 }
+
 .conversation-send-container form i {
-   cursor: pointer;
+    cursor: pointer;
 }
+
 .conversation-add {
     /* padding: 10px; */
 }
@@ -230,3 +232,14 @@ li.repaly .time {
 }
 
 .conversation-option i {}
+
+.chat-search {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chat-search i {
+    font-size: 24px;
+    cursor: pointer;
+}

@@ -7,7 +7,7 @@ import '../style.css'
 import SearchBar from '../../Components/SearchBar';
 import { useAppDispatch, useAppSelector } from '../../Redux/store';
 import { selectMessage, selectRoom, selectUser } from '../../utils/selector';
-import { getMyRooms } from '../../Redux/features/room/roomAction';
+import { createRoom, getMyRooms } from '../../Redux/features/room/roomAction';
 
 import "./style.css"
 import { Modal } from '../../Components/Modal';
@@ -18,31 +18,41 @@ import { createMessage, getMessages } from '../../Redux/features/message/message
 import { Room } from '../../Redux/features/room/roomSlice';
 import Message from '../../Components/Message';
 
-interface test {
-    sender: string | number,
+type INewMessage = {
+    sender: string,
     content: string,
-    createdAt: string | number,
+    createdAt: string | Date | number,
 }
 
+type IProps = {
+    notification: {}[]
+    setNotification: ({ }) => void
+}
+type IArrivalMessage = {
+
+}
 const Index = () => {
-    const { userInfo } = useAppSelector(selectUser)
+    // const Index = ({ notification, setNotification }: IProps) => {
     const dispatch = useAppDispatch()
-    const { rooms } = useAppSelector(selectRoom)
+    const { userInfo } = useAppSelector(selectUser)
     const { messages } = useAppSelector(selectMessage)
+    const { rooms } = useAppSelector(selectRoom)
     const [email, setEmail] = useState("")
     const [newMessage, setNewMessage] = useState("")
-    // const [messages, setMessages] = useState<any>([]);
-    const [arrivalMessage, setArrivalMessage] = useState<test>();
-    const [conversations, setConversations] = useState([]);
+    const [arrivalMessage, setArrivalMessage] = useState<INewMessage | null>(null);
     const [onlineUsers, setOnlineUsers] = useState([]);
     const [isOpen, setIsOpen] = useState(false)
     const [currentChat, setCurrentChat] = useState<Room>();
     const [error, setError] = useState("");
+    // const [messages, setMessages] = useState<any>();
     const socket = useRef<Socket>();
     const scrollRef = useRef<null | HTMLDivElement>(null);
 
-    useEffect(() => {
+    // const [notification, setNotification] = useState([]);
 
+    // console.log("test", messages)
+
+    useEffect(() => {
         socket.current = io("ws://localhost:8900");
         socket.current.on("getMessage", (data) => {
             setArrivalMessage({
@@ -53,10 +63,22 @@ const Index = () => {
         });
     }, []);
 
+    useEffect(() => {
+        if (currentChat) {
+            // setMessages(dispatch(getMessages(currentChat?._id)))
+            socket.current?.emit("join chat", currentChat._id);
+            dispatch(getMessages(currentChat?._id))
+        }
+
+    }, [currentChat]);
+
+
     // useEffect(() => {
     //     arrivalMessage &&
+    //         // @ts-ignore TS2564
     //         currentChat?.users.includes(arrivalMessage.sender) &&
-    //         setMessages((prev) => [...prev, arrivalMessage]);
+    //         dispatch(getMessages(currentChat?._id))
+    //         console.log(arrivalMessage)
     // }, [arrivalMessage, currentChat]);
 
     // useEffect(() => {
@@ -72,13 +94,6 @@ const Index = () => {
         dispatch(getMyRooms())
     }, [userInfo?._id]);
 
-    useEffect(() => {
-        if (currentChat) {
-            // setMessages(dispatch(getMessages(currentChat?._id)))
-            dispatch(getMessages(currentChat?._id))
-        }
-    }, [currentChat]);
-
     const submit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const message = {
@@ -89,27 +104,53 @@ const Index = () => {
         const receiverId = currentChat?.users.find(
             (user) => user._id !== userInfo?._id
         );
-        socket?.current?.emit("sendMessage", {
-            senderId: userInfo?._id,
-            receiverId,
-            content: newMessage,
-        });
 
         try {
-            // const res = await axios.post("/messages", message);
-            // setMessages([...messages, res.data]);
             dispatch(createMessage(message))
+            socket.current?.emit("new message", {
+                senderId: userInfo?._id,
+                receiverId,
+                content: newMessage,
+            });
             setNewMessage("");
         } catch (err) {
             console.log(err);
         }
     }
     useEffect(() => {
+        socket.current?.on("message recieved", (newMessageRecieved) => {
+            console.log(newMessageRecieved)
+            // if (!currentChat || currentChat._id !== newMessageRecieved.chat._id) {
+            // if (!notification.includes(newMessageRecieved)) {
+            //     // setNotification([newMessageRecieved, ...notification]);
+            // }
+            // } else {
+            // setMessages([...messages, newMessageRecieved])
+            // if (currentChat) {
+            //     // console.log("test")
+            //     dispatch(getMessages(currentChat?._id))
+
+            // }
+            // }
+        });
+    }, [messages]);
+
+    useEffect(() => {
+        if (currentChat) {
+            dispatch(getMessages(currentChat?._id))
+        }
         scrollRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
+
+
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         setEmail(event.currentTarget.value)
+    }
+
+    const addUserChat = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        dispatch(createRoom(email))
     }
     return (
         <>
@@ -119,19 +160,20 @@ const Index = () => {
                     <div className='contacts'>
                         <div className='contacts-header'>
                             <h3>Liste des contacts</h3>
-                            <button>add Friend</button>
                             <Modal open={isOpen} onClose={() => setIsOpen(false)}>
                                 <div className='modal-title'>
                                     <h3>Ajouter une personne</h3>
-
                                 </div>
-                                <form action="" onSubmit={submit}>
+                                <form action="" onSubmit={addUserChat}>
                                     <InputField name="search" label='Email' type='text' onChange={() => handleChange} />
                                     <button type="submit">Ajouter</button>
                                 </form>
                             </Modal>
                         </div>
-                        <SearchBar />
+                        <div className='chat-search'>
+                            <SearchBar />
+                            <i className='bx bx-plus' onClick={() => setIsOpen(true)}></i>
+                        </div>
                         <div className='contact-list'>
                             {
                                 rooms.map((room, index) =>
@@ -160,9 +202,8 @@ const Index = () => {
                                 <div className="msg-body">
                                     <ul>
                                         <>
-                                            {messages?.map((message: { content: string; sender: string | undefined; }, index) => (
+                                            {messages?.map((message: { content: string; sender: string; }, index: React.Key | null | undefined) => (
                                                 <div key={index} ref={scrollRef}>
-                                                    {/* <Message message={message.content} own={message.sender === userInfo?._id} /> */}
                                                     <Message message={message.content} own={message.sender === userInfo?._id} />
                                                 </div>
                                             ))}

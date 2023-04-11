@@ -1,6 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-// import DropDownMenu from '../DropDown/Index'
+import DropDown from '../../Components/DropDown/Index'
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import { io, Socket } from 'socket.io-client';
 
 import "./style.css"
 
@@ -9,8 +13,38 @@ interface IProps {
     sidebarOnClose: () => void
     // acces: string,
 }
+
+type INotification = string[]
+
 const Index = ({ firstName, sidebarOnClose }: IProps) => {
     const [isOpen, setIsOpen] = useState(false)
+    const [dropdown, setDropdown] = useState(null);
+    const socket = useRef<Socket>();
+    const [notifications, setNotifications] = useState<INotification>([]);
+    useEffect(() => {
+        socket.current = io("ws://localhost:8900");
+    }, []);
+    useEffect(() => {
+        socket.current?.on("getNotification", (data) => {
+            setNotifications((prev) => [...prev, data]);
+        });
+    }, [socket]);
+
+    const displayNotification = (senderName: string) => {
+        let action;
+
+        // if (type === 1) {
+        //     action = "liked";
+        // } else if (type === 2) {
+        //     action = "commented";
+        // } else {
+        //     action = "shared";
+        // }
+        return (
+            <span className="notification">{`${senderName} vous a envoyé une demande d'ami`}</span>
+        );
+    };
+
     return (
         <div className='menu-top'>
             <div className="home-content">
@@ -19,10 +53,28 @@ const Index = ({ firstName, sidebarOnClose }: IProps) => {
             </div>
 
             <ul className='topmenu'>
-                <li className='topmenu-item'>
+                {/* <DropDown dropdown={dropdown} id='2' handleDropdown={() => handleDropdown} /> */}
+                {/* {/* <li className='topmenu-item'>
                     <div className='nav-link'>
                         <i className="far fa-envelope-open">
                         </i>
+                    </div>
+                </li> */}
+                <li className='topmenu-item' onClick={() => setIsOpen(!isOpen)}>
+                    <div className='nav-link notifications'>
+                        <i className="far fa-envelope-open"></i>
+                        {
+                            notifications.length > 0 &&
+                            <div className="counter">{notifications.length}</div>
+                        }
+                    </div>
+                    <div className={`dropdown-menu dropdown-content ${isOpen ? "show" : ""}`}>
+                        <Link to="#" className="dropdown-item notify-item">
+                            {notifications.map((n) => {
+                                console.log(n)
+                                return displayNotification(n)
+                            })}
+                        </Link>
                     </div>
                 </li>
                 <li className='topmenu-item'>
@@ -31,7 +83,7 @@ const Index = ({ firstName, sidebarOnClose }: IProps) => {
                         </i>
                     </div>
                 </li>
-                <li className='topmenu-item' onClick={() => setIsOpen(!isOpen)}>
+                {/* <li className='topmenu-item' onClick={() => setIsOpen(!isOpen)}>
                     <Link className="nav-link" to="#">
                         <span>
                             <span className="account-user-name">{firstName}</span>
@@ -65,7 +117,7 @@ const Index = ({ firstName, sidebarOnClose }: IProps) => {
                             <span>Logout</span>
                         </Link>
                     </div>
-                </li>
+                </li>  */}
             </ul>
         </div>
     )

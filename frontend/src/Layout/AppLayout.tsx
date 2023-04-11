@@ -13,8 +13,7 @@ const AppLayout = () => {
     const dispatch = useAppDispatch()
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const logOut = () => { dispatch(logout()) }
-    const { userInfo } = useAppSelector(selectUser)
-    const { userToken } = useAppSelector(selectUser)
+    const { userInfo, userToken } = useAppSelector(selectUser)
 
     useEffect(() => {
         if (userToken) {
