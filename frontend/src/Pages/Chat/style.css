@@ -97,6 +97,7 @@
     position: relative;
     flex: 1 1 auto;
     padding: 1rem;
+    scrollbar-width: none;
 }
 
 .conversation-content .msg-body ul {

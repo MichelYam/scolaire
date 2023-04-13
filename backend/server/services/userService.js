@@ -1,4 +1,5 @@
 const User = require('../models/User')
+const FriendRequest = require('../models/FriendRequest')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
@@ -154,6 +155,116 @@ module.exports.getFriendList = async (req) => {
     })
   } catch (error) {
     console.error('Error in userService.js', error)
+    throw new Error(error)
+  }
+}
+
+module.exports.sendFriendRequest = async (req, res) => {
+  const { _id } = req.user.id
+  const { recipientId } = req.body
+  try {
+    const foundFriendRequest = await FriendRequest.findOne({
+      sender: _id,
+      recipient: recipientId
+    })
+
+    if (foundFriendRequest) return res.status(400).send()
+
+
+    const newFriendRequest = new FriendRequest({
+      sender: _id,
+      recipient: recipientId,
+      status: 'pending',
+    });
+
+    let result = await newFriendRequest.save()
+    return result
+
+  } catch (error) {
+    console.error('Error in notificationService.js', error)
+    throw new Error(error)
+  }
+}
+
+
+module.exports.rejectFriendRequest = async (req) => {
+  const recipientId = req.user._id;
+  const senderId = req.body.sender;
+  try {
+
+    const deletedFriendRequest = await FriendRequest.findOneAndDelete({
+      sender: senderId,
+      recipient: recipientId,
+    });
+
+    // const updatedRequests = await FriendRequest.find({
+    //   recipient: req.tokenUser.userId,
+    //   status: 'pending',
+    // });
+
+    return deletedFriendRequest.toObject()
+  } catch (error) {
+    console.error('Error in notificationService.js', error)
+    throw new Error(error)
+  }
+}
+
+module.exports.acceptFriendRequest = async (req, res) => {
+  const recipientId = req.user._id
+  const senderId = req.body.senderId
+
+  try {
+    const updatedSender = await User.findOneAndUpdate(
+      { _id: senderId, friendList: { $nin: [recipientId] } },
+      { $push: { friendList: recipientId } },
+      { new: true }
+    );
+    const updatedRecipient = await User.findOneAndUpdate(
+      { _id: recipientId, friendList: { $nin: [senderId] } },
+      {
+        $push: { friendList: senderId },
+      },
+      { new: true }
+    );
+
+    if (updatedRecipient) {
+      const updatedFriendRequest = await FriendRequest.findOneAndUpdate(
+        {
+          sender: senderId,
+          recipient: recipientId,
+        },
+        {
+          $set: { status: 'accepted' },
+          $push: { friendshipParticipants: [senderId, recipientId] },
+        },
+        { new: true }
+      );
+
+      const updatedRequests = await FriendRequest.find({
+        recipient: req.tokenUser.userId,
+        status: 'pending',
+      });
+      res.status(200).send({
+        updatedRequests: updatedRequests,
+        updatedUserFriendList: updatedRecipient.friendList,
+      });
+    }
+
+  } catch (error) {
+    console.error('Error in notificationService.js', error)
+    throw new Error(error)
+  }
+}
+
+// get friend requests of current user
+module.exports.getFriendRequest = async (req) => {
+  try {
+    const requests = await FriendRequest.find({
+      recipient: req.params.id,
+    });
+    return requests
+  } catch (error) {
+    console.error('Error in notificationService.js', error)
     throw new Error(error)
   }
 }
