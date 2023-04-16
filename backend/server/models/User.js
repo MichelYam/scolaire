@@ -35,7 +35,7 @@ const UserSchema = new Schema({
   },
   role: {
     type: String,
-    enum: ['Admin', 'Student', "Tutor"]
+    enum: ['admin', 'student', "tutor"]
   },
   friendList: [
     {

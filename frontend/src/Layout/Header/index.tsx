@@ -6,9 +6,13 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { io, Socket } from 'socket.io-client';
 
+import { useAppDispatch, useAppSelector } from '../../Redux/store';
+import { selectUser } from '../../utils/selector';
+// import { deleteNotification } from '../../Redux/features/notification/notificationAction';
+import { acceptFriendRequest, rejectFriendRequest, getFriendRequest } from '../../Redux/features/user/userAction';
 import "./style.css"
-import { useAppSelector } from '../../Redux/store';
-import { selectNotification } from '../../utils/selector';
+import { createRoom } from '../../Redux/features/room/roomAction';
+// import { INotification } from '../../Interfaces';
 
 interface IProps {
     firstName?: string,
@@ -22,9 +26,8 @@ const Index = ({ firstName, sidebarOnClose }: IProps) => {
     const [isOpen, setIsOpen] = useState(false)
     const [dropdown, setDropdown] = useState(null);
     const socket = useRef<Socket>();
-    // const [notifications, setNotifications] = useState<INotification>([]);
-    const { notifications } = useAppSelector(selectNotification)
-
+    const { notifications } = useAppSelector(selectUser)
+    const dispatch = useAppDispatch()
     useEffect(() => {
         socket.current = io("ws://localhost:8900");
     }, []);
@@ -34,25 +37,32 @@ const Index = ({ firstName, sidebarOnClose }: IProps) => {
             // setNotifications((prev) => [...prev, data]);
         });
     }, [socket]);
-    const acceptFriendRequest = () => {
 
-    }
-    const acceptFriendRequest = () => {
+    useEffect(() => {
+        dispatch(getFriendRequest())
+    }, [])
 
+    const handleAcceptFriendRequest = (notification: any) => {
+        console.log(notification.sender._id)
+        dispatch(acceptFriendRequest(notification.sender._id))
+        // dispatch(createRoom(notification.sender._id))
+        console.log(notifications)
     }
-    const displayNotification = (senderName: string, notifications: INotification, type: string) => {
-        let action;
-        let test = ""
-        if (type === "requestFriend") {
-            <span onClick={() => setNotifications(notifications.filter((n) => n !== notifications))} className="notification">{`${senderName} vous a envoyé une demande d'ami`}</span>
-        } else if (type === 2) {
-            action = "commented";
-        } else {
-            action = "shared";
-        }
+
+    const displayNotification = (notification: any, index: number) => {
+        // if (type === "requestFriend") {
         return (
-            <span onClick={() => setNotifications(notifications.filter((n) => n !== notifications))} className="notification">{`${senderName} vous a envoyé une demande d'ami`}</span>
-        );
+            <div key={index} className='dropdown-item notify-item'>
+                <span>{notification.sender.firstName} vous as envoyé une demande d'ami</span>
+                <button onClick={() => handleAcceptFriendRequest(notification)}><i className='bx bx-check'></i></button>
+                <button onClick={() => { dispatch(rejectFriendRequest(notification._id)) }}><i className='bx bx-x' ></i></button>
+            </div>
+        )
+        // } else {
+        // return (
+        //     <span onClick={() => setNotification(notification.filter((n) => n !== notification))} className="notification">{`${senderName} vous a envoyé un message`}</span>
+        // );
+        // }
     };
 
     return (
@@ -72,28 +82,27 @@ const Index = ({ firstName, sidebarOnClose }: IProps) => {
                 </li> */}
                 <li className='topmenu-item' onClick={() => setIsOpen(!isOpen)}>
                     <div className='nav-link notifications'>
-                        <i className="far fa-envelope-open"></i>
-                        {!notifications.length && "Vous n'avez pas de notification pour l'instant"}
+                        <i className="far fa-bell"></i>
                         {
                             notifications.length > 0 &&
                             <div className="counter">{notifications.length}</div>
                         }
                     </div>
                     <div className={`dropdown-menu dropdown-content ${isOpen ? "show" : ""}`}>
-                        <Link to="#" className="dropdown-item notify-item">
-                            {notifications.map((n) => {
-                                console.log(n)
-                                return displayNotification(n, notifications)
-                            })}
-                        </Link>
+                        {/* <div className="dropdown-item notify-item"> */}
+                        {!notifications.length && <span>Vous n'avez pas de notification pour l'instant</span>}
+                        {notifications.map((notification, index) => {
+                            return displayNotification(notification, index)
+                        })}
+                        {/* </div> */}
                     </div>
                 </li>
-                <li className='topmenu-item'>
+                {/* <li className='topmenu-item'>
                     <div className='nav-link'>
                         <i className="far fa-bell">
                         </i>
                     </div>
-                </li>
+                </li> */}
                 {/* <li className='topmenu-item' onClick={() => setIsOpen(!isOpen)}>
                     <Link className="nav-link" to="#">
                         <span>

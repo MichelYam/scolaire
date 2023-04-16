@@ -41,4 +41,29 @@ router.delete(
   userController.deleteUser
 )
 
+//notfications friend request
+router.post(
+  '/sendfriendrequest',
+  tokenValidation.validateToken,
+  userController.sendFriendRequest
+)
+
+router.put(
+  '/acceptFriendRequest',
+  tokenValidation.validateToken,
+  userController.acceptFriendRequest
+)
+
+router.get(
+  '/getfriendrequest',
+  tokenValidation.validateToken,
+  userController.getFriendRequest
+)
+
+router.delete(
+  "/notification/delete/:id",
+  userController.rejectFriendRequest
+)
+
+
 module.exports = router

@@ -16,7 +16,7 @@ const store = configureStore({
         event: eventReducer,
         room: roomReducer,
         message: messageReducer,
-        notification: notificationReducer,
+        // notification: notificationReducer,
         appState: appStateSlice,
     }
 })

@@ -1,12 +1,12 @@
 const mongoose = require("mongoose")
 
-const friendRequestSchema = new mongoose.Schema({
-    senderId: {
+const NotificationSchema = new mongoose.Schema({
+    sender: {
         type: mongoose.Types.ObjectId,
         required: true,
         ref: "user"
     },
-    receiverId: {
+    recipient: {
         type: mongoose.Types.ObjectId,
         required: true,
         ref: "user"
@@ -19,4 +19,4 @@ const friendRequestSchema = new mongoose.Schema({
     { timestamps: true }
 )
 
-module.exports = FriendRequest = mongoose.model("FriendRequest", friendRequestSchema);
+module.exports = Notification = mongoose.model("notification", NotificationSchema);

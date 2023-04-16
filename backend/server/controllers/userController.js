@@ -116,3 +116,72 @@ module.exports.getFriendList = async (req, res) => {
 
   return res.status(response.status).send(response)
 }
+
+module.exports.sendFriendRequest = async (req, res) => {
+  let response = {}
+  try {
+    const responseFromService = await userService.sendFriendRequest(req)
+    response.status = 200
+    response.message = 'Successfully send friend request'
+    response.body = responseFromService
+  } catch (error) {
+    console.log('Error in sendFriendRequest - userController.js')
+    // console.log(error)
+    response.status = 400
+    response.message = error.message
+  }
+
+  return res.status(response.status).send(response)
+}
+
+module.exports.getFriendRequest = async (req, res) => {
+  let response = {}
+  try {
+    const responseFromService = await userService.getFriendRequest(req)
+    response.status = 200
+    response.message = 'Successfully get friend request'
+    response.body = responseFromService
+  } catch (error) {
+    console.log('Error in getFriendRequest - userController.js')
+    response.status = 400
+    response.message = error.message
+  }
+
+  return res.status(response.status).send(response)
+}
+
+
+module.exports.acceptFriendRequest = async (req, res) => {
+  let response = {}
+
+  try {
+    const responseFromService = await userService.acceptFriendRequest(req)
+    response.status = 200
+    response.message = 'Successfully accept friend request'
+    response.body = responseFromService
+  } catch (error) {
+    console.log('Error in acceptFriendRequest - userController.js')
+    response.status = 400
+    response.message = error.message
+  }
+
+  return res.status(response.status).send(response)
+}
+
+
+module.exports.rejectFriendRequest = async (req, res) => {
+  let response = {}
+
+  try {
+    const responseFromService = await userService.rejectFriendRequest(req)
+    response.status = 200
+    response.message = 'Successfully rejected friend request'
+    response.body = responseFromService
+  } catch (error) {
+    console.log('Error in rejectFriendRequest - userController.js')
+    response.status = 400
+    response.message = error.message
+  }
+
+  return res.status(response.status).send(response)
+}

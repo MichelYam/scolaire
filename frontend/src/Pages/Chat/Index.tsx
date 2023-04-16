@@ -12,8 +12,8 @@ import { createRoom, getMyRooms } from '../../Redux/features/room/roomAction';
 import { Modal } from '../../Components/Modal';
 import InputField from '../../Components/Form/inputField';
 import { io, Socket } from 'socket.io-client';
-import { ChangeEvent } from 'preact/compat';
 import { createMessage, getMessages } from '../../Redux/features/message/messageAction';
+import { sendFriendRequest } from '../../Redux/features/user/userAction';
 import { Room } from '../../Redux/features/room/roomSlice';
 import Message from '../../Components/Message';
 import animationData from "./animation.json"
@@ -45,7 +45,7 @@ const Index = () => {
     const [istyping, setIsTyping] = useState(false);
     const socket = useRef<Socket>();
     const scrollRef = useRef<null | HTMLDivElement>(null);
-
+    const { notifications } = useAppSelector(selectUser)
     // const [notification, setNotification] = useState([]);
 
     // console.log("test", messages)
@@ -121,19 +121,19 @@ const Index = () => {
     useEffect(() => {
         socket.current?.on("message recieved", (newMessageRecieved) => {
             console.log(newMessageRecieved)
-            // if (!currentChat || currentChat._id !== newMessageRecieved.chat._id) {
-            // if (!notification.includes(newMessageRecieved)) {
-            //     // setNotification([newMessageRecieved, ...notification]);
-            // }
-            // } else {
-            // setMessages([...messages, newMessageRecieved])
-            if (currentChat) {
-                // console.log("test")
-                dispatch(getMessages(currentChat?._id))
+            if (!currentChat || currentChat._id !== newMessageRecieved.chat._id) {
+                if (!notifications.includes(newMessageRecieved)) {
+                    // setNotification([newMessageRecieved, ...notification]);
+                }
+            } else {
+                if (currentChat) {
+                    // console.log("test")
+                    dispatch(getMessages(currentChat?._id))
 
+                }
             }
-            // }
         });
+
     });
 
     useEffect(() => {
@@ -145,7 +145,7 @@ const Index = () => {
 
     const handleTypingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewMessage(e.target.value)
-        console.log
+        // console.log
         if (!typing) {
             setTyping(true);
             socket.current?.emit("typing", currentChat?._id);
@@ -162,11 +162,15 @@ const Index = () => {
         }, timerLength);
     }
 
-    const addUserChat = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
-        dispatch(createRoom(email))
+    const addUserChat = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        console.log(email)
+        // dispatch(createRoom(email))
+        dispatch(sendFriendRequest(email))
     }
-
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setEmail(event.target.value)
+    }
     const defaultOptions = {
         loop: true,
         autoplay: true,
@@ -188,7 +192,7 @@ const Index = () => {
                                     <h3>Ajouter une personne</h3>
                                 </div>
                                 <form action="" onSubmit={addUserChat}>
-                                    <InputField name="search" label='Email' type='text' onChange={() => handleTypingChange} />
+                                    <InputField name="search" label='Email' type='text' onChange={handleChange} />
                                     <button type="submit">Ajouter</button>
                                 </form>
                             </Modal>

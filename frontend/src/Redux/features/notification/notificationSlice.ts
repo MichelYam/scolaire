@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { IUser } from "../user/userAction";
-import { createNotification, deleteNotification, getMyNotifications } from "./notificationAction"
+import { sendFriendRequest, rejectFriendRequest, getFriendRequest, acceptFriendRequest } from "./notificationAction"
 
 
 export interface Notification {
@@ -28,45 +28,59 @@ const notificationSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            //create notification
-            .addCase(createNotification.pending, (state) => {
+            //send friend request
+            .addCase(sendFriendRequest.pending, (state) => {
                 state.loading = true
                 state.error = null
             })
-            .addCase(createNotification.fulfilled, (state, { payload }) => {
+            .addCase(sendFriendRequest.fulfilled, (state, { payload }) => {
                 state.loading = false
                 state.notifications.push(payload)
                 state.error = null
             })
-            .addCase(createNotification.rejected, (state, { payload }: any) => {
+            .addCase(sendFriendRequest.rejected, (state, { payload }: any) => {
                 state.loading = false
                 state.error = payload
             })
-            // get user notifications
-            .addCase(getMyNotifications.pending, (state) => {
+            // get all friend Request
+            .addCase(getFriendRequest.pending, (state) => {
                 state.loading = true
                 state.error = null
             })
-            .addCase(getMyNotifications.fulfilled, (state, { payload }: any) => {
+            .addCase(getFriendRequest.fulfilled, (state, { payload }: any) => {
                 state.loading = false
                 state.notifications = payload?.body
                 state.error = null
             })
-            .addCase(getMyNotifications.rejected, (state, { payload }: any) => {
+            .addCase(getFriendRequest.rejected, (state, { payload }: any) => {
                 state.loading = false
                 state.error = payload
             })
-            //delete taks
-            .addCase(deleteNotification.pending, (state) => {
+            //Accept Friend request
+            .addCase(acceptFriendRequest.pending, (state) => {
                 state.loading = true
                 state.error = null
             })
-            .addCase(deleteNotification.fulfilled, (state, { payload }: any) => {
+            .addCase(acceptFriendRequest.fulfilled, (state, { payload }: any) => {
                 state.loading = false
                 // state.notifications = state.notifications.filter(item => item._id !== payload.body.id)
                 state.error = null
             })
-            .addCase(deleteNotification.rejected, (state, { payload }: any) => {
+            .addCase(acceptFriendRequest.rejected, (state, { payload }: any) => {
+                state.loading = false
+                state.error = payload
+            })
+            //Reject friend request
+            .addCase(rejectFriendRequest.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(rejectFriendRequest.fulfilled, (state, { payload }: any) => {
+                state.loading = false
+                // state.notifications = state.notifications.filter(item => item._id !== payload.body.id)
+                state.error = null
+            })
+            .addCase(rejectFriendRequest.rejected, (state, { payload }: any) => {
                 state.loading = false
                 state.error = payload
             })

@@ -14,7 +14,7 @@
 }
 
 .contacts {
-    width: 25%;
+    /* width: 25%; */
     /* height: 100%; */
     border: 1px solid transparent;
     padding: 25px 10px;
@@ -236,7 +236,7 @@ li.repaly .time {
 
 .chat-search {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 

@@ -118,9 +118,88 @@ export const getAllUsers = createAsyncThunk('user/getAllUsers', async (arg, { re
 })
 export const deleteUser = createAsyncThunk('user/delete', async ({ _id }: IUser, { rejectWithValue, getState }) => {
     // console.log(_id);
-    
+
     try {
         const { data } = await axios.delete(`${BASE_URL}/delete/${_id}`);
+        return data;
+    } catch (error: any) {
+        if (error.response && error.response.data.message) {
+            return rejectWithValue(error.response.data.message)
+        } else {
+            return rejectWithValue(error.message)
+        }
+    }
+})
+
+
+// notification Friend Request
+
+export const sendFriendRequest = createAsyncThunk("notification/sendFriendRequest", async (email: string, { rejectWithValue, getState }) => {
+
+    const { user }: any = getState()
+    try {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${user.userToken}`
+            },
+        }
+        const { data } = await axios.post(`${BASE_URL}/sendfriendrequest`, { email }, config)
+        // console.log(data);
+
+        return data
+    } catch (error: any) {
+        if (error.response && error.response.data.message) {
+            return rejectWithValue(error.response.data.message)
+        } else {
+            return rejectWithValue(error.message)
+        }
+    }
+})
+
+export const getFriendRequest = createAsyncThunk('notification/getFriendRequest', async (arg, { rejectWithValue, getState }) => {
+    const { user }: any = getState()
+    try {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${user.userToken}`
+            },
+        }
+        const { data } = await axios.get(`${BASE_URL}/getFriendRequest`, config)
+
+        return data
+    } catch (error: any) {
+        if (error.response && error.response.data.message) {
+            return rejectWithValue(error.response.data.message)
+        } else {
+            return rejectWithValue(error.message)
+        }
+    }
+})
+export const acceptFriendRequest = createAsyncThunk("notification/acceptFriendRequest", async (senderId: string, { rejectWithValue, getState }) => {
+
+    const { user }: any = getState()
+    try {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${user.userToken}`
+            },
+        }
+        const { data } = await axios.put(`${BASE_URL}/acceptFriendRequest`, { senderId }, config)
+        // console.log(data);
+
+        return data
+    } catch (error: any) {
+        if (error.response && error.response.data.message) {
+            return rejectWithValue(error.response.data.message)
+        } else {
+            return rejectWithValue(error.message)
+        }
+    }
+})
+export const rejectFriendRequest = createAsyncThunk('notification/rejectFriendRequest', async (senderId: string, { rejectWithValue }) => {
+
+    try {
+        const { data } = await axios.delete(`${BASE_URL}/rejectFriendRequest/${senderId}`, { data: senderId });
         return data;
     } catch (error: any) {
         if (error.response && error.response.data.message) {

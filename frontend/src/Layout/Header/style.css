@@ -134,3 +134,8 @@
 .dropdown-item:hover {
     background-color: #eef2f7;
 }
+
+
+.notification-friendrequest {
+    display: flex;
+}

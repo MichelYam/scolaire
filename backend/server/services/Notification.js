@@ -1,4 +1,4 @@
-const FriendInvation = require('../models/FriendInvation')
+const Notification = require('../models/Notification')
 
 module.exports.inviteUser = async (req, res) => {
     const emailRequested = req.body
@@ -53,7 +53,7 @@ module.exports.inviteUser = async (req, res) => {
     }
 }
 
-module.exports.acceptUser = async (req, res) => {
+module.exports.acceptFriendRequest = async (req, res) => {
     try {
         const { id } = req.body;
         const invitation = await FriendInvation.findById({ _id: id });
@@ -95,7 +95,7 @@ module.exports.acceptUser = async (req, res) => {
     }
 };
 
-module.exports.rejectUser = async (req, res) => {
+module.exports.rejectFriendRequest = async (req, res) => {
     try {
         const { _id } = req.body;
         const currentUserId = req.user._id;

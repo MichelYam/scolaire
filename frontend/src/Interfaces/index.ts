@@ -6,6 +6,13 @@ export interface IUser {
     friendsList: [];
     role: string;
 }
+export interface INotification {
+    _id: string;
+    sender: string;
+    recipient: string;
+    status: string;
+    type?: string
+}
 
 export interface IEvents {
     id: number;
@@ -23,6 +30,6 @@ export interface ITicket {
     assigned: string;
     date: string;
     priority: string;
-    statut: string;
+    status: string;
     createdBy: string;
 }

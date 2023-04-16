@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IUser } from "../../../Interfaces";
+import { IUser, INotification } from "../../../Interfaces";
 import { clearStorage } from "../../../utils/TokenStorage";
-import { userLogin, userRegister, getUserDetails, updateUserProfile, getAllUsers, deleteUser } from './userAction'
+import { userLogin, userRegister, getUserDetails, updateUserProfile, getAllUsers, deleteUser, sendFriendRequest, acceptFriendRequest, getFriendRequest, rejectFriendRequest } from './userAction'
 
 
 
@@ -12,6 +12,7 @@ export interface IDataAPI {
     userToken: string | null,
     error: string | null,
     allUsers: IUser[],
+    notifications: INotification[],
 }
 
 const initialState: IDataAPI = {
@@ -21,6 +22,7 @@ const initialState: IDataAPI = {
     userToken: sessionStorage.getItem('userToken') || localStorage.getItem('userToken') || null,
     error: null,
     allUsers: [],
+    notifications: [],
 }
 const userSlice = createSlice({
     name: 'user',
@@ -69,6 +71,7 @@ const userSlice = createSlice({
             //Get user
             .addCase(getUserDetails.pending, (state) => {
                 state.loading = true
+                state.error = null
             })
             .addCase(getUserDetails.fulfilled, (state, { payload }) => {
                 state.loading = false
@@ -82,6 +85,7 @@ const userSlice = createSlice({
             //Update user
             .addCase(updateUserProfile.pending, (state) => {
                 state.loading = true
+                state.error = null
             })
             .addCase(updateUserProfile.fulfilled, (state, { payload }) => {
                 state.loading = false
@@ -95,6 +99,7 @@ const userSlice = createSlice({
             //Get all users
             .addCase(getAllUsers.pending, (state) => {
                 state.loading = true
+                state.error = null
             })
             .addCase(getAllUsers.fulfilled, (state, { payload }) => {
                 state.loading = false
@@ -108,6 +113,7 @@ const userSlice = createSlice({
             //Delete user
             .addCase(deleteUser.pending, (state) => {
                 state.loading = true
+                state.error = null
             })
             .addCase(deleteUser.fulfilled, (state, { payload }) => {
                 state.loading = false
@@ -118,6 +124,64 @@ const userSlice = createSlice({
                 state.error = payload
             })
 
+            // Notification Friend Request
+            // Send friend Request
+            .addCase(sendFriendRequest.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(sendFriendRequest.fulfilled, (state, { payload }) => {
+                state.loading = false
+                state.notifications.push(payload)
+                state.error = null
+            })
+            .addCase(sendFriendRequest.rejected, (state, { payload }: any) => {
+                state.loading = false
+                state.error = payload
+            })
+            // get all friend Request
+            .addCase(getFriendRequest.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(getFriendRequest.fulfilled, (state, { payload }: any) => {
+                state.loading = false
+                state.notifications = payload?.body
+                state.error = null
+            })
+            .addCase(getFriendRequest.rejected, (state, { payload }: any) => {
+                state.loading = false
+                state.error = payload
+            })
+            //Accept Friend request
+            .addCase(acceptFriendRequest.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(acceptFriendRequest.fulfilled, (state, { payload }: any) => {
+                console.log("payload", payload)
+                state.loading = false
+                state.notifications = payload?.body
+                state.error = null
+            })
+            .addCase(acceptFriendRequest.rejected, (state, { payload }: any) => {
+                state.loading = false
+                state.error = payload
+            })
+            //Reject friend request
+            .addCase(rejectFriendRequest.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(rejectFriendRequest.fulfilled, (state, { payload }: any) => {
+                state.loading = false
+                state.notifications = state.notifications.filter(item => item._id !== payload.body.id)
+                state.error = null
+            })
+            .addCase(rejectFriendRequest.rejected, (state, { payload }: any) => {
+                state.loading = false
+                state.error = payload
+            })
 
     }
 });

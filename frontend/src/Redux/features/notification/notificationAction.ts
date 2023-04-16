@@ -10,7 +10,7 @@ interface INotificationParams {
     messages: string[]
 }
 
-export const createNotification = createAsyncThunk("notification/new", async (receiverId: string, { rejectWithValue, getState }) => {
+export const sendFriendRequest = createAsyncThunk("notification/new", async (receiverId: string, { rejectWithValue, getState }) => {
 
     const { user }: any = getState()
     try {
@@ -32,7 +32,7 @@ export const createNotification = createAsyncThunk("notification/new", async (re
     }
 })
 
-export const getMyNotifications = createAsyncThunk('notification/myNotifications', async (arg, { rejectWithValue, getState }) => {
+export const getFriendRequest = createAsyncThunk('notification/myNotifications', async (arg, { rejectWithValue, getState }) => {
     const { user }: any = getState()
     try {
         const config = {
@@ -51,8 +51,28 @@ export const getMyNotifications = createAsyncThunk('notification/myNotifications
         }
     }
 })
+export const acceptFriendRequest = createAsyncThunk("notification/new", async (receiverId: string, { rejectWithValue, getState }) => {
 
-export const deleteNotification = createAsyncThunk('notification/delete', async (id: INotificationParams, { rejectWithValue }) => {
+    const { user }: any = getState()
+    try {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${user.userToken}`
+            },
+        }
+        const { data } = await axios.post(`${BASE_URL}/new`, receiverId, config)
+        // console.log(data);
+
+        return data
+    } catch (error: any) {
+        if (error.response && error.response.data.message) {
+            return rejectWithValue(error.response.data.message)
+        } else {
+            return rejectWithValue(error.message)
+        }
+    }
+})
+export const rejectFriendRequest = createAsyncThunk('notification/delete', async (id: INotificationParams, { rejectWithValue }) => {
 
     try {
         const { data } = await axios.delete(`${BASE_URL}/delete/${id._id}`, { data: id });

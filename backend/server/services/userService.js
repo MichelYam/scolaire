@@ -1,5 +1,5 @@
 const User = require('../models/User')
-const FriendRequest = require('../models/FriendRequest')
+const Notification = require('../models/Notification')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
@@ -11,7 +11,7 @@ module.exports.createUser = async serviceData => {
     }
 
     const hashPassword = await bcrypt.hash(serviceData.password, 12)
-
+    console.log("info", serviceData)
     const newUser = new User({
       firstName: serviceData.firstName,
       lastName: serviceData.lastName,
@@ -160,20 +160,27 @@ module.exports.getFriendList = async (req) => {
 }
 
 module.exports.sendFriendRequest = async (req, res) => {
-  const { _id } = req.user.id
-  const { recipientId } = req.body
-  try {
-    const foundFriendRequest = await FriendRequest.findOne({
-      sender: _id,
-      recipient: recipientId
-    })
+  const { id } = req.user
+  const { email } = req.body
+  const dataRecipient = await User.findOne({ email: email })
+  console.log("dataRecipient", id)
 
+  if (!dataRecipient) {
+    throw new Error('User not found!')
+  }
+
+  try {
+    const foundFriendRequest = await Notification.findOne({
+      sender: id,
+      recipient: dataRecipient._id
+    })
+    //message d'erreur requete existant
     if (foundFriendRequest) return res.status(400).send()
 
 
-    const newFriendRequest = new FriendRequest({
-      sender: _id,
-      recipient: recipientId,
+    const newFriendRequest = new Notification({
+      sender: id,
+      recipient: dataRecipient._id,
       status: 'pending',
     });
 
@@ -192,7 +199,7 @@ module.exports.rejectFriendRequest = async (req) => {
   const senderId = req.body.sender;
   try {
 
-    const deletedFriendRequest = await FriendRequest.findOneAndDelete({
+    const deletedFriendRequest = await Notification.findOneAndDelete({
       sender: senderId,
       recipient: recipientId,
     });
@@ -210,16 +217,18 @@ module.exports.rejectFriendRequest = async (req) => {
 }
 
 module.exports.acceptFriendRequest = async (req, res) => {
-  const recipientId = req.user._id
+  const recipientId = req.user.id
   const senderId = req.body.senderId
-
   try {
-    const updatedSender = await User.findOneAndUpdate(
+    // const updatedSender = await User.findOneAndUpdate(
+    await User.findOneAndUpdate(
       { _id: senderId, friendList: { $nin: [recipientId] } },
       { $push: { friendList: recipientId } },
       { new: true }
     );
+    // updatedSender.toObject()
     const updatedRecipient = await User.findOneAndUpdate(
+      // await User.findOneAndUpdate(
       { _id: recipientId, friendList: { $nin: [senderId] } },
       {
         $push: { friendList: senderId },
@@ -228,28 +237,28 @@ module.exports.acceptFriendRequest = async (req, res) => {
     );
 
     if (updatedRecipient) {
-      const updatedFriendRequest = await FriendRequest.findOneAndUpdate(
+      await Notification.findOneAndUpdate(
         {
           sender: senderId,
           recipient: recipientId,
         },
         {
           $set: { status: 'accepted' },
-          $push: { friendshipParticipants: [senderId, recipientId] },
+          // $push: { friendshipParticipants: [senderId, recipientId] },
         },
         { new: true }
       );
-
-      const updatedRequests = await FriendRequest.find({
-        recipient: req.tokenUser.userId,
+      const updatedRequests = await Notification.find({
+        recipient: req.user.id,
         status: 'pending',
       });
-      res.status(200).send({
-        updatedRequests: updatedRequests,
-        updatedUserFriendList: updatedRecipient.friendList,
-      });
+      
+      return updatedRequests
+      // res.status(200).send({
+      //   updatedRequests: updatedRequests,
+      //   updatedUserFriendList: updatedRecipient.friendList,
+      // });
     }
-
   } catch (error) {
     console.error('Error in notificationService.js', error)
     throw new Error(error)
@@ -259,9 +268,10 @@ module.exports.acceptFriendRequest = async (req, res) => {
 // get friend requests of current user
 module.exports.getFriendRequest = async (req) => {
   try {
-    const requests = await FriendRequest.find({
-      recipient: req.params.id,
-    });
+    const requests = await Notification.find({
+      recipient: req.user.id,
+      status: "pending"
+    }).populate("sender").select('-password');
     return requests
   } catch (error) {
     console.error('Error in notificationService.js', error)
