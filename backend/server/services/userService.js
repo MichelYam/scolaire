@@ -251,8 +251,8 @@ module.exports.acceptFriendRequest = async (req, res) => {
       const updatedRequests = await Notification.find({
         recipient: req.user.id,
         status: 'pending',
-      });
-      
+      }).populate("sender").select('-password');
+
       return updatedRequests
       // res.status(200).send({
       //   updatedRequests: updatedRequests,
