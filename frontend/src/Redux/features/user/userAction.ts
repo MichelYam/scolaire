@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { saveStorage } from "../../../utils/TokenStorage";
+import { INotification } from "../../../Interfaces";
 
 const BASE_URL = "http://localhost:3001/api/v1/user";
 
@@ -130,6 +131,24 @@ export const deleteUser = createAsyncThunk('user/delete', async ({ _id }: IUser,
         }
     }
 })
+export const getFriendList = createAsyncThunk('user/friends', async (arg, { rejectWithValue, getState }) => {
+    const { user }: any = getState()
+    const config = {
+        headers: {
+            Authorization: `Bearer ${user.userToken}`,
+        },
+    }
+    try {
+        const { data } = await axios.get(`${BASE_URL}/friends`, config);
+        return data;
+    } catch (error: any) {
+        if (error.response && error.response.data.message) {
+            return rejectWithValue(error.response.data.message)
+        } else {
+            return rejectWithValue(error.message)
+        }
+    }
+})
 
 
 // notification Friend Request
@@ -196,10 +215,9 @@ export const acceptFriendRequest = createAsyncThunk("notification/acceptFriendRe
         }
     }
 })
-export const rejectFriendRequest = createAsyncThunk('notification/rejectFriendRequest', async (senderId: string, { rejectWithValue }) => {
-
+export const rejectFriendRequest = createAsyncThunk('notification/rejectFriendRequest', async (_id: INotification, { rejectWithValue }) => {
     try {
-        const { data } = await axios.delete(`${BASE_URL}/rejectFriendRequest/${senderId}`, { data: senderId });
+        const { data } = await axios.delete(`${BASE_URL}/rejectFriendRequest/${_id}`);
         return data;
     } catch (error: any) {
         if (error.response && error.response.data.message) {

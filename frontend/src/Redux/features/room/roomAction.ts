@@ -19,9 +19,7 @@ export const createRoom = createAsyncThunk("room/new", async (receiverId: string
                 Authorization: `Bearer ${user.userToken}`
             },
         }
-        const { data } = await axios.post(`${BASE_URL}/new`, receiverId, config)
-        // console.log(data);
-
+        const { data } = await axios.post(`${BASE_URL}/new`, { receiverId }, config)
         return data
     } catch (error: any) {
         if (error.response && error.response.data.message) {

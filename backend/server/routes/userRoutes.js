@@ -32,7 +32,6 @@ router.get(
 router.get(
   '/friends',
   tokenValidation.validateToken,
-  // authorize(Role.Admin),
   userController.getFriendList
 )
 
@@ -61,7 +60,8 @@ router.get(
 )
 
 router.delete(
-  "/notification/delete/:id",
+  "/rejectFriendRequest/:id",
+  // tokenValidation.validateToken,
   userController.rejectFriendRequest
 )
 

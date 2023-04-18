@@ -92,7 +92,7 @@ const Index = () => {
 
     useEffect(() => {
         dispatch(getMyRooms())
-    }, [userInfo?._id]);
+    }, [userInfo?._id, dispatch]);
 
     const submit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -120,7 +120,7 @@ const Index = () => {
     }
     useEffect(() => {
         socket.current?.on("message recieved", (newMessageRecieved) => {
-            console.log(newMessageRecieved)
+            // console.log(newMessageRecieved)
             if (!currentChat || currentChat._id !== newMessageRecieved.chat._id) {
                 if (!notifications.includes(newMessageRecieved)) {
                     // setNotification([newMessageRecieved, ...notification]);
@@ -164,8 +164,7 @@ const Index = () => {
 
     const addUserChat = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        console.log(email)
-        // dispatch(createRoom(email))
+
         dispatch(sendFriendRequest(email))
     }
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -222,6 +221,7 @@ const Index = () => {
                                     <div className='conversation-header-contact-call'>
                                         <i className='bx bx-sm bxs-phone-call'></i>
                                         <i className='bx bx-sm bxs-video' ></i>
+                                        <i className='bx bx-dots-vertical-rounded'></i>
                                     </div>
                                 </div>
                             </div>

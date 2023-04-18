@@ -179,6 +179,7 @@ module.exports.rejectFriendRequest = async (req, res) => {
     response.body = responseFromService
   } catch (error) {
     console.log('Error in rejectFriendRequest - userController.js')
+    console.log(error)
     response.status = 400
     response.message = error.message
   }

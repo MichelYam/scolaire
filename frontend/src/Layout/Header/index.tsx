@@ -40,13 +40,12 @@ const Index = ({ firstName, sidebarOnClose }: IProps) => {
 
     useEffect(() => {
         dispatch(getFriendRequest())
-    }, [])
+    }, [notifications])
 
     const handleAcceptFriendRequest = (notification: any) => {
-        console.log(notification.sender._id)
         dispatch(acceptFriendRequest(notification.sender._id))
-        // dispatch(createRoom(notification.sender._id))
-        console.log(notifications)
+        dispatch(createRoom(notification.sender._id))
+        window.location.reload();
     }
 
     const displayNotification = (notification: any, index: number) => {

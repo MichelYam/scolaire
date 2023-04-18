@@ -195,15 +195,18 @@ module.exports.sendFriendRequest = async (req, res) => {
 
 
 module.exports.rejectFriendRequest = async (req) => {
-  const recipientId = req.user._id;
-  const senderId = req.body.sender;
+  // const recipientId = req.user._id;
+  // const senderId = req.body.notificationId;
+  const { id } = req.params
   try {
 
+    // const deletedFriendRequest = await Notification.findOneAndDelete({
+    //   sender: senderId,
+    //   recipient: recipientId,
+    // });
     const deletedFriendRequest = await Notification.findOneAndDelete({
-      sender: senderId,
-      recipient: recipientId,
+      _id: id
     });
-
     // const updatedRequests = await FriendRequest.find({
     //   recipient: req.tokenUser.userId,
     //   status: 'pending',
@@ -216,6 +219,7 @@ module.exports.rejectFriendRequest = async (req) => {
   }
 }
 
+// accepte Friend Request and update friend list 
 module.exports.acceptFriendRequest = async (req, res) => {
   const recipientId = req.user.id
   const senderId = req.body.senderId

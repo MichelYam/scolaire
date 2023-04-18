@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IUser, INotification } from "../../../Interfaces";
 import { clearStorage } from "../../../utils/TokenStorage";
-import { userLogin, userRegister, getUserDetails, updateUserProfile, getAllUsers, deleteUser, sendFriendRequest, acceptFriendRequest, getFriendRequest, rejectFriendRequest } from './userAction'
+import { userLogin, userRegister, getUserDetails, updateUserProfile, getAllUsers, deleteUser, getFriendList, sendFriendRequest, acceptFriendRequest, getFriendRequest, rejectFriendRequest } from './userAction'
 
-
+type friendList = IUser
 
 export interface IDataAPI {
     isAuthenticated: boolean,
@@ -13,6 +13,7 @@ export interface IDataAPI {
     error: string | null,
     allUsers: IUser[],
     notifications: INotification[],
+    friendList: friendList[]
 }
 
 const initialState: IDataAPI = {
@@ -22,6 +23,7 @@ const initialState: IDataAPI = {
     userToken: sessionStorage.getItem('userToken') || localStorage.getItem('userToken') || null,
     error: null,
     allUsers: [],
+    friendList: [],
     notifications: [],
 }
 const userSlice = createSlice({
@@ -106,6 +108,20 @@ const userSlice = createSlice({
                 state.allUsers = payload?.body
             })
             .addCase(getAllUsers.rejected, (state, { payload }: any) => {
+                state.loading = false
+                state.error = payload
+            })
+
+            //Get all users
+            .addCase(getFriendList.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(getFriendList.fulfilled, (state, { payload }) => {
+                state.loading = false
+                state.friendList = payload?.body
+            })
+            .addCase(getFriendList.rejected, (state, { payload }: any) => {
                 state.loading = false
                 state.error = payload
             })
