@@ -25,7 +25,7 @@ const AppLayout = () => {
         <>
             <SideBar logout={logOut} sidebarOpen={sidebarOpen} appRoutes={appRoutes} />
             <div className="content">
-                <Header firstName={userInfo?.firstName} sidebarOnClose={() => setSidebarOpen(!sidebarOpen)} />
+                <Header firstName={userInfo?.firstName} logout={logOut} sidebarOnClose={() => setSidebarOpen(!sidebarOpen)} />
                 <div className="test">
                     <Outlet />
                 </div>

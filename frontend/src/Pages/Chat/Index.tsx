@@ -72,7 +72,6 @@ const Index = () => {
 
     }, [currentChat]);
 
-
     // useEffect(() => {
     //     arrivalMessage &&
     //         // @ts-ignore TS2564
@@ -92,7 +91,7 @@ const Index = () => {
 
     useEffect(() => {
         dispatch(getMyRooms())
-    }, [userInfo?._id, dispatch]);
+    }, [userInfo?._id]);
 
     const submit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -114,6 +113,9 @@ const Index = () => {
                 content: newMessage,
             });
             setNewMessage("");
+            if (currentChat) {
+                dispatch(getMessages(currentChat?._id))
+            }
         } catch (err) {
             console.log(err);
         }

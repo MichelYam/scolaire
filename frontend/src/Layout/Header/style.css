@@ -3,8 +3,11 @@
     height: 60px;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
+    text-align: center;
     padding: 0;
     margin: 0;
+    padding-right: 20px;
 }
 
 .topmenu .topmenu-item {
@@ -33,6 +36,7 @@
 .account-user-name {
     display: block;
     font-weight: 600;
+    margin: 0 10px 0 0;
 }
 
 .account-position {
