@@ -32,6 +32,22 @@ module.exports.getUserTasks = async (req, res) => {
   return res.status(response.status).send(response)
 }
 
+module.exports.getTaskById = async (req, res) => {
+  let response = {}
+  try {
+    const responseFromService = await taskService.getTaskById(req)
+    response.status = 200
+    response.message = 'Successfully got specific task'
+    response.body = responseFromService
+  } catch (error) {
+    console.log('Error in taskController.js')
+    response.status = 400
+    response.message = error.message
+  }
+
+  return res.status(response.status).send(response)
+}
+
 module.exports.getUserTasksAssignee = async (req, res) => {
   let response = {}
   try {

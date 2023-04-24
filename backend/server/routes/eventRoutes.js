@@ -20,7 +20,7 @@ router.get(
 )
 
 router.put(
-    '/:_id',
+    '/:id',
     tokenValidation.validateToken,
     verifyRoles(ROLES.Tutor, ROLES.Admin),
     eventController.updateEvent

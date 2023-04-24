@@ -14,7 +14,7 @@ export interface INotification {
     type?: string
 }
 
-export interface IEvents {
+export interface IEvent {
     id: number;
     title: string;
     description: string;
@@ -23,13 +23,13 @@ export interface IEvents {
     createdBy: string;
 }
 
-export interface ITicket {
+export interface ITask {
     id: number;
     title: string;
     description: string;
-    assigned: string;
+    assignee: string;
     date: string;
-    priority: string;
+    dateDue: string;
     status: string;
     createdBy: string;
 }

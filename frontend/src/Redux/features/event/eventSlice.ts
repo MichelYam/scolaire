@@ -7,16 +7,15 @@ export interface Event {
     title: string,
     description?: string,
     assignee: string,
-    dateDue: string,
+    date: string,
     createdBy: string,
-    statut: string,
     type: 'Event'
 }
 
 interface IEvent {
     loading: boolean,
     error: string | null;
-    events: IEvent[]
+    events: Event[]
 }
 
 const initialState: IEvent = {

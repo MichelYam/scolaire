@@ -10,12 +10,12 @@ interface IProps {
     // lastMessage: string
     currentUser: IUser | null
     conversation: Room
-    onChange: () => void
+    onClick: () => void
 }
 
 // const img = "../../public/assets/img/avatar.png";
 
-const Index = ({ conversation, currentUser, onChange }: IProps) => {
+const Index = ({ conversation, currentUser, onClick }: IProps) => {
     const [isActive, setIsActive] = useState("");
     const user = conversation.users.find((m) => (
         m._id !== currentUser?._id
@@ -26,7 +26,7 @@ const Index = ({ conversation, currentUser, onChange }: IProps) => {
     }
     return (
         // <div key={user?.id} className={`contact ${isActive === user.id ? "active" : ""}`} onClick={() => handleClick(user.id)}>
-        <div key={currentUser?._id} className={`contact ${isActive === user?._id ? "active" : ""}`} onClick={onChange}>
+        <div key={currentUser?._id} className={`contact ${isActive === user?._id ? "active" : ""}`} onClick={onClick}>
             <div className="contact-img">
                 <img src="../assets/img/avatar.png" alt="profile de l'utilisateur" />
             </div>

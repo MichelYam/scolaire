@@ -7,7 +7,7 @@ module.exports.createEvent = async (req) => {
             title: req.body.title,
             description: req.body.description,
             assignee: req.body.assignee,
-            dateDue: req.body.dateDue,
+            date: req.body.dateDue,
             createdBy: req.body.createdBy,
         })
         let result = await newEvent.save()
@@ -33,15 +33,17 @@ module.exports.getUserEvents = async (req) => {
     }
 }
 
-module.exports.updateEvent = async serviceData => {
+module.exports.updateEvent = async req => {
     try {
-        const jwtToken = serviceData.headers.authorization.split('Bearer')[1].trim()
+        const jwtToken = req.headers.authorization.split('Bearer')[1].trim()
         const decodedJwtToken = jwt.decode(jwtToken)
         const event = await User.findOneAndUpdate(
             { _id: decodedJwtToken.id },
             {
-                firstName: serviceData.body.firstName,
-                lastName: serviceData.body.lastName
+                title: req.body.title,
+                description: req.body.description,
+                assignee: req.body.assignee,
+                date: req.body.date,
             },
             { new: true }
         )

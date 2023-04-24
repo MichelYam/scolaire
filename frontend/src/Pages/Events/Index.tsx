@@ -11,53 +11,53 @@ import { selectEvent } from '../../utils/selector'
 import { createEvent } from '../../Redux/features/event/eventAction'
 
 
-const example = [
-  {
-    title: "Découverte de la programmation",
-    description: "Lorem erezld azdjazdi odjlzadj zaidj lza",
-    assignee: "Jean Charles",
-    createdBy: "Mr Dupont",
-    date: "12/12/2022",
-  },
-  {
-    title: "Découverte de la programmation",
-    description: "Lorem erezld azdjazdi odjlzadj zaidj lza",
-    assignee: "Jean Charles",
-    createdBy: "Mr Dupont",
-    date: "12/12/2022",
-  },
-  {
-    title: "Découverte de la programmation",
-    description: "Lorem erezld azdjazdi odjlzadj zaidj lza",
-    assignee: "Jean Charles",
-    createdBy: "Mr Dupont",
-    date: "12/12/2022",
-  },
-  {
-    title: "Découverte de la programmation",
-    description: "Lorem erezld azdjazdi odjlzadj zaidj lza",
-    assignee: "Jean Charles",
-    createdBy: "Mr Dupont",
-    date: "12/12/2022",
-  },
-  {
-    title: "Découverte de la programmation",
-    description: "Lorem erezld azdjazdi odjlzadj zaidj lza",
-    assignee: "Jean Charles",
-    createdBy: "Mr Dupont",
-    date: "12/12/2022",
-  },
-  {
-    title: "Découverte de la programmation",
-    description: "Lorem erezld azdjazdi odjlzadj zaidj lza",
-    assignee: "Jean Charles",
-    createdBy: "Mr Dupont",
-    date: "12/12/2022",
-  },
-]
+// const example = [
+//   {
+//     title: "Découverte de la programmation",
+//     description: "Lorem erezld azdjazdi odjlzadj zaidj lza",
+//     assignee: "Jean Charles",
+//     createdBy: "Mr Dupont",
+//     date: "12/12/2022",
+//   },
+//   {
+//     title: "Découverte de la programmation",
+//     description: "Lorem erezld azdjazdi odjlzadj zaidj lza",
+//     assignee: "Jean Charles",
+//     createdBy: "Mr Dupont",
+//     date: "12/12/2022",
+//   },
+//   {
+//     title: "Découverte de la programmation",
+//     description: "Lorem erezld azdjazdi odjlzadj zaidj lza",
+//     assignee: "Jean Charles",
+//     createdBy: "Mr Dupont",
+//     date: "12/12/2022",
+//   },
+//   {
+//     title: "Découverte de la programmation",
+//     description: "Lorem erezld azdjazdi odjlzadj zaidj lza",
+//     assignee: "Jean Charles",
+//     createdBy: "Mr Dupont",
+//     date: "12/12/2022",
+//   },
+//   {
+//     title: "Découverte de la programmation",
+//     description: "Lorem erezld azdjazdi odjlzadj zaidj lza",
+//     assignee: "Jean Charles",
+//     createdBy: "Mr Dupont",
+//     date: "12/12/2022",
+//   },
+//   {
+//     title: "Découverte de la programmation",
+//     description: "Lorem erezld azdjazdi odjlzadj zaidj lza",
+//     assignee: "Jean Charles",
+//     createdBy: "Mr Dupont",
+//     date: "12/12/2022",
+//   },
+// ]
 const Index = () => {
-  const [isOpen, setIsOpen] = useState(false)
   const dispatch = useAppDispatch()
+  const [isOpen, setIsOpen] = useState(false)
   const { events } = useAppSelector(selectEvent)
   const [eventData, setTaskData] = useState({
     title: "",
@@ -89,20 +89,21 @@ const Index = () => {
               </div>
             </Can>
             <div className='event-list'>
-              {example.map((item, index) => (
+            {!events.length && <span>Vous n'avez pas d'évènements pour l'instant</span>}
+              {events.map((event, index) => (
                 <div key={index} className='card'>
                   <div className='card-header'>
                     <h2>Informatiques</h2>
                     <div className='card-badge'>
                       <span className='badge'>12h00</span>
-                      <span className='badge'>{item.date}</span>
+                      <span className='badge'>{event.date}</span>
                     </div>
                   </div>
                   <div className='card-body'>
-                    <p>{item.description}</p>
+                    <p>{event.description}</p>
                   </div>
                   <div className="card-footer">
-                    <p>avec {item.createdBy}</p>
+                    <p>avec {event.createdBy}</p>
                   </div>
                 </div>
               ))}

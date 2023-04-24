@@ -85,7 +85,7 @@ export const updateTask = createAsyncThunk("user/updateTask", async (taskData: I
                 Authorization: `Bearer ${user.userToken}`,
             },
         }
-        const { data } = await axios.put(`${BASE_URL}/profile`, taskData, config);
+        const { data } = await axios.put(`${BASE_URL}/${taskData._id}`, taskData, config);
         // console.log("update:",data)
         return data
     } catch (error: any) {

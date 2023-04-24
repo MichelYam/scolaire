@@ -43,15 +43,15 @@ const Index = ({ logout, firstName, sidebarOnClose }: IProps) => {
         socket.current = io("ws://localhost:8900");
     }, []);
 
-    useEffect(() => {
-        socket.current?.on("getNotification", (data) => {
-            // setNotifications((prev) => [...prev, data]);
-        });
-    }, [socket]);
+    // useEffect(() => {
+    //     socket.current?.on("getNotification", (data) => {
+    //         // setNotifications((prev) => [...prev, data]);
+    //     });
+    // }, [socket]);
 
-    useEffect(() => {
-        dispatch(getFriendRequest())
-    }, [notifications])
+    // useEffect(() => {
+    //     dispatch(getFriendRequest())
+    // }, [notifications])
 
     const handleAcceptFriendRequest = (notification: any) => {
         dispatch(acceptFriendRequest(notification.sender._id))

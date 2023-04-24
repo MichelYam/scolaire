@@ -8,17 +8,17 @@ type SelectOptionTypes = {
 type SelectFieldProps = {
     label: string
     name: string;
-    onChange: (newValue: string) => void;
+    onChange:  void;
     Options: readonly SelectOptionTypes[];
     classInput?: string
-    value?:string
+    value?: string
 }
 
 
 const index = ({ label, name, onChange, classInput, Options, value }: SelectFieldProps) => {
     return (
         <>
-            <label htmlFor={name}>{label}</label>
+            <label htmlFor={name}>{label}:</label>
             <select name={name} id={name} className={classInput} value={value} onChange={() => onChange}>
                 {
                     Options.map((item) => (

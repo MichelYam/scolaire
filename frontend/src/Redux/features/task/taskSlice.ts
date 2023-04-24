@@ -10,7 +10,7 @@ export interface Task {
     dateDue: string,
     createdBy: string,
     date: string;
-    statut: string,
+    status: string,
     type: 'Task'
 }
 interface ITask {

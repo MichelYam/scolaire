@@ -20,14 +20,15 @@ const TaskSchema = new Schema({
   createdBy: {
     type: String,
   },
-  statut: {
+  status: {
     type: String,
     default: "en cours"
   },
   date: {
     type: Date,
-    default: Date.now
+    default: Date.now()
   }
-});
+}
+);
 
-module.exports = Task = mongoose.model("tasks", TaskSchema);
+module.exports = Task = mongoose.model("task", TaskSchema);

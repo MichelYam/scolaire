@@ -10,6 +10,7 @@ import { Task } from '../../Redux/features/task/taskSlice'
 import TaskView from './task'
 
 
+
 const Index = () => {
   const dispatch = useAppDispatch()
   const { userInfo } = useAppSelector(selectUser)
@@ -18,6 +19,7 @@ const Index = () => {
   const [openTask, setOpenTask] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [inputText, setInputText] = useState("");
+  const [currentTask, setCurrentTask] = useState<Task>()
   const [taskData, setTaskData] = useState({
     title: "",
     description: "",
@@ -25,9 +27,16 @@ const Index = () => {
     dateDue: '',
   })
   // const taskList = userInfo?.role === "Tutor" ? dispatch(getMyTasksAssignee()) : dispatch(getMyTasks())
-  // useEffect(() => {
-  //   dispatch(taskList)
-  // }, [])
+  useEffect(() => {
+    dispatch(getMyTasks())
+  }, [])
+
+  useEffect(() => {
+    if (currentTask) {
+      // setMessages(dispatch(getMessages(currentChat?._id)))
+      // dispatch(getMessages(currentChat?._id))
+    }
+  }, [currentTask]);
 
   const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTaskData({
@@ -43,51 +52,12 @@ const Index = () => {
   const deleteTaskByID = (_id: string) => {
     dispatch(deleteTask({ _id }))
   }
-  const showTicket = (index: number, task: Task) => {
-    let counter = 0
-    // if (counter === undefined || index !== index) counter = 0
-    // if (index === undefined || index !== index) index = index
-    const ticketView = <TaskView edit={edit} setEdit={setEdit} userRole={userInfo?.role} {...task} />
-    const container = document.getElementById("task-container") as HTMLInputElement
-    if (counter % 2 === 0) {
 
-      container.innerHTML =
-        //  `${ticketView}`
-        `
-          <div className = 'task-container'>
-            <div className='task-view-header'>
-              <h2>${task.title}</h2>
-                ${userInfo?.role === "Tutor" ? `<button onclick={()=>console.log("test")}> Edit</button > ` : ""}
-            </div >
-          <div className='task-view-body'>
-            <div className='task-view-description'>
-              <label htmlFor="description">Description</label>
-              ${edit ? <textarea name="" id="" cols={30} rows={10}>${task.description}</textarea> : <p>${task.description}</p>}
-            </div >
-            <div className='task-view-assigne'>
-              <div className='task-assigned'>
-                <p>Assigné par :</p>
-                <p>${task.createdBy}</p>
-              </div>
-              <p>Donné a <span>${task.assignee}</span> le : <span>${task.date}</span> </p>
-            </div>
-            <div className='task-view-date'>
-              <p>Date limite: <span>${task.dateDue}</span> </p>
-              <p>Statut: <span>${task.statut}</span> </p>
-            </div>
-          </div >
-          </div > `;
-      // counter++
-    } else {
-      counter++
-      return container.innerHTML = ""
-    }
-    return container
-  }
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     var lowerCase = event.target.value.toLowerCase();
     setInputText(lowerCase);
   }
+
   const filteredData = tasks.filter((el) => {
     if (inputText === '') {
       return el;
@@ -95,6 +65,7 @@ const Index = () => {
       return el.title.toLowerCase().includes(inputText)
     }
   })
+
   return (
     <>
       <div className='section_task'>
@@ -110,21 +81,22 @@ const Index = () => {
               </Can>
             </div>
             <div className='task-list'>
+              {!tasks.length && <span>Vous n'avez pas de devoir pour l'instant</span>}
               {filteredData.map((task, index) => (
-                <div key={index} className='task' onClick={() => showTicket(index, task)}>
-                  {/* <div key={index} className='task' onClick={() => { setOpenTask(!openTask) }}> */}
+                // <div key={index} className='task' onClick={() => showTicket(index, task)}>
+                <div key={index} className='task' onClick={() => setCurrentTask(task)}>
                   <div className='task-description'>
-                    <p>{task.title}</p>
+                    <h4>{task.title}</h4>
+                    <p>{task.description}</p>
                     <span>{`par ${task.createdBy} `}</span>
                   </div>
                   <div className='task-date'>
-                    <p>{task.dateDue}</p>
-                    <span className='task-status'>{task.statut}</span>
+                    <p>{task.dateDue.replaceAll("-", "/")}</p>
+                    <span className='task-status'>{task.status}</span>
                   </div>
                   <Can I="delete" a="Task">
                     <button onClick={() => deleteTaskByID(task._id)}>delete</button>
                   </Can>
-                  {/* {openTask && <TaskView edit={edit} setEdit={setEdit} userRole={userInfo?.role} {...task} />} */}
                 </div>
               ))}
             </div>
@@ -132,31 +104,11 @@ const Index = () => {
         </div>
         <div className='task-view'>
           {/* view task */}
-          <h2>Tâche</h2>
-          <div className='task-container' id='task-container'></div>
-        </div>
-        {/* task done */}
-        <div className='task-done'>
-          <h2>tâches terminées</h2>
-          <div className='task-done-list'>
-            {tasks.map((task, index) => (
-              <div key={index} className='card'>
-                <div className='card-header'>
-                  <h2>Informatiques</h2>
-                  <div className='card-badge'>
-                    <span className='badge'>2023-01-27</span>
-                    <span className='badge'>{task.statut}</span>
-                  </div>
-                </div>
-                <div className='card-body'>
-                  <p>{task.description}</p>
-                </div>
-                <div className='card-footer'>
-                  <p>avec {task.createdBy}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          {currentTask && <>
+            <h2>Tâche</h2>
+            <TaskView edit={edit} setEdit={setEdit} userRole={userInfo?.role} {...currentTask} />
+          </>
+          }
         </div>
       </div>
       <Modal open={isOpen} onClose={() => setIsOpen(false)}>
@@ -168,7 +120,7 @@ const Index = () => {
           </div>
           <div className='control-input'>
             <label htmlFor="dateDue">Date</label>
-            <input type="date" id='dateDue' onChange={handleChangeValue} />
+            <input type="date" id='dateDue' onChange={handleChangeValue} placeholder="dd-mm-yyyy" />
           </div>
           <div className='control-input'>
             <label htmlFor="description">Description</label>

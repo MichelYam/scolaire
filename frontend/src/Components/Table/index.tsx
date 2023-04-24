@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import { ITicket } from '../../Interfaces'
+import { ITask } from '../../Interfaces'
 
 import "./style.css";
 
@@ -10,7 +10,7 @@ type columnsProp = {
 }
 
 interface IProps {
-    data: ITicket[],
+    data: ITask[],
     columns: columnsProp[]
 }
 

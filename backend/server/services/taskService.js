@@ -22,7 +22,41 @@ module.exports.getUserTasks = async (req) => {
     const jwtToken = req.headers.authorization.split('Bearer')[1].trim()
     const decodedJwtToken = jwt.decode(jwtToken)
     try {
-        const tasks = await Task.find({ assignee: decodedJwtToken.email })
+        // const tasks = await Task.find({ assignee: decodedJwtToken.email })
+        const tasks = await Task.aggregate([
+            {
+
+                $match: {
+                    assignee: decodedJwtToken.email,
+                    status: "en cours",
+                }
+            },
+            {
+                $project: {
+                    title: "$title",
+                    description: "$description",
+                    assignee: "$assignee",
+                    status: "$status",
+                    createdBy: "$createdBy",
+                    dateDue: "$dateDue",
+                    date: { $dateToString: { format: "%d/%m/%Y", date: "$date" } },
+                }
+            }
+        ])
+        if (!tasks) {
+            throw new Error('Tasks not found!')
+        }
+        return tasks
+    } catch (error) {
+        console.error('Error in userService.js', error)
+        throw new Error(error)
+    }
+}
+
+module.exports.getTaskById = async (req) => {
+    const { id } = req.params
+    try {
+        const tasks = await Task.find({ _id: id })
         if (!tasks) {
             throw new Error('Tasks not found!')
         }
@@ -48,19 +82,22 @@ module.exports.getUserTasksAssignee = async (req) => {
     }
 }
 
-module.exports.updateTask = async serviceData => {
+module.exports.updateTask = async req => {
+    const { id } = req.params
+
     try {
-        const jwtToken = serviceData.headers.authorization.split('Bearer')[1].trim()
-        const decodedJwtToken = jwt.decode(jwtToken)
-        const task = await User.findOneAndUpdate(
-            { _id: decodedJwtToken.id },
+        // const jwtToken = req.headers.authorization.split('Bearer')[1].trim()
+        // const decodedJwtToken = jwt.decode(jwtToken)
+        const task = await Task.findOneAndUpdate(
+            { _id: id },
             {
-                firstName: serviceData.body.firstName,
-                lastName: serviceData.body.lastName
+                title: req.body.title,
+                description: req.body.description,
+                dateDue: req.body.dateDue,
+                status: req.body.status,
             },
             { new: true }
         )
-
         if (!task) {
             throw new Error('Task not found!')
         }

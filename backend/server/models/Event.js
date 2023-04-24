@@ -10,7 +10,7 @@ const EventSchema = new Schema({
   description: {
     type: String,
   },
-  dateDue: {
+  date: {
     type: String
   },
   assignee: {

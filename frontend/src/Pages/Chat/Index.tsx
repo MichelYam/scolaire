@@ -206,7 +206,7 @@ const Index = () => {
                             {
                                 rooms.map((room, index) =>
                                     <div key={index}>
-                                        <Conversation key={index} conversation={room} currentUser={userInfo} onChange={() => setCurrentChat(room)} />
+                                        <Conversation key={index} conversation={room} currentUser={userInfo} onClick={() => setCurrentChat(room)} />
                                     </div>
                                 )
                             }
