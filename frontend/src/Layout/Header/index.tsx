@@ -10,7 +10,6 @@ import { useAppDispatch, useAppSelector } from '../../Redux/store';
 import { selectUser } from '../../utils/selector';
 // import { deleteNotification } from '../../Redux/features/notification/notificationAction';
 import { acceptFriendRequest, rejectFriendRequest, getFriendRequest } from '../../Redux/features/user/userAction';
-import "./style.css"
 import { createRoom } from '../../Redux/features/room/roomAction';
 import Avatar from '@mui/material/Avatar';
 import { red } from '@mui/material/colors';
@@ -21,6 +20,7 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 // import { INotification } from '../../Interfaces';
+import "./style.css"
 
 interface IProps {
     firstName?: string,
@@ -49,9 +49,9 @@ const Index = ({ logout, firstName, sidebarOnClose }: IProps) => {
     //     });
     // }, [socket]);
 
-    // useEffect(() => {
-    //     dispatch(getFriendRequest())
-    // }, [notifications])
+    useEffect(() => {
+        dispatch(getFriendRequest())
+    }, [])
 
     const handleAcceptFriendRequest = (notification: any) => {
         dispatch(acceptFriendRequest(notification.sender._id))
@@ -82,7 +82,7 @@ const Index = ({ logout, firstName, sidebarOnClose }: IProps) => {
     const isNotificationMenuOpen = Boolean(notificaitonAnchorEl);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        console.log(event.currentTarget)
+        // console.log(event.currentTarget)
         setAnchorEl(event.currentTarget);
     };
     const handleNotificationeMenuOpen = (event: React.MouseEvent<HTMLElement>) => {

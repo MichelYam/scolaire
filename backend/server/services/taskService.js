@@ -22,27 +22,30 @@ module.exports.getUserTasks = async (req) => {
     const jwtToken = req.headers.authorization.split('Bearer')[1].trim()
     const decodedJwtToken = jwt.decode(jwtToken)
     try {
-        // const tasks = await Task.find({ assignee: decodedJwtToken.email })
-        const tasks = await Task.aggregate([
-            {
+        const tasks = await Task.find({
+            assignee: decodedJwtToken.email,
+            status: "en cours"
+        })
+        // const tasks = await Task.aggregate([
+        //     {
 
-                $match: {
-                    assignee: decodedJwtToken.email,
-                    status: "en cours",
-                }
-            },
-            {
-                $project: {
-                    title: "$title",
-                    description: "$description",
-                    assignee: "$assignee",
-                    status: "$status",
-                    createdBy: "$createdBy",
-                    dateDue: "$dateDue",
-                    date: { $dateToString: { format: "%d/%m/%Y", date: "$date" } },
-                }
-            }
-        ])
+        //         $match: {
+        //             assignee: decodedJwtToken.email,
+        //             status: "en cours",
+        //         }
+        //     },
+        //     {
+        //         $project: {
+        //             title: "$title",
+        //             description: "$description",
+        //             assignee: "$assignee",
+        //             status: "$status",
+        //             createdBy: "$createdBy",
+        //             dateDue: "$dateDue",
+        //             date: { $dateToString: { format: "%d/%m/%Y", date: "$date" } },
+        //         }
+        //     }
+        // ])
         if (!tasks) {
             throw new Error('Tasks not found!')
         }

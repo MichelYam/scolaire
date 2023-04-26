@@ -3,7 +3,6 @@ import SideBar from '../../Components/SideBar/index';
 
 import { contactMockData } from '../../data/mockData'
 import Conversation from '../../Components/Conversation/index'
-import './style.css'
 import SearchBar from '../../Components/SearchBar';
 import { useAppDispatch, useAppSelector } from '../../Redux/store';
 import { selectMessage, selectRoom, selectUser } from '../../utils/selector';
@@ -18,6 +17,7 @@ import { Room } from '../../Redux/features/room/roomSlice';
 import Message from '../../Components/Message';
 import animationData from "./animation.json"
 import Lottie from "react-lottie";
+import '../style.css'
 type INewMessage = {
     sender: string,
     content: string,

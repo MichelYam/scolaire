@@ -23,6 +23,23 @@ module.exports.getUserEvents = async (req) => {
     const decodedJwtToken = jwt.decode(jwtToken)
     try {
         const events = await Event.find({ assignee: decodedJwtToken.email })
+        // const events = await Event.aggregate([
+        //     {
+        //         $match: {
+        //             assignee: decodedJwtToken.email,
+        //         }
+        //     },
+        //     {
+        //         $project: {
+        //             title: "$title",
+        //             description: "$description",
+        //             assignee: "$assignee",
+        //             createdBy: "$createdBy",
+        //             dateDue: { $dateToString: { format: "%d/%m/%Y", date: "$dateDue" } },
+        //         }
+        //     }
+        // ])
+
         if (!events) {
             throw new Error('Events not found!')
         }

@@ -87,7 +87,7 @@
     cursor: pointer;
     border: 1px solid transparent;
     background-color: #fff;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .card .card-header {
@@ -143,4 +143,40 @@
 
 .calendar {
     width: 100%;
+}
+
+.control-input {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.control-input textarea, .control-input input {
+    border-radius: 10px;
+    padding: 5px 10px;
+    height: 25px;
+    width: 250px;
+    outline: none;
+    border: 1px solid #ced4da;
+}
+
+.control-input select {
+    border-radius: 10px;
+    padding: 0 25px;
+    height: 25px;
+    width: 250px;
+    outline: none;
+    margin: 0;
+}
+
+.group-btn {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }

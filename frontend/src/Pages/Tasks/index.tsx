@@ -8,6 +8,7 @@ import "./style.css"
 import Can from '../../Components/Can'
 import { Task } from '../../Redux/features/task/taskSlice'
 import TaskView from './task'
+import moment from 'moment'
 
 
 
@@ -91,7 +92,8 @@ const Index = () => {
                     <span>{`par ${task.createdBy} `}</span>
                   </div>
                   <div className='task-date'>
-                    <p>{task.dateDue.replaceAll("-", "/")}</p>
+                    <p>{moment(task.dateDue).format('DD/MM/YYYY')}</p>
+                    {/* <p>{task.dateDue.replaceAll("-", "/")}</p> */}
                     <span className='task-status'>{task.status}</span>
                   </div>
                   <Can I="delete" a="Task">
@@ -147,7 +149,7 @@ const Index = () => {
               <option value="Charles">Charles Jean</option>
             </select>
           </div>
-          <button type='submit'>Créer</button>
+          <button className='button-task' type='submit'>Créer</button>
         </form>
       </Modal>
     </>

@@ -10,6 +10,7 @@ import Button from '@mui/material/Button'
 import { updateTask } from "../../../Redux/features/task/taskAction"
 
 import { useAppDispatch } from '../../../Redux/store'
+import moment from 'moment'
 interface IProps {
     _id: string
     edit: boolean,
@@ -125,14 +126,14 @@ const Index = ({ _id, edit, setEdit, userRole, title, description, assignee, dat
                                     <Avatar {...stringAvatar(createdBy)} />
                                     {/* <p>{createdBy}</p> */}
                                 </div>
-                                <p>Donné a <span>{assignee}</span> le : <span>{date}</span> </p>
+                                <p>Donné a <span>{assignee}</span> le : <span>{moment(date).format('DD/MM/YYYY')}</span> </p>
                             </div>
                             <div className='task-view-description'>
                                 <p>Description</p>
                                 <textarea name="description" id="description" value={description} disabled></textarea>
                             </div >
                             <div className='task-view-date'>
-                                <p>Date limite: <span>{dateDue}</span> </p>
+                                <p>Date limite: <span>{moment(dateDue).format('DD/MM/YYYY')}</span> </p>
                                 <p>Status: <span>{status}</span> </p>
                             </div>
                         </div >

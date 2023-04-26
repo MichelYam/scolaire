@@ -19,3 +19,70 @@
     font-size: 26px;
     font-weight: 600;
 }
+
+.dashboard {
+    display: flex;
+    flex-direction: row;
+    /* justify-content: space-between; */
+    gap: 60px;
+}
+
+.calendar-envent .fc-toolbar-chunk .fc-toolbar-title {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.dashboard-events {
+    display: flex;
+    flex-grow: 0.5;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.dashboard-events-container {
+    position: relative;
+    height: 350px;
+}
+
+.dashboard-events-list {
+    display: flex;
+    flex-direction: column;
+    /* background-color: red; */
+    height: 100%;
+    overflow: auto;
+
+    row-gap: 20px;
+}
+
+.dashboard-todos {
+    flex-grow: 1.8;
+}
+
+.dashboard-todos-list {
+    border-radius: 10px;
+    background: #ffffff;
+    padding: 10px;
+}
+
+.todo {
+    display: flex;
+    justify-content: space-between;
+    height: 45px;
+    align-items: center;
+    border-radius: 10px;
+    padding: 0 10px;
+    border: 1px solid transparent;
+    cursor: pointer;
+}
+
+.todo .todo-description {
+    width: 65%;
+}
+
+.todo.even {
+    background-color: #cfcfcf;
+}
+
+.dashboard-conversations {
+    flex-grow: 1;
+}
