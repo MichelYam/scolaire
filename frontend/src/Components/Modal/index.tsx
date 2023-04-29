@@ -1,5 +1,5 @@
 import React from 'react'
-
+import CloseIcon from '@mui/icons-material/Close';
 import "./style.css"
 
 interface IModal {
@@ -14,7 +14,7 @@ export const Modal = ({ children, onClose, open }: IModal) => {
         <>
             <div className='overlay' onClick={onClose} />
             <div className='modal'>
-                <button className='modal-close' onClick={onClose}>Close Modal</button>
+                <CloseIcon className='modal-close' onClick={onClose} />
                 {children}
             </div>
         </>

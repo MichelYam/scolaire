@@ -65,8 +65,11 @@
     padding: 10px;
     cursor: pointer;
     overflow: hidden;
+    align-items: center;
 }
+.task{
 
+}
 .task-description, .task-date {
     display: flex;
     flex-direction: column;

@@ -1,19 +1,18 @@
 import React from 'react';
+import SearchIcon from '@mui/icons-material/Search';
 import './style.css';
 
-const index = () => {
+type IProps = {
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+}
+
+const index = ({ onChange }: IProps) => {
     return (
         <div className="search">
-            <div className="search-container">
-                <form action="POST">
-                    <div className="search-bar">
-                        <input type="text" placeholder="Search a contact" name="search" required />
-                        <button className="search-btn" type="submit">
-                            <i className="fas fa-search"></i>
-                        </button>
-                    </div>
-                </form>
-            </div>
+            {/* <div className="search-bar"> */}
+            <input type="text" placeholder="Search a contact" name="search" onChange={onChange} required />
+            <SearchIcon />
+            {/* </div> */}
         </div>
     )
 }

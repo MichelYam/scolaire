@@ -53,16 +53,16 @@ const appRoutes: RouteType[] = [
 
     }
   },
-  {
-    path: "/settings",
-    element: <Settings />,
-    state: "settings",
-    sidebarProps: {
-      displayText: "Settings",
-      icon: "bx-cog"
-      // icon: <SettingsIcon />
-    }
-  }
+  // {
+  //   path: "/settings",
+  //   element: <Settings />,
+  //   state: "settings",
+  //   sidebarProps: {
+  //     displayText: "Settings",
+  //     icon: "bx-cog"
+  //     // icon: <SettingsIcon />
+  //   }
+  // }
 ];
 
 export default appRoutes;

@@ -49,22 +49,38 @@
 
 .chat-container {
     width: 100%;
-    max-height: 100%;
     box-shadow: 0px 8px 16px 0px rgb(0 0 0 / 20%);
     border-radius: 10px;
     display: flex;
 }
 
+.add-friend div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .contacts {
-    /* width: 25%; */
-    /* height: 100%; */
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    min-width: 300px;
+    max-width: 300px;
     border: 1px solid transparent;
     padding: 25px 10px;
     background: #ffffff;
     border-right: 1px solid #ccc;
-    max-height: 100%;
-    overflow: hidden;
     border-radius: 10px 0 0 10px;
+}
+
+.contacts-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.contacts-header svg {
+    cursor: pointer;
 }
 
 .contacts h3 {
@@ -73,14 +89,14 @@
 
 .contact-list {
     display: flex;
-    height: 73%;
+    /* height: 73%; */
     flex-direction: column;
     row-gap: 10px;
     overflow-y: auto;
     /* padding: 15px; */
     position: relative;
     flex: 1 1 auto;
-    padding: 1rem
+    /* padding: 1rem; */
 }
 
 .contact-info p {
@@ -91,10 +107,8 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 100%;
     background-color: #ffffff;
     border-radius: 0 10px 10px 0;
-
 }
 
 .conversation-header {

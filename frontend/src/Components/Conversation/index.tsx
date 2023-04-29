@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { IUser } from '../../Interfaces';
 import { Room } from '../../Redux/features/room/roomSlice';
 import './style.css';
+import Avatar from '@mui/material/Avatar';
+import { deepOrange } from '@mui/material/colors';
 
 interface IProps {
     // id: number;
     // firstName: string;
     // lastName: string;
     // lastMessage: string
+    currentChat?: any
     currentUser: IUser | null
     conversation: Room
     onClick: () => void
@@ -15,24 +18,22 @@ interface IProps {
 
 // const img = "../../public/assets/img/avatar.png";
 
-const Index = ({ conversation, currentUser, onClick }: IProps) => {
-    const [isActive, setIsActive] = useState("");
+const Index = ({ conversation, currentUser, onClick, currentChat }: IProps) => {
     const user = conversation.users.find((m) => (
         m._id !== currentUser?._id
     ));
     const lastMessage = conversation.messages[conversation.messages.length - 1] && "";
-    const handleClick = (id: string) => {
-        setIsActive(id)
-    }
+    const fullName = [user?.firstName, user?.lastName].join(" ")
+
+
+
     return (
-        // <div key={user?.id} className={`contact ${isActive === user.id ? "active" : ""}`} onClick={() => handleClick(user.id)}>
-        <div key={currentUser?._id} className={`contact ${isActive === user?._id ? "active" : ""}`} onClick={onClick}>
-            <div className="contact-img">
-                <img src="../assets/img/avatar.png" alt="profile de l'utilisateur" />
-            </div>
+        <div key={currentUser?._id} className={`contact ${currentChat?._id === conversation?._id ? "active" : ""}`} onClick={onClick}>
+            <Avatar sx={{ bgcolor: deepOrange[500] }}>N</Avatar>
             <div className="contact-info">
-                <p>{user?.firstName} {user?.lastName}</p>
-                <span>{lastMessage}</span>
+                <p>{fullName}</p>
+                {/* <span>{lastMessage}</span> */}
+                <span>ceci est le dernier message envoyé donc voilà</span>
             </div>
         </div>
     )

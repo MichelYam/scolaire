@@ -4,12 +4,12 @@ import { useAppDispatch, useAppSelector } from '../../Redux/store'
 import { createTask, deleteTask, getMyTasks, getMyTasksAssignee } from "../../Redux/features/task/taskAction"
 import { selectTask, selectUser } from '../../utils/selector'
 
-import "./style.css"
 import Can from '../../Components/Can'
 import { Task } from '../../Redux/features/task/taskSlice'
 import TaskView from './task'
 import moment from 'moment'
-
+import DeleteIcon from '@mui/icons-material/Delete';
+import "./style.css"
 
 
 const Index = () => {
@@ -27,9 +27,13 @@ const Index = () => {
     assignee: "",
     dateDue: '',
   })
-  // const taskList = userInfo?.role === "Tutor" ? dispatch(getMyTasksAssignee()) : dispatch(getMyTasks())
+
   useEffect(() => {
-    dispatch(getMyTasks())
+    if (userInfo?.role === "Tutor") {
+      dispatch(getMyTasksAssignee())
+    } else {
+      dispatch(getMyTasks())
+    }
   }, [])
 
   useEffect(() => {
@@ -55,8 +59,7 @@ const Index = () => {
   }
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    var lowerCase = event.target.value.toLowerCase();
-    setInputText(lowerCase);
+    setInputText(event.target.value.toLowerCase());
   }
 
   const filteredData = tasks.filter((el) => {
@@ -97,7 +100,8 @@ const Index = () => {
                     <span className='task-status'>{task.status}</span>
                   </div>
                   <Can I="delete" a="Task">
-                    <button onClick={() => deleteTaskByID(task._id)}>delete</button>
+                    {/* <button onClick={() => deleteTaskByID(task._id)}>delete</button> */}
+                    <DeleteIcon style={{ color: 'red' }} onClick={() => deleteTaskByID(task._id)} />
                   </Can>
                 </div>
               ))}
@@ -142,11 +146,15 @@ const Index = () => {
               })
             }}>
               <option value="">Sélectionner un élève</option>
-              <option value="admin@admin.com">admin@admin.com</option>
+              {/* {userInfo?.friendsList.map((friend, index) => (
+                // console.log(friend)
+                // <option value="student@student.com">{friend.firstName}</option>
+              ))} */}
+              {/* <option value="admin@admin.com">admin@admin.com</option>
               <option value="student@student.com">student@student.com</option>
               <option value="Charles">Charles Jean</option>
               <option value="Charles">Charles Jean</option>
-              <option value="Charles">Charles Jean</option>
+              <option value="Charles">Charles Jean</option> */}
             </select>
           </div>
           <button className='button-task' type='submit'>Créer</button>

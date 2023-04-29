@@ -17,7 +17,11 @@ import { Room } from '../../Redux/features/room/roomSlice';
 import Message from '../../Components/Message';
 import animationData from "./animation.json"
 import Lottie from "react-lottie";
+import SendIcon from '@mui/icons-material/Send';
+import TextField from '@mui/material/TextField';
+import AddIcon from '@mui/icons-material/Add';
 import '../style.css'
+import Button from '@mui/material/Button';
 type INewMessage = {
     sender: string,
     content: string,
@@ -46,6 +50,8 @@ const Index = () => {
     const socket = useRef<Socket>();
     const scrollRef = useRef<null | HTMLDivElement>(null);
     const { notifications } = useAppSelector(selectUser)
+    const [inputText, setInputText] = useState("");
+
     // const [notification, setNotification] = useState([]);
 
     // console.log("test", messages)
@@ -180,6 +186,28 @@ const Index = () => {
             preserveAspectRatio: "xMidYMid slice",
         },
     };
+
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setInputText(event.target.value.toLowerCase());
+    }
+
+    const userFullname = currentChat?.users.find((m) => (
+        m._id !== userInfo?._id
+    ));
+
+    const filteredData = rooms.filter((el) => {
+        const user = el.users.find((m) => (
+            m._id !== userInfo?._id
+        ));
+        const fullName = [user?.firstName, user?.lastName].join(" ")
+        if (inputText === '') {
+            return el;
+        } else {
+            return fullName.toLowerCase().includes(inputText)
+
+        }
+    })
+
     return (
         <>
             <h2>Chat</h2>
@@ -188,26 +216,26 @@ const Index = () => {
                     <div className='contacts'>
                         <div className='contacts-header'>
                             <h3>Liste des contacts</h3>
+                            <AddIcon onClick={() => setIsOpen(true)} />
                             <Modal open={isOpen} onClose={() => setIsOpen(false)}>
                                 <div className='modal-title'>
                                     <h3>Ajouter une personne</h3>
                                 </div>
-                                <form action="" onSubmit={addUserChat}>
-                                    <InputField name="search" label='Email' type='text' onChange={handleChange} />
-                                    <button type="submit">Ajouter</button>
+                                <form className='add-friend' action="" onSubmit={addUserChat}>
+                                    <div>
+                                        <TextField id="search" label="Email" variant="standard" onChange={handleChange} />
+                                        <Button type="submit"><SendIcon /></Button>
+                                    </div>
                                 </form>
                             </Modal>
                         </div>
                         <div className='chat-search'>
-                            <SearchBar />
-                            <i className='bx bx-plus' onClick={() => setIsOpen(true)}></i>
+                            <SearchBar onChange={handleSearch} />
                         </div>
                         <div className='contact-list'>
                             {
-                                rooms.map((room, index) =>
-                                    <div key={index}>
-                                        <Conversation key={index} conversation={room} currentUser={userInfo} onClick={() => setCurrentChat(room)} />
-                                    </div>
+                                filteredData.map((room, index) =>
+                                    <Conversation key={index} currentChat={currentChat} conversation={room} currentUser={userInfo} onClick={() => setCurrentChat(room)} />
                                 )
                             }
                         </div>
@@ -218,7 +246,7 @@ const Index = () => {
                                 <div className='conversation-header-contact'>
                                     <div className='conversation-header-contact-info'>
                                         <img src="../assets/img/avatar.png" alt="" />
-                                        <p>Nom du destinataire</p>
+                                        <p>{[userFullname?.firstName, userFullname?.lastName].join(" ")}</p>
                                     </div>
                                     <div className='conversation-header-contact-call'>
                                         <i className='bx bx-sm bxs-phone-call'></i>
