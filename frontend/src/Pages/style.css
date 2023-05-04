@@ -140,11 +140,14 @@
 }
 
 .conversation-header-contact-call {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 20px;
     width: 20%;
 }
 
 .conversation-header-contact-call i {
-    margin: 0 15px;
     cursor: pointer;
 }
 

@@ -1,12 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { IUser } from "../user/userAction";
 import { createRoom, deleteRoom, getMyRooms } from "./roomAction"
+import { IMessage, INMessage } from "../message/messageSlice";
 
 
 export interface Room {
     _id: string,
     users: IUser[]
     messages: string[]
+    latestMessage: INMessage
     type: 'Room'
 }
 

@@ -13,7 +13,6 @@ export interface IDataAPI {
     error: string | null,
     allUsers: IUser[],
     notifications: INotification[],
-    friendList: friendList[]
 }
 
 const initialState: IDataAPI = {
@@ -23,7 +22,6 @@ const initialState: IDataAPI = {
     userToken: sessionStorage.getItem('userToken') || localStorage.getItem('userToken') || null,
     error: null,
     allUsers: [],
-    friendList: [],
     notifications: [],
 }
 const userSlice = createSlice({
@@ -119,7 +117,7 @@ const userSlice = createSlice({
             })
             .addCase(getFriendList.fulfilled, (state, { payload }) => {
                 state.loading = false
-                state.friendList = payload?.body
+                state.allUsers = payload?.body
             })
             .addCase(getFriendList.rejected, (state, { payload }: any) => {
                 state.loading = false

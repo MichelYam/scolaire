@@ -3,7 +3,7 @@ export interface IUser {
     firstName: string;
     lastName: string;
     email: string;
-    friendsList: [];
+    friendList: IUser[];
     role: string;
 }
 export interface INotification {

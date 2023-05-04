@@ -20,9 +20,7 @@ export const createMessage = createAsyncThunk("task/create", async ({ roomId, se
             },
         }
         const { data } = await axios.post(`${BASE_URL}/new`, { roomId, sender, content }, config)
-        // console.log(data);
-
-        return data
+        return data.body
     } catch (error: any) {
         if (error.response && error.response.data.message) {
             return rejectWithValue(error.response.data.message)

@@ -1,4 +1,5 @@
-const Message = require('../models/message')
+const Message = require('../models/Message')
+const Room = require('../models/Room')
 const jwt = require('jsonwebtoken')
 
 module.exports.createMessage = async (req) => {
@@ -9,11 +10,16 @@ module.exports.createMessage = async (req) => {
             sender: req.body.sender,
             content: req.body.content
         })
+        // await Room.findByIdAndUpdate(req.body.roomId, { latestMessage: newMessage });
+        await Room.findOneAndUpdate(
+            { _id: req.body.roomId },
+            { latestMessage: newMessage },
+            { new: true }
+        )
         let result = await newMessage.save()
-
         return result
     } catch (error) {
-        console.error('Error in roomService.js', error)
+        console.error('Error in messageService.js', error)
         throw new Error(error)
     }
 }
@@ -26,7 +32,7 @@ module.exports.getMessages = async (req) => {
 
         return messages
     } catch (error) {
-        console.error('Error in roomService.js', error)
+        console.error('Error in messageService.js', error)
         throw new Error(error)
     }
 }

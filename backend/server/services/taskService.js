@@ -70,11 +70,25 @@ module.exports.getTaskById = async (req) => {
     }
 }
 
+module.exports.getTaskById = async (req) => {
+    const { id } = req.params
+    try {
+        const tasks = await Task.find({ _id: id })
+        if (!tasks) {
+            throw new Error('Tasks not found!')
+        }
+        return tasks
+    } catch (error) {
+        console.error('Error in userService.js', error)
+        throw new Error(error)
+    }
+}
+
 module.exports.getUserTasksAssignee = async (req) => {
     const jwtToken = req.headers.authorization.split('Bearer')[1].trim()
     const decodedJwtToken = jwt.decode(jwtToken)
     try {
-        const tasks = await Task.find({ createdBy: decodedJwtToken.email })
+        const tasks = await Task.find({ createdBy: decodedJwtToken.email, status: "en cours" })
         if (!tasks) {
             throw new Error('Tasks not found!')
         }

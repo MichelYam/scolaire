@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 // import { eventMockData } from '../../data/eventsData'
 import './Style.css'
 
@@ -7,15 +7,17 @@ import Can from '../../Components/Can'
 import { Modal } from '../../Components/Modal'
 import Form from '../../Components/Form'
 import { useAppDispatch, useAppSelector } from '../../Redux/store'
-import { selectEvent } from '../../utils/selector'
-import { createEvent } from '../../Redux/features/event/eventAction'
+import { selectEvent, selectUser } from '../../utils/selector'
+import { createEvent, getMyEvents } from '../../Redux/features/event/eventAction'
 
 import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button'
 import moment from 'moment'
 const Index = () => {
   const dispatch = useAppDispatch()
+  const { userInfo } = useAppSelector(selectUser)
   const [isOpen, setIsOpen] = useState(false)
+
   const { events } = useAppSelector(selectEvent)
   const [eventData, setTaskData] = useState({
     title: "",
@@ -23,6 +25,11 @@ const Index = () => {
     assignee: "",
     dateDue: '',
   })
+
+  useEffect(()=>{
+    dispatch(getMyEvents())
+  }, [])
+
 
   const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTaskData({
@@ -111,11 +118,10 @@ const Index = () => {
               })
             }}>
               <option value="">Sélectionner un élève</option>
-              <option value="admin@admin.com">admin@admin.com</option>
-              <option value="student@student.com">student@student.com</option>
-              <option value="Charles">Charles Jean</option>
-              <option value="Charles">Charles Jean</option>
-              <option value="Charles">Charles Jean</option>
+              {userInfo?.friendList.map((friend, index) => {
+                const fullName = [friend.firstName, friend.lastName].join(" ")
+                return <option key={index} value={friend.email}>{fullName}</option>
+              })}
             </select>
           </div>
           <div className='group-btn'>

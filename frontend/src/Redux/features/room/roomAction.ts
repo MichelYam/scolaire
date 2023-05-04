@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { IUser } from "../user/userAction";
+import { INMessage } from "../message/messageSlice";
 
 const BASE_URL = "http://localhost:3001/api/v1/room";
 
@@ -8,6 +9,7 @@ interface IRoomParams {
     _id: string
     users: {}
     messages: string[]
+    latestMessage: INMessage
 }
 
 export const createRoom = createAsyncThunk("room/new", async (receiverId: string, { rejectWithValue, getState }) => {

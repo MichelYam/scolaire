@@ -100,7 +100,7 @@ const Index = ({ logout, firstName, sidebarOnClose }: IProps) => {
         <div className='menu-top'>
             <div className="home-content">
                 <i className='bx bx-menu' onClick={sidebarOnClose} />
-                {/* <span className="text">Drop Down Sidebar</span> */}
+                <span className="text">Drop Down Sidebar</span>
             </div>
             <div className='topmenu'>
                 <Button
@@ -131,7 +131,6 @@ const Index = ({ logout, firstName, sidebarOnClose }: IProps) => {
                     {notifications.map((notification, index) => {
                         return displayNotification(notification, index)
                     })}
-                    {/* <MenuItem onClick={handleNotificationClose}>Profile</MenuItem> */}
                 </Menu>
                 <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
                     <Tooltip title="Account settings">
@@ -182,19 +181,9 @@ const Index = ({ logout, firstName, sidebarOnClose }: IProps) => {
                     transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                     anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 >
-                    {/* <MenuItem onClick={handleProfileClose}>
-                        <Avatar /> Profile
-                    </MenuItem> */}
                     <MenuItem onClick={handleProfileClose}>
                         <Avatar /> My account
                     </MenuItem>
-                    {/* <Divider /> */}
-                    {/* <MenuItem onClick={handleProfileClose}>
-                        <ListItemIcon>
-                            <PersonAdd fontSize="small" />
-                        </ListItemIcon>
-                        Add another account
-                    </MenuItem> */}
                     <MenuItem onClick={handleProfileClose}>
                         <ListItemIcon>
                             <Settings fontSize="small" />

@@ -11,6 +11,7 @@ export interface IUser {
     password?: string
     firstName: string
     lastName: string
+    friendList?: IUser[]
     remember?: boolean
     role?: string
 }

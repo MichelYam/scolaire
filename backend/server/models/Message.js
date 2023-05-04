@@ -21,6 +21,7 @@ const MessageSchema = new Schema({
         isImage: Boolean,
         fileName: String
     },
+    // readBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     timeStamp: {
         type: Date,
         required: true,

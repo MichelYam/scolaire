@@ -22,6 +22,8 @@ import TextField from '@mui/material/TextField';
 import AddIcon from '@mui/icons-material/Add';
 import '../style.css'
 import Button from '@mui/material/Button';
+import ChatContainer from '../../Components/Chat/ChatContainer';
+
 type INewMessage = {
     sender: string,
     content: string,
@@ -47,24 +49,19 @@ const Index = () => {
     const [currentChat, setCurrentChat] = useState<Room>();
     const [typing, setTyping] = useState(false);
     const [istyping, setIsTyping] = useState(false);
-    const socket = useRef<Socket>();
+    const socket = useRef<Socket | null>(null);
     const scrollRef = useRef<null | HTMLDivElement>(null);
     const { notifications } = useAppSelector(selectUser)
     const [inputText, setInputText] = useState("");
-
+    const [socketConnected, setSocketConnected] = useState(false);
+    
     // const [notification, setNotification] = useState([]);
 
     // console.log("test", messages)
 
     useEffect(() => {
         socket.current = io("ws://localhost:8900");
-        socket.current.on("getMessage", (data) => {
-            setArrivalMessage({
-                sender: data.senderId,
-                content: data.content,
-                createdAt: Date.now(),
-            });
-        });
+        socket.current.on("connected", () => console.log("connected"));
         socket.current.on("typing", () => setIsTyping(true));
         socket.current.on("stop typing", () => setIsTyping(false));
     }, []);
@@ -97,7 +94,7 @@ const Index = () => {
 
     useEffect(() => {
         dispatch(getMyRooms())
-    }, [userInfo?._id]);
+    }, [userInfo?._id,]);
 
     const submit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -110,13 +107,15 @@ const Index = () => {
         const receiverId = currentChat?.users.find(
             (user) => user._id !== userInfo?._id
         );
-
+        // console.log(receiverId)
+        if (!newMessage) return
         try {
             dispatch(createMessage(message))
             socket.current?.emit("new message", {
                 senderId: userInfo?._id,
                 receiverId,
                 content: newMessage,
+                room: currentChat,
             });
             setNewMessage("");
             if (currentChat) {
@@ -126,49 +125,48 @@ const Index = () => {
             console.log(err);
         }
     }
-    useEffect(() => {
-        socket.current?.on("message recieved", (newMessageRecieved) => {
-            // console.log(newMessageRecieved)
-            if (!currentChat || currentChat._id !== newMessageRecieved.chat._id) {
-                if (!notifications.includes(newMessageRecieved)) {
-                    // setNotification([newMessageRecieved, ...notification]);
-                }
-            } else {
-                if (currentChat) {
-                    // console.log("test")
-                    dispatch(getMessages(currentChat?._id))
+    // useEffect(() => {
+    //     socket.current?.on("message recieved", (newMessageRecieved) => {
+    //         // console.log(newMessageRecieved)
+    //         if (!currentChat || currentChat._id !== newMessageRecieved.room._id) {
+    //             if (!notifications.includes(newMessageRecieved)) {
+    //                 // dispatch(createAlert());
+    //                 // setNotification([newMessageRecieved, ...notification]);
+    //             }
+    //         } else {
+    //             if (currentChat) {
+    //                 dispatch(getMessages(currentChat?._id))
+    //             }
+    //         }
+    //     });
 
-                }
-            }
-        });
+    // });
 
-    });
+    // useEffect(() => {
+    //     // if (currentChat) {
+    //     //     dispatch(getMessages(currentChat?._id))
+    //     // }
+    //     console.log("test")
+    //     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+    // }, [messages]);
 
-    useEffect(() => {
-        // if (currentChat) {
-        //     dispatch(getMessages(currentChat?._id))
-        // }
-        scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [messages]);
-
-    const handleTypingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setNewMessage(e.target.value)
-        // console.log
-        if (!typing) {
-            setTyping(true);
-            socket.current?.emit("typing", currentChat?._id);
-        }
-        let lastTypingTime = new Date().getTime();
-        var timerLength = 3000;
-        setTimeout(() => {
-            var timeNow = new Date().getTime();
-            var timeDiff = timeNow - lastTypingTime;
-            if (timeDiff >= timerLength && typing) {
-                socket.current?.emit("stop typing", currentChat?._id);
-                setTyping(false);
-            }
-        }, timerLength);
-    }
+    // const handleTypingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     setNewMessage(e.target.value)
+    //     if (!typing) {
+    //         setTyping(true);
+    //         socket.current?.emit("typing", currentChat?._id);
+    //     }
+    //     let lastTypingTime = new Date().getTime();
+    //     var timerLength = 3000;
+    //     setTimeout(() => {
+    //         var timeNow = new Date().getTime();
+    //         var timeDiff = timeNow - lastTypingTime;
+    //         if (timeDiff >= timerLength && typing) {
+    //             socket.current?.emit("stop typing", currentChat?._id);
+    //             setTyping(false);
+    //         }
+    //     }, timerLength);
+    // }
 
     const addUserChat = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -178,6 +176,7 @@ const Index = () => {
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(event.target.value)
     }
+
     const defaultOptions = {
         loop: true,
         autoplay: true,
@@ -190,10 +189,6 @@ const Index = () => {
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInputText(event.target.value.toLowerCase());
     }
-
-    const userFullname = currentChat?.users.find((m) => (
-        m._id !== userInfo?._id
-    ));
 
     const filteredData = rooms.filter((el) => {
         const user = el.users.find((m) => (
@@ -233,73 +228,73 @@ const Index = () => {
                             <SearchBar onChange={handleSearch} />
                         </div>
                         <div className='contact-list'>
-                            {
+                            {rooms &&
                                 filteredData.map((room, index) =>
                                     <Conversation key={index} currentChat={currentChat} conversation={room} currentUser={userInfo} onClick={() => setCurrentChat(room)} />
                                 )
                             }
                         </div>
                     </div>
-                    {currentChat &&
-                        <div className='contact-conversation'>
-                            <div className='conversation-header'>
-                                <div className='conversation-header-contact'>
-                                    <div className='conversation-header-contact-info'>
-                                        <img src="../assets/img/avatar.png" alt="" />
-                                        <p>{[userFullname?.firstName, userFullname?.lastName].join(" ")}</p>
-                                    </div>
-                                    <div className='conversation-header-contact-call'>
-                                        <i className='bx bx-sm bxs-phone-call'></i>
-                                        <i className='bx bx-sm bxs-video' ></i>
-                                        <i className='bx bx-dots-vertical-rounded'></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className='conversation-content'>
-                                <div className="msg-body">
-                                    <ul>
-                                        <>
-                                            {messages?.map((message: { content: string; sender: string; }, index: React.Key | null | undefined) => (
-                                                <div key={index} ref={scrollRef}>
-                                                    <Message message={message.content} own={message.sender === userInfo?._id} />
-                                                </div>
-                                            ))}
-                                        </>
+                    {currentChat && <ChatContainer currentChat={currentChat} socket={socket} socketConnected={socketConnected} isTyping={typing} setIsTyping={setIsTyping} />
+                        // <div className='contact-conversation'>
+                        //     <div className='conversation-header'>
+                        //         <div className='conversation-header-contact'>
+                        //             <div className='conversation-header-contact-info'>
+                        //                 <img src="../assets/img/avatar.png" alt="" />
+                        //                 <p>{[userFullname?.firstName, userFullname?.lastName].join(" ")}</p>
+                        //             </div>
+                        //             <div className='conversation-header-contact-call'>
+                        //                 <i className='bx bx-sm bxs-phone-call'></i>
+                        //                 <i className='bx bx-sm bxs-video' ></i>
+                        //                 <i className='bx bx-dots-vertical-rounded'></i>
+                        //             </div>
+                        //         </div>
+                        //     </div>
+                        //     <div className='conversation-content'>
+                        //         <div className="msg-body">
+                        //             <ul>
+                        //                 <>
+                        //                     {messages?.map((message: { content: string; sender: string; }, index: React.Key | null | undefined) => (
+                        //                         <div key={index} ref={scrollRef}>
+                        //                             <Message message={message.content} own={message.sender === userInfo?._id} />
+                        //                         </div>
+                        //                     ))}
+                        //                 </>
 
-                                    </ul>
-                                </div>
-                            </div>
-                            {istyping ? (
-                                <div>
-                                    <Lottie
-                                        options={defaultOptions}
-                                        // height={50}
-                                        width={70}
-                                        style={{ marginBottom: 15, marginLeft: 0 }}
-                                    />
-                                </div>
-                            ) : (
-                                null
-                            )}
-                            <div className='conversation-footer'>
-                                <div className='conversation-send'>
-                                    <div className='conversation-send-container'>
-                                        <div className='conversation-add'>
-                                            <i className='bx bx-sm bxs-plus-circle'></i>
-                                        </div>
-                                        <form onSubmit={submit}>
-                                            <input type="text" name="message" id="message" placeholder='Send a message'
-                                                onChange={handleTypingChange} value={newMessage} />
-                                            <button type='submit'><i className='bx bx-sm bxs-send' ></i></button>
-                                            <i className='bx bx-sm bxs-smile' ></i>
-                                            {/* <div className='conversation-option'>
-                                            <i className='bx bx-sm bxs-send' ></i>
-                                        </div> */}
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        //             </ul>
+                        //         </div>
+                        //     </div>
+                        //     {istyping ? (
+                        //         <div>
+                        //             <Lottie
+                        //                 options={defaultOptions}
+                        //                 // height={50}
+                        //                 width={70}
+                        //                 style={{ marginBottom: 15, marginLeft: 0 }}
+                        //             />
+                        //         </div>
+                        //     ) : (
+                        //         null
+                        //     )}
+                        //     <div className='conversation-footer'>
+                        //         <div className='conversation-send'>
+                        //             <div className='conversation-send-container'>
+                        //                 <div className='conversation-add'>
+                        //                     <i className='bx bx-sm bxs-plus-circle'></i>
+                        //                 </div>
+                        //                 <form onSubmit={submit}>
+                        //                     <input type="text" name="message" id="message" placeholder='Send a message'
+                        //                         onChange={handleTypingChange} value={newMessage} />
+                        //                     <button type='submit'><i className='bx bx-sm bxs-send' ></i></button>
+                        //                     <i className='bx bx-sm bxs-smile' ></i>
+                        //                     {/* <div className='conversation-option'>
+                        //                     <i className='bx bx-sm bxs-send' ></i>
+                        //                 </div> */}
+                        //                 </form>
+                        //             </div>
+                        //         </div>
+                        //     </div>
+                        // </div>
                     }
                 </div>
             </section>

@@ -1,4 +1,4 @@
-const Room = require('../models/room')
+const Room = require('../models/Room')
 const jwt = require('jsonwebtoken')
 
 module.exports.createRoom = async (req) => {

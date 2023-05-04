@@ -14,13 +14,12 @@ const AppLayout = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const logOut = () => { dispatch(logout()) }
     const { userInfo, userToken } = useAppSelector(selectUser)
-
+    
     useEffect(() => {
         if (userToken) {
             dispatch(getUserDetails())
         }
     }, [userToken, dispatch])
-
     return (
         <>
             <SideBar logout={logOut} sidebarOpen={sidebarOpen} appRoutes={appRoutes} />

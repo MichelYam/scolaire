@@ -37,12 +37,11 @@ const UserSchema = new Schema({
     type: String,
     enum: ['admin', 'student', "tutor"]
   },
-  friendList: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'user'
-    }
-  ]
+  friendList:
+  {
+    type: [Schema.Types.ObjectId],
+    ref: 'user'
+  }
   ,
   date: {
     type: Date,

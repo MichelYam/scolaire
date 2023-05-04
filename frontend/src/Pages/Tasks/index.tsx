@@ -69,7 +69,6 @@ const Index = () => {
       return el.title.toLowerCase().includes(inputText)
     }
   })
-
   return (
     <>
       <div className='section_task'>
@@ -86,16 +85,16 @@ const Index = () => {
             </div>
             <div className='task-list'>
               {!tasks.length && <span>Vous n'avez pas de devoir pour l'instant</span>}
-              {filteredData.map((task, index) => (
-                // <div key={index} className='task' onClick={() => showTicket(index, task)}>
-                <div key={index} className='task' onClick={() => setCurrentTask(task)}>
+              {filteredData.map((task, index) => {
+                const isSamePerson = task.createdBy === userInfo?.email ? "moi" : task.createdBy
+                return <div key={index} className='task' onClick={() => setCurrentTask(task)}>
                   <div className='task-description'>
                     <h4>{task.title}</h4>
                     <p>{task.description}</p>
-                    <span>{`par ${task.createdBy} `}</span>
+                    <span>{`par ${isSamePerson} `}</span>
                   </div>
                   <div className='task-date'>
-                    <p>{moment(task.dateDue).format('DD/MM/YYYY')}</p>
+                    <p className='badge'>{moment(task.dateDue).format('DD/MM/YYYY')}</p>
                     {/* <p>{task.dateDue.replaceAll("-", "/")}</p> */}
                     <span className='task-status'>{task.status}</span>
                   </div>
@@ -104,7 +103,7 @@ const Index = () => {
                     <DeleteIcon style={{ color: 'red' }} onClick={() => deleteTaskByID(task._id)} />
                   </Can>
                 </div>
-              ))}
+              })}
             </div>
           </div>
         </div>
@@ -146,15 +145,10 @@ const Index = () => {
               })
             }}>
               <option value="">Sélectionner un élève</option>
-              {/* {userInfo?.friendsList.map((friend, index) => (
-                // console.log(friend)
-                // <option value="student@student.com">{friend.firstName}</option>
-              ))} */}
-              {/* <option value="admin@admin.com">admin@admin.com</option>
-              <option value="student@student.com">student@student.com</option>
-              <option value="Charles">Charles Jean</option>
-              <option value="Charles">Charles Jean</option>
-              <option value="Charles">Charles Jean</option> */}
+              {userInfo?.friendList.map((friend, index) => {
+                const fullName = [friend.firstName, friend.lastName].join(" ")
+                return <option key={index} value={friend.email}>{fullName}</option>
+              })}
             </select>
           </div>
           <button className='button-task' type='submit'>Créer</button>

@@ -6,7 +6,7 @@ import { sendFriendRequest, rejectFriendRequest, getFriendRequest, acceptFriendR
 export interface Notification {
     _id: string,
     users: IUser[]
-    messages: string[]
+    notifications: string[]
     type: 'Notification'
 }
 

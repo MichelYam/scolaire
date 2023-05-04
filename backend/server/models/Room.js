@@ -34,6 +34,10 @@ const mongoose = require('mongoose');
 //     }
 // })
 const roomSchema = new mongoose.Schema({
+    roomName: {
+        type: String,
+        trim: true
+    },
     users: [
         {
             type: mongoose.Schema.Types.ObjectId,
