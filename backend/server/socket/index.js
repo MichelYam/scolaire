@@ -114,9 +114,9 @@ io.on("connection", (socket) => {
 
     socket.on("new message", (newMessageRecieved) => {
         let room = newMessageRecieved.room;
-        
+
         if (!room.users) return console.log("room not defined");
-        
+
         room.users.forEach((user) => {
             console.log("test:", user)
             if (user._id == newMessageRecieved.senderId) return;

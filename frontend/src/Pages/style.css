@@ -303,3 +303,8 @@ li.repaly .time {
     font-size: 24px;
     cursor: pointer;
 }
+
+.message-loading{
+    width: 70px;
+    height: 75px;
+}
