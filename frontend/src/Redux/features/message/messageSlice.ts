@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { createMessage, getMessages } from "./messageAction"
+import { createMessage, getMessages, updateMessage, deleteMessage } from "./messageAction"
 
 
 export interface INMessage {
@@ -51,6 +51,37 @@ const taskSlice = createSlice({
                 state.error = null
             })
             .addCase(getMessages.rejected, (state, { payload }: any) => {
+                state.loading = false
+                state.error = payload
+            })
+            // update message
+            .addCase(updateMessage.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(updateMessage.fulfilled, (state, { payload }: any) => {
+                state.loading = false
+                // state.messages = payload?.body
+                state.messages = state.messages.map((message) =>
+                    message._id === payload._id ? payload.body : message
+                )
+                state.error = null
+            })
+            .addCase(updateMessage.rejected, (state, { payload }: any) => {
+                state.loading = false
+                state.error = payload
+            })
+            // delete message
+            .addCase(deleteMessage.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(deleteMessage.fulfilled, (state, { payload }: any) => {
+                state.loading = false
+                state.messages = state.messages.filter(item => item._id === payload.body)
+                state.error = null
+            })
+            .addCase(deleteMessage.rejected, (state, { payload }: any) => {
                 state.loading = false
                 state.error = payload
             })

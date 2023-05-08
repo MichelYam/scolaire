@@ -94,14 +94,14 @@ const getUser = (userId) => {
 io.on("connection", (socket) => {
     console.log("Connected to socket.io");
     socket.on("setup", (userData) => {
-        socket.join(userData._id);
+        socket.join(userData?._id);
         socket.emit("connected");
     });
     //take userId and socketId from user
-    // socket.on("addUser", (userId) => {
-    //     addUser(userId, socket.id);
-    //     io.emit("getUsers", users);
-    // });
+    socket.on("addUser", (userId) => {
+        addUser(userId, socket.id);
+        io.emit("getUsers", users);
+    });
 
     socket.on("join chat", (room) => {
         socket.join(room);
@@ -118,7 +118,6 @@ io.on("connection", (socket) => {
         if (!room.users) return console.log("room not defined");
 
         room.users.forEach((user) => {
-            console.log("test:", user)
             if (user._id == newMessageRecieved.senderId) return;
 
             socket.in(user._id).emit("message recieved", newMessageRecieved);

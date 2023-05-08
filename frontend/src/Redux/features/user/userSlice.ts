@@ -28,6 +28,11 @@ const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
+        createNofif: (state, { payload }) => {
+            state.loading = false
+            state.notifications.push(payload)
+            state.error = null
+        },
         logout: (state) => {
             clearStorage()
             state.loading = false

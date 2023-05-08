@@ -56,12 +56,10 @@ const Index = () => {
 
     // const [notification, setNotification] = useState([]);
 
-    // console.log("test", messages)
-
     useEffect(() => {
         socket.current = io("ws://localhost:8900");
         socket.current.emit("setup", userInfo);
-        socket.current.on("connected", () => console.log("connected"));
+        socket.current.on("connected", () => setSocketConnected(true));
         socket.current.on("typing", () => setIsTyping(true));
         socket.current.on("stop typing", () => setIsTyping(false));
     }, []);
@@ -74,18 +72,18 @@ const Index = () => {
 
     }, [currentChat]);
 
-    // useEffect(() => {
-    //     socket.current?.emit("addUser", userInfo?._id);
-    //     socket.current?.on("getUsers", (users) => {
-    //         setOnlineUsers(
-    //             userInfo?.friendsList.filter((f) => users.some((u: { userId: any; }) => u.userId === f))
-    //         );
-    //     });
-    // }, [userInfo]);
+    useEffect(() => {
+        socket.current?.emit("addUser", userInfo?._id);
+        // socket.current?.on("getUsers", (users) => {
+        //     setOnlineUsers(
+        //         userInfo?.friendsList.filter((f) => users.some((u: { userId: any; }) => u.userId === f))
+        //     );
+        // });
+    }, [userInfo]);
 
     useEffect(() => {
         dispatch(getMyRooms())
-    }, [userInfo?._id,]);
+    }, [userInfo?._id, rooms]);
 
     const submit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -120,10 +118,10 @@ const Index = () => {
         socket.current?.on("message recieved", (newMessageRecieved) => {
             // console.log(newMessageRecieved)
             if (!currentChat || currentChat._id !== newMessageRecieved.room._id) {
-                if (!notifications.includes(newMessageRecieved)) {
-                    // dispatch(createAlert());
-                    // setNotification([newMessageRecieved, ...notification]);
-                }
+                // if (!notifications.includes(newMessageRecieved)) {
+                //     dispatch(createNofif());
+                //     // setNotification([newMessageRecieved, ...notification]);
+                // }
             } else {
                 if (currentChat) {
                     dispatch(getMessages(currentChat?._id))
@@ -134,10 +132,6 @@ const Index = () => {
     });
 
     useEffect(() => {
-        // if (currentChat) {
-        //     dispatch(getMessages(currentChat?._id))
-        // }
-        console.log("test")
         scrollRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
@@ -162,6 +156,8 @@ const Index = () => {
     const addUserChat = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         dispatch(sendFriendRequest(email))
+        setIsOpen(false)
+
     }
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(event.target.value)
@@ -261,7 +257,7 @@ const Index = () => {
                                 <div className='message-loading'>
                                     <Lottie
                                         options={defaultOptions}
-                                        // height={50}
+                                        height={0}
                                         width={70}
                                         style={{ marginLeft: 0 }}
                                     />
@@ -296,3 +292,7 @@ const Index = () => {
 }
 
 export default Index
+
+function createNofif(): any {
+    throw new Error('Function not implemented.');
+}

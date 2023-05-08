@@ -50,3 +50,45 @@ export const getMessages = createAsyncThunk('message/getMessages', async (_id: s
         }
     }
 })
+
+export const updateMessage = createAsyncThunk('message/updateMessage', async (_id: string, { rejectWithValue, getState }) => {
+    const { user }: any = getState()
+    try {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${user.userToken}`
+            },
+        }
+        const { data } = await axios.put(`${BASE_URL}/${_id}`, config)
+        // console.log(data);
+
+        return data
+    } catch (error: any) {
+        if (error.response && error.response.data.message) {
+            return rejectWithValue(error.response.data.message)
+        } else {
+            return rejectWithValue(error.message)
+        }
+    }
+})
+
+export const deleteMessage = createAsyncThunk('message/deleteMessage', async (_id: string, { rejectWithValue, getState }) => {
+    const { user }: any = getState()
+    try {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${user.userToken}`
+            },
+        }
+        const { data } = await axios.delete(`${BASE_URL}/${_id}`, config)
+        // console.log(data);
+
+        return data
+    } catch (error: any) {
+        if (error.response && error.response.data.message) {
+            return rejectWithValue(error.response.data.message)
+        } else {
+            return rejectWithValue(error.message)
+        }
+    }
+})

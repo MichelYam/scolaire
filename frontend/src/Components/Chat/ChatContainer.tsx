@@ -79,7 +79,7 @@ const ChatContainer = ({ currentChat, socket, socketConnected, isTyping, setIsTy
                     // setNotification([newMessageRecieved, ...notification]);
                     console.log("test 2")
 
-                    dispatch(getFriendRequest())
+                    // dispatch(getFriendRequest())
 
                 }
             } else {

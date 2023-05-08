@@ -38,6 +38,12 @@ const Index = ({ logout, firstName, sidebarOnClose }: IProps) => {
     const { notifications } = useAppSelector(selectUser)
     const dropdownRef = useRef<HTMLLIElement>(null)
 
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [notificaitonAnchorEl, setNotificationAnchorEl] =
+        React.useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+
+    const isNotificationMenuOpen = Boolean(notificaitonAnchorEl);
     const dispatch = useAppDispatch()
     useEffect(() => {
         socket.current = io("ws://localhost:8900");
@@ -51,7 +57,7 @@ const Index = ({ logout, firstName, sidebarOnClose }: IProps) => {
 
     useEffect(() => {
         dispatch(getFriendRequest())
-    }, [])
+    }, [notifications])
 
     const handleAcceptFriendRequest = (notification: any) => {
         dispatch(acceptFriendRequest(notification.sender._id))
@@ -60,26 +66,21 @@ const Index = ({ logout, firstName, sidebarOnClose }: IProps) => {
     }
 
     const displayNotification = (notification: any, index: number) => {
-        // if (type === "requestFriend") {
+        // if (notification.type === "message") {
+        //     return (
+        //         <span onClick={() => setNotification(notification.filter((n) => n !== notification))} className="notification">{`${senderName} vous a envoyé un message`}</span>
+        //     );
+        // }
+        // else {
         return (
             <MenuItem key={index} onClick={handleNotificationClose}>
-                <span>{notification.sender.firstName} vous as envoyé une demande d'ami</span>
+                <span>{notification.sender?.firstName} vous as envoyé une demande d'ami</span>
                 <button onClick={() => handleAcceptFriendRequest(notification)}><i className='bx bx-check'></i></button>
                 <button onClick={() => { dispatch(rejectFriendRequest(notification._id)) }}><i className='bx bx-x' ></i></button>
             </MenuItem>
         )
-        // } else {
-        // return (
-        //     <span onClick={() => setNotification(notification.filter((n) => n !== notification))} className="notification">{`${senderName} vous a envoyé un message`}</span>
-        // );
         // }
     };
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const [notificaitonAnchorEl, setNotificationAnchorEl] =
-        React.useState<null | HTMLElement>(null);
-    const open = Boolean(anchorEl);
-
-    const isNotificationMenuOpen = Boolean(notificaitonAnchorEl);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         // console.log(event.currentTarget)
