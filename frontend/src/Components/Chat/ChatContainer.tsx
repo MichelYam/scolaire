@@ -24,13 +24,13 @@ type INewMessage = {
 const ChatContainer = ({ currentChat, socket, socketConnected, isTyping, setIsTyping }: IProps) => {
 
     const dispatch = useAppDispatch()
-    const [typing, setTyping] = useState(false);
+    // const [typing, setTyping] = useState(false);
     const { messages } = useAppSelector(selectMessage)
     const { userInfo } = useAppSelector(selectUser)
     const { notifications } = useAppSelector(selectUser)
     const scrollRef = useRef<null | HTMLDivElement>(null);
     const [newMessage, setNewMessage] = useState("")
-    // const [arrivalMessage, setArrivalMessage] = useState<INewMessage>();
+
 
     // const [istyping, setIsTyping] = useState(false);
     const defaultOptions = {
@@ -41,33 +41,6 @@ const ChatContainer = ({ currentChat, socket, socketConnected, isTyping, setIsTy
             preserveAspectRatio: "xMidYMid slice",
         },
     };
-
-
-    // useEffect(() => {
-    //     socket.current?.on("getMessage", (data: { senderId: any; content: any; }) => {
-    //         setArrivalMessage({
-    //             sender: data.senderId,
-    //             content: data.content,
-    //             createdAt: Date.now(),
-    //         });
-    //     });
-    //     // socket.current?.on("typing", () => setIsTyping(true));
-    //     // socket.current?.on("stop typing", () => setIsTyping(false));
-    //     console.log("arrivalMessage", arrivalMessage)
-    // }, [])
-
-    // useEffect(() => {
-    //     typingData && typingData.senderId === userId &&
-    //         setIsTyping(typingData.typing)
-    // }, [typingData, userId])
-
-
-    // useEffect(() => {
-    //     // @ts-ignore TS2564
-    //     arrivalMessage && currentChat?.users.includes(arrivalMessage.sender) &&
-    //         // arrivalMessage && arrivalMessage.sender === userInfo?._id &&
-    //         dispatch(getMessages(currentChat?._id))
-    // }, [arrivalMessage, userInfo?._id]);
 
     useEffect(() => {
         socket.current?.on("message recieved", (newMessageRecieved) => {
@@ -88,13 +61,13 @@ const ChatContainer = ({ currentChat, socket, socketConnected, isTyping, setIsTy
                 dispatch(getMessages(currentChat?._id))
             }
         });
-    });
+    }, []);
 
     const handleTypingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewMessage(e.target.value)
         if (!socketConnected) return;
-        if (!typing) {
-            setTyping(true);
+        if (!isTyping) {
+            setIsTyping(true);
             socket.current?.emit("typing", currentChat?._id);
         }
         let lastTypingTime = new Date().getTime();
@@ -102,9 +75,9 @@ const ChatContainer = ({ currentChat, socket, socketConnected, isTyping, setIsTy
         setTimeout(() => {
             var timeNow = new Date().getTime();
             var timeDiff = timeNow - lastTypingTime;
-            if (timeDiff >= timerLength && typing) {
+            if (timeDiff >= timerLength && isTyping) {
                 socket.current?.emit("stop typing", currentChat?._id);
-                setTyping(false);
+                setIsTyping(false);
             }
         }, timerLength);
     }
@@ -161,24 +134,23 @@ const ChatContainer = ({ currentChat, socket, socketConnected, isTyping, setIsTy
             <div className='conversation-content'>
                 <div className="msg-body">
                     <ul>
-                        <>
-                            {messages?.map((message: { content: string; sender: string; }, index: React.Key | null | undefined) => (
-                                <div key={index} ref={scrollRef}>
-                                    <Message message={message.content} own={message.sender === userInfo?._id} />
-                                </div>
-                            ))}
-                        </>
-
+                        {!messages && <span>Envoyer lui un message pour commencer la discussion.</span>}
+                        {messages && messages.map((message, index) =>
+                            // console.log(message.timeStamp)
+                            <div key={index} ref={scrollRef}>
+                                {/* <Message message={message.content} own={message.sender === userInfo?._id} date={message.timeStamp} /> */}
+                            </div>
+                        )}
                     </ul>
                 </div>
             </div>
             {isTyping ? (
-                <div>
+                <div className='message-loading'>
                     <Lottie
                         options={defaultOptions}
-                        // height={50}
+                        // height={0}
                         width={70}
-                        style={{ marginBottom: 15, marginLeft: 0 }}
+                        style={{ marginLeft: 0 }}
                     />
                 </div>
             ) : (
@@ -196,8 +168,8 @@ const ChatContainer = ({ currentChat, socket, socketConnected, isTyping, setIsTy
                             <button type='submit'><i className='bx bx-sm bxs-send' ></i></button>
                             <i className='bx bx-sm bxs-smile' ></i>
                             {/* <div className='conversation-option'>
-                    <i className='bx bx-sm bxs-send' ></i>
-                </div> */}
+                                            <i className='bx bx-sm bxs-send' ></i>
+                                        </div> */}
                         </form>
                     </div>
                 </div>

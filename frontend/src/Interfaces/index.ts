@@ -3,12 +3,13 @@ export interface IUser {
     firstName: string;
     lastName: string;
     email: string;
+    profileImageUrl: string;
     friendList: IUser[];
     role: string;
 }
 export interface INotification {
     _id: string;
-    sender: string;
+    sender: IUser;
     recipient: string;
     status: string;
     type?: string

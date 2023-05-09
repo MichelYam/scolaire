@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { createMessage, getMessages, updateMessage, deleteMessage } from "./messageAction"
+import { IUser } from "../../../Interfaces"
 
 
 export interface INMessage {
     _id: string,
-    sender: string
+    sender: IUser
     content: string
+    timeStamp: string
     type: 'Message'
 }
 export interface IMessage {

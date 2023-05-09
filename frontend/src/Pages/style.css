@@ -153,31 +153,68 @@
 
 .conversation-content {
     overflow-y: auto;
-    position: relative;
     flex: 1 1 auto;
+    display: flex;
+    flex-direction: column-reverse;
     padding: 1rem;
     scrollbar-width: none;
 }
+
+/* .conversation-content .msg-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+} */
 
 .conversation-content .msg-body ul {
     margin: 0;
     padding: 0;
 }
 
-.msg-body ul li.sender {
-    display: block;
-    width: 100%;
-    position: relative;
+.conversation-content .msg-body ul {
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
 }
 
-.msg-body ul li.repaly {
-    display: block;
+.msg-body ul li {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    /* position: relative; */
+}
+
+.msg-body ul li.sender {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+
+.msg-body ul li p {
+    margin: 0;
+}
+
+.msg-body ul li.reply {
+    display: flex;
+    flex-direction: row-reverse;
     width: 100%;
     text-align: right;
-    position: relative;
 }
 
-li.repaly .time {
+.message-header {
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+}
+
+.message-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+li.reply .time {
     margin-right: 20px;
 }
 
@@ -304,7 +341,7 @@ li.repaly .time {
     cursor: pointer;
 }
 
-.message-loading{
+.message-loading {
     width: 70px;
-    height: 75px;
+    /* height: 75px; */
 }

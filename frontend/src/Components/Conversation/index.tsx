@@ -23,7 +23,7 @@ const Index = ({ conversation, currentUser, onClick, currentChat }: IProps) => {
             <Avatar sx={{ bgcolor: deepOrange[500] }}>N</Avatar>
             <div className="contact-info">
                 <p>{fullName}</p>
-                <span>{conversation.latestMessage?.content}</span>
+                {/* <span>{conversation.latestMessage?.content}</span> */}
             </div>
         </div>
     )

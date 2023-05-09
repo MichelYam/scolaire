@@ -1,14 +1,42 @@
 import React from 'react'
+import Avatar from '@mui/material/Avatar'
+import { deepOrange } from '@mui/material/colors';
+import { INMessage } from '../../Redux/features/message/messageSlice';
+import { useAppSelector } from '../../Redux/store';
+import { selectUser } from '../../utils/selector';
 
-interface IMessage {
-    message: string
+interface IProps {
+    message: INMessage
     own: boolean
+    date: string
 }
 
-const Index = ({ message, own }: IMessage) => {
+const Index = ({ message, own, date }: IProps) => {
+    const { userInfo } = useAppSelector(selectUser)
+    const todayDate = new Date()
+    // console.log(todayDate)
+    const formatedDate = new Date(date)
+    const hours = formatedDate.getHours()
+    const minutes = formatedDate.getMinutes()
     return (
-        <li className={own ? "repaly" : "sender"}>
-            <p>{message}</p>
+        // <li className={own ? "reply" : "sender"}>
+        <li>
+            {own ? !userInfo?.profileImageUrl ?
+                <Avatar sx={{ bgcolor: deepOrange[500] }}>{userInfo?.firstName?.charAt(0).toUpperCase()}</Avatar>
+                :
+                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                :
+                !message.sender.profileImageUrl ?
+                    <Avatar sx={{ bgcolor: deepOrange[500] }}>{message.sender.firstName?.charAt(0).toUpperCase()}</Avatar>
+                    :
+
+                    <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+            }
+            <div className='message-content'>
+                <p>{[hours, minutes].join(":")}</p>
+                <p className='message-container'>{message.content}</p>
+
+            </div>
         </li>
     )
 }

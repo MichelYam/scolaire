@@ -28,8 +28,7 @@ module.exports.getMessages = async (req) => {
     try {
         const messages = await Message.find({
             roomId: req.params.roomID,
-        });
-
+        }).populate({ path: 'sender', select: 'profileImageUrl firstName lastName' });
         return messages
     } catch (error) {
         console.error('Error in messageService.js', error)

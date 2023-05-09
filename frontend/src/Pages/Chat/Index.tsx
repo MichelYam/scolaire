@@ -24,12 +24,6 @@ import '../style.css'
 import Button from '@mui/material/Button';
 import ChatContainer from '../../Components/Chat/ChatContainer';
 
-type INewMessage = {
-    sender: string,
-    content: string,
-    createdAt: string | Date | number,
-}
-
 type IProps = {
     notification: {}[]
     setNotification: ({ }) => void
@@ -101,7 +95,7 @@ const Index = () => {
         try {
             dispatch(createMessage(message))
             socket.current?.emit("new message", {
-                senderId: userInfo?._id,
+                sender: userInfo?._id,
                 receiverId,
                 content: newMessage,
                 room: currentChat,
@@ -242,14 +236,13 @@ const Index = () => {
                             <div className='conversation-content'>
                                 <div className="msg-body">
                                     <ul>
-                                        <>
-                                            {messages?.map((message: { content: string; sender: string; }, index: React.Key | null | undefined) => (
-                                                <div key={index} ref={scrollRef}>
-                                                    <Message message={message.content} own={message.sender === userInfo?._id} />
-                                                </div>
-                                            ))}
-                                        </>
-
+                                        {!messages && <span>Envoyer lui un message pour commencer la discussion.</span>}
+                                        {messages && messages.map((message, index) =>
+                                            // console.log(message.timeStamp)
+                                            <div key={index} ref={scrollRef}>
+                                                <Message message={message} own={message.sender._id === userInfo?._id} date={message.timeStamp} />
+                                            </div>
+                                        )}
                                     </ul>
                                 </div>
                             </div>
@@ -257,7 +250,7 @@ const Index = () => {
                                 <div className='message-loading'>
                                     <Lottie
                                         options={defaultOptions}
-                                        height={0}
+                                        // height={0}
                                         width={70}
                                         style={{ marginLeft: 0 }}
                                     />

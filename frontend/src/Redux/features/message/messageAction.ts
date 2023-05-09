@@ -1,13 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { IUser } from "../../../Interfaces";
 
 const BASE_URL = "http://localhost:3001/api/v1/message";
 
 interface IMessageParams {
     _id?: string
     roomId?: string
-    sender?: string
+    sender?: IUser | string
     content?: string
+    timestamps?: string
 }
 
 export const createMessage = createAsyncThunk("task/create", async ({ roomId, sender, content }: IMessageParams, { rejectWithValue, getState }) => {
