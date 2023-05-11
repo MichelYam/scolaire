@@ -21,6 +21,7 @@ export interface IEvent {
     description: string;
     assigned: string;
     date: string;
+    timetable: string;
     createdBy: string;
 }
 

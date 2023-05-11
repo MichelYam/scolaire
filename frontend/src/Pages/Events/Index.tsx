@@ -19,37 +19,39 @@ const Index = () => {
   const [isOpen, setIsOpen] = useState(false)
 
   const { events } = useAppSelector(selectEvent)
-  const [eventData, setTaskData] = useState({
+  const [eventData, setEventData] = useState({
     title: "",
     description: "",
     assignee: "",
-    dateDue: '',
+    date: '',
+    timetable: '',
   })
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(getMyEvents())
   }, [])
 
 
   const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTaskData({
+    setEventData({
       ...eventData,
       [event.target.id]: event.target.value,
     })
   }
   const handleChangeDateValue = (date: any) => {
-    setTaskData({
+    setEventData({
       ...eventData,
-      dateDue: date.startStr,
+      date: date.startStr,
     })
     setIsOpen(true)
   }
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    // console.log(eventData)
-    dispatch(createEvent(eventData))
+    const newDate = moment(eventData.date + eventData.timetable, 'YYYY-MM-DDLT').toISOString();
+    dispatch(createEvent({...eventData, date:newDate}))
     setIsOpen(false)
   }
+
   return (
     <>
       <div className='event'>
@@ -70,7 +72,7 @@ const Index = () => {
                   <div className='card-header'>
                     <h2>Informatiques</h2>
                     <div className='card-badge'>
-                      <span className='badge'>12h00</span>
+                      <span className='badge'>{moment(event.date).format("HH:mm")}</span>
                       <span className='badge'>{moment(event.date).format('DD/MM/YYYY')}</span>
                     </div>
                   </div>
@@ -99,20 +101,26 @@ const Index = () => {
           <div className='control-input'>
             <label htmlFor="description">Description</label>
             <textarea name="description" id="description" cols={20} rows={5} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-              setTaskData({
+              setEventData({
                 ...eventData,
                 description: e.target.value
               })
             }} />
           </div>
-          <div className='control-input'>
-            <label htmlFor="dateDue">Date</label>
-            <input type="date" id='dateDue' value={eventData.dateDue} onChange={handleChangeValue} />
+          <div>
+            <div className='control-input'>
+              <label htmlFor="date">Date</label>
+              <input type="date" id='date' value={eventData.date} onChange={handleChangeValue} />
+            </div>
+            <div className='control-input'>
+              <label htmlFor="timetable">Horaire</label>
+              <input type="time" id='timetable' value={eventData.timetable} onChange={handleChangeValue} />
+            </div>
           </div>
           <div className='control-input'>
             <label htmlFor="assignee">Affectée à </label>
             <select name="assignee" id="assignee" onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-              setTaskData({
+              setEventData({
                 ...eventData,
                 assignee: e.target.value
               })

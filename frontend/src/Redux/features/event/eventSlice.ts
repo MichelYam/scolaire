@@ -8,6 +8,7 @@ export interface Event {
     description?: string,
     assignee: string,
     date: string,
+    timetable?: string;
     createdBy: string,
     type: 'Event'
 }

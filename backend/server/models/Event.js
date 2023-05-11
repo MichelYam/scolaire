@@ -11,6 +11,9 @@ const EventSchema = new Schema({
     type: String,
   },
   date: {
+    type: Date,
+  },
+  timetable: {
     type: String
   },
   assignee: {
@@ -20,10 +23,10 @@ const EventSchema = new Schema({
   createdBy: {
     type: String,
   },
-  date: {
+  dateCreated: {
     type: Date,
     default: Date.now
-  }
+  },
 });
 
 module.exports = Event = mongoose.model("events", EventSchema);

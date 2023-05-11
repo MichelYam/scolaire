@@ -61,15 +61,48 @@
     border: 1px solid rgb(175, 173, 173);
     border-radius: 10px;
     height: 60px;
-    justify-content: space-between;
     padding: 10px;
     cursor: pointer;
     overflow: hidden;
     align-items: center;
+    animation: revealAnimation 1s cubic-bezier(0.5, 0, 0, 1) forwards;
+    transition-duration: 0.5s;
 }
-.task{
 
+.task-content {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    overflow: hidden;
+    align-items: center;
+    flex: 1;
 }
+
+@keyframes revealAnimation {
+    0% {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0px);
+        opacity: 1;
+    }
+}
+
+.task-delete {
+    /* display: none; */
+    margin: -16px -46px -16px 16px;
+    width: 32px;
+    transition: 0.5s ease-in-out;
+}
+
+.task:hover .task-delete {
+    margin-right: 0;
+    display: block;
+    transition-duration: 0.5s;
+}
+
 .task-description, .task-date {
     display: flex;
     flex-direction: column;
@@ -78,8 +111,12 @@
     height: 100%;
 }
 
+.task-date {
+    text-align: center;
+}
+
 .task-description {
-    width: 65%;
+    overflow: hidden;
 }
 
 .task-description h4 {
@@ -94,7 +131,7 @@
 
 .task-description span {
     font-size: 14px;
-    color: #ADACAC;
+    color: #818080;
 }
 
 .task-date p {

@@ -57,7 +57,7 @@ const Index = ({ logout, firstName, sidebarOnClose }: IProps) => {
 
     useEffect(() => {
         dispatch(getFriendRequest())
-    }, [notifications])
+    }, [])
 
     const handleAcceptFriendRequest = (notification: any) => {
         dispatch(acceptFriendRequest(notification.sender._id))

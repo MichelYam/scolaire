@@ -14,7 +14,6 @@ interface IProps {
 const Index = ({ message, own, date }: IProps) => {
     const { userInfo } = useAppSelector(selectUser)
     const todayDate = new Date()
-    // console.log(todayDate)
     const formatedDate = new Date(date)
     const hours = formatedDate.getHours()
     const minutes = formatedDate.getMinutes()

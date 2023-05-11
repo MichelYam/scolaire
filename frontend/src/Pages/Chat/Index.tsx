@@ -77,7 +77,7 @@ const Index = () => {
 
     useEffect(() => {
         dispatch(getMyRooms())
-    }, [userInfo?._id, rooms]);
+    }, [userInfo?._id]);
 
     const submit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -236,7 +236,7 @@ const Index = () => {
                             <div className='conversation-content'>
                                 <div className="msg-body">
                                     <ul>
-                                        {!messages && <span>Envoyer lui un message pour commencer la discussion.</span>}
+                                        {!messages.length && <span>Envoyer lui un message pour commencer la discussion.</span>}
                                         {messages && messages.map((message, index) =>
                                             // console.log(message.timeStamp)
                                             <div key={index} ref={scrollRef}>

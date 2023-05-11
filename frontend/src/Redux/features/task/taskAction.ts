@@ -25,7 +25,7 @@ export const createTask = createAsyncThunk("task/create", async ({ title, descri
         const { data } = await axios.post(`${BASE_URL}/create`, { title, description, dateDue, assignee, createdBy }, config)
         // console.log(data);
 
-        return data
+        return data.body
     } catch (error: any) {
         if (error.response && error.response.data.message) {
             return rejectWithValue(error.response.data.message)

@@ -88,20 +88,23 @@ const Index = () => {
               {filteredData.map((task, index) => {
                 const isSamePerson = task.createdBy === userInfo?.email ? "moi" : task.createdBy
                 return <div key={index} className='task' onClick={() => setCurrentTask(task)}>
-                  <div className='task-description'>
-                    <h4>{task.title}</h4>
-                    <p>{task.description}</p>
-                    <span>{`par ${isSamePerson} `}</span>
+                  <div className='task-content'>
+                    <div className='task-description'>
+                      <h4>{task.title}</h4>
+                      <p>{task.description}</p>
+                      <span>{`par ${isSamePerson} `}</span>
+                    </div>
+                    <div className='task-date'>
+                      <p className='badge'>{moment(task.dateDue).format('DD/MM/YYYY')}</p>
+                      {/* <p>{task.dateDue.replaceAll("-", "/")}</p> */}
+                      <span className='task-status'>{task.status}</span>
+                    </div>
                   </div>
-                  <div className='task-date'>
-                    <p className='badge'>{moment(task.dateDue).format('DD/MM/YYYY')}</p>
-                    {/* <p>{task.dateDue.replaceAll("-", "/")}</p> */}
-                    <span className='task-status'>{task.status}</span>
+                  <div className='task-delete'>
+                    <Can I="delete" a="Task">
+                      <DeleteIcon style={{ color: 'red' }} onClick={() => deleteTaskByID(task._id)} />
+                    </Can>
                   </div>
-                  <Can I="delete" a="Task">
-                    {/* <button onClick={() => deleteTaskByID(task._id)}>delete</button> */}
-                    <DeleteIcon style={{ color: 'red' }} onClick={() => deleteTaskByID(task._id)} />
-                  </Can>
                 </div>
               })}
             </div>

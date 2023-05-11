@@ -1,4 +1,4 @@
-const Event = require('../models/event')
+const Event = require('../models/Event')
 const jwt = require('jsonwebtoken')
 
 module.exports.createEvent = async (req) => {
@@ -7,7 +7,8 @@ module.exports.createEvent = async (req) => {
             title: req.body.title,
             description: req.body.description,
             assignee: req.body.assignee,
-            date: req.body.dateDue,
+            date: req.body.date,
+            timetable: req.body.timetable,
             createdBy: req.body.createdBy,
         })
         let result = await newEvent.save()
@@ -22,23 +23,7 @@ module.exports.getUserEvents = async (req) => {
     const jwtToken = req.headers.authorization.split('Bearer')[1].trim()
     const decodedJwtToken = jwt.decode(jwtToken)
     try {
-        const events = await Event.find({ assignee: decodedJwtToken.email })
-        // const events = await Event.aggregate([
-        //     {
-        //         $match: {
-        //             assignee: decodedJwtToken.email,
-        //         }
-        //     },
-        //     {
-        //         $project: {
-        //             title: "$title",
-        //             description: "$description",
-        //             assignee: "$assignee",
-        //             createdBy: "$createdBy",
-        //             dateDue: { $dateToString: { format: "%d/%m/%Y", date: "$dateDue" } },
-        //         }
-        //     }
-        // ])
+        const events = await Event.find({ $or: [{ assignee: decodedJwtToken.email }, { createdBy: decodedJwtToken.email }] })
 
         if (!events) {
             throw new Error('Events not found!')

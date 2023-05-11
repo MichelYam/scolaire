@@ -9,10 +9,11 @@ interface IEventParams {
     description?: string,
     assignee?: string;
     date?: string;
+    timetable?: string;
     createdBy?: string;
 }
 
-export const createEvent = createAsyncThunk("event/create", async ({ title, description, assignee, date }: IEventParams, { rejectWithValue, getState }) => {
+export const createEvent = createAsyncThunk("event/create", async ({ title, description, assignee, date, timetable }: IEventParams, { rejectWithValue, getState }) => {
 
     const { user }: any = getState()
     const createdBy = user.userInfo.email
@@ -22,10 +23,10 @@ export const createEvent = createAsyncThunk("event/create", async ({ title, desc
                 Authorization: `Bearer ${user.userToken}`
             },
         }
-        const { data } = await axios.post(`${BASE_URL}/create`, { title, description, date, assignee, createdBy }, config)
+        const { data } = await axios.post(`${BASE_URL}/create`, { title, description, date, assignee, createdBy, timetable }, config)
         // console.log(data);
 
-        return data
+        return data.body
     } catch (error: any) {
         if (error.response && error.response.data.message) {
             return rejectWithValue(error.response.data.message)
