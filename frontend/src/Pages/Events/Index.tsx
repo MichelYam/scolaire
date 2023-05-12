@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { createRef, useEffect, useState } from 'react'
 // import { eventMockData } from '../../data/eventsData'
-import './Style.css'
 
 import Calendar from '../../Components/Calendar'
 import Can from '../../Components/Can'
@@ -13,6 +12,13 @@ import { createEvent, getMyEvents } from '../../Redux/features/event/eventAction
 import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button'
 import moment from 'moment'
+import FullCalendar from '@fullcalendar/react'
+import { DateSelectArg, formatDate } from '@fullcalendar/core'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import timeGridPlugin from '@fullcalendar/timegrid'
+import interactionPlugin from '@fullcalendar/interaction'
+import frLocale from '@fullcalendar/core/locales/fr';
+import './Style.css'
 const Index = () => {
   const dispatch = useAppDispatch()
   const { userInfo } = useAppSelector(selectUser)
@@ -26,6 +32,7 @@ const Index = () => {
     date: '',
     timetable: '',
   })
+  const calendarComponentRef = createRef<FullCalendar>();
 
   useEffect(() => {
     dispatch(getMyEvents())
@@ -48,16 +55,21 @@ const Index = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const newDate = moment(eventData.date + eventData.timetable, 'YYYY-MM-DDLT').toISOString();
-    dispatch(createEvent({...eventData, date:newDate}))
+    dispatch(createEvent({ ...eventData, date: newDate }))
     setIsOpen(false)
   }
+
+  // const handleEventClick = (info: any) => {
+  //   console.log(info.event._def)
+
+  // }
 
   return (
     <>
       <div className='event'>
         <div className='event-container'>
           <div>
-            <div className='flex'>
+            <div className='flex justify-content-space-between align-items-center '>
               <h2> Évènements</h2>
               <Can I="create" a="Task">
                 <div className='task-add' onClick={() => setIsOpen(true)}>
@@ -86,8 +98,27 @@ const Index = () => {
               ))}
             </div>
           </div>
-          <div className='calendar'>
-            <Calendar height={800} onSelect={handleChangeDateValue} events={events} />
+          <div className='event-calendar'>
+            <FullCalendar
+              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+              initialView="dayGridMonth"
+              // weekends={true}
+              events={events}
+              aspectRatio={10}
+              ref={calendarComponentRef}
+              height={800}
+              // eventClick={(info) => handleEventClick(info)}
+              locale={frLocale}
+              editable={true}
+              select={handleChangeDateValue}
+              selectable={true}
+              windowResize={(arg) => console.log(arg)}
+              headerToolbar={{
+                left: 'prev,today,next',
+                center: 'title',
+                right: "dayGridMonth,timeGridWeek,timeGridDay"
+              }}
+            />
           </div>
         </div>
       </div>

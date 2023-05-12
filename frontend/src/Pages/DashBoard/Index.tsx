@@ -3,12 +3,18 @@ import { useAppDispatch, useAppSelector } from '../../Redux/store';
 import { selectEvent, selectRoom, selectTask, selectUser } from '../../utils/selector';
 import { getUserDetails } from '../../Redux/features/user/userAction';
 //Style
-import Calendar from '../../Components/Calendar';
 import './style.css'
 import { getMyTasks } from '../../Redux/features/task/taskAction';
 import { getMyEvents } from '../../Redux/features/event/eventAction';
 import moment from 'moment';
-
+import dayGridPlugin from '@fullcalendar/daygrid'
+import timeGridPlugin from '@fullcalendar/timegrid'
+import interactionPlugin from '@fullcalendar/interaction'
+import FullCalendar from '@fullcalendar/react';
+import frLocale from '@fullcalendar/core/locales/fr';
+import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
+import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 //components
 const Index = () => {
     const dispatch = useAppDispatch()
@@ -25,8 +31,27 @@ const Index = () => {
             <div className='dashboard'>
                 <div className='dashboard-events'>
                     <div className='calendar-envent'>
-                        <h2>Calendrier</h2>
-                        <Calendar height={300} events={events} />
+                        <div className='flex align-items-center '>
+                            <CalendarMonthOutlinedIcon />
+                            <h2>Calendrier</h2>
+                        </div>
+                        <FullCalendar
+                            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                            initialView="dayGridMonth"
+                            weekends={true}
+                            events={events}
+                            aspectRatio={10}
+                            height={300}
+                            locale={frLocale}
+                            editable={true}
+                            // select={handleChangeDateValue}
+                            selectable={true}
+                            headerToolbar={{
+                                left: 'prev,today,next',
+                                // center: 'title',
+                                right: "title"
+                            }}
+                        />
                     </div>
                     <div className='dashboard-events-container'>
                         <h2>Prochains évènements</h2>
@@ -53,7 +78,10 @@ const Index = () => {
                     </div>
                 </div>
                 <div className='dashboard-todos'>
-                    <h2>Tâches</h2>
+                    <div className='flex align-items-center '>
+                        <ListAltOutlinedIcon />
+                        <h2>Tâches</h2>
+                    </div>
                     <div className='dashboard-todos-list'>
                         <h3>Tâche en cours</h3>
                         {!tasks.length && <span>Vous n'avez pas de devoir pour l'instant</span>}
@@ -67,7 +95,10 @@ const Index = () => {
                     </div>
                 </div>
                 <div className='dashboard-conversations'>
-                    <h2>Messagerie</h2>
+                    <div className='flex align-items-center '>
+                        <ChatOutlinedIcon />
+                        <h2>Messagerie</h2>
+                    </div>
 
                 </div>
             </div>
