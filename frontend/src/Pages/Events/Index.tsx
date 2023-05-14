@@ -82,7 +82,7 @@ const Index = () => {
               {events.map((event, index) => (
                 <div key={index} className='card'>
                   <div className='card-header'>
-                    <h2>Informatiques</h2>
+                    <h2>{event.title}</h2>
                     <div className='card-badge'>
                       <span className='badge'>{moment(event.date).format("HH:mm")}</span>
                       <span className='badge'>{moment(event.date).format('DD/MM/YYYY')}</span>

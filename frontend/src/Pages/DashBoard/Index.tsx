@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../Redux/store';
-import { selectEvent, selectRoom, selectTask, selectUser } from '../../utils/selector';
-import { getUserDetails } from '../../Redux/features/user/userAction';
-//Style
-import './style.css'
+import { selectEvent, selectTask } from '../../utils/selector';
 import { getMyTasks } from '../../Redux/features/task/taskAction';
 import { getMyEvents } from '../../Redux/features/event/eventAction';
 import moment from 'moment';
@@ -15,6 +12,22 @@ import frLocale from '@fullcalendar/core/locales/fr';
 import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
 import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
+
+//Style
+import './style.css'
+import Avatar from '@mui/material/Avatar';
+import { deepOrange } from '@mui/material/colors';
+
+const initialValueMissingMessage = [
+    {
+        sender: 'Jean Charles',
+        content: "Je suis un test"
+    },
+    {
+        sender: 'Jean Dupont',
+        content: "Je suis un test"
+    }
+]
 //components
 const Index = () => {
     const dispatch = useAppDispatch()
@@ -25,6 +38,8 @@ const Index = () => {
         dispatch(getMyTasks())
         dispatch(getMyEvents())
     }, [])
+
+
     return (
         <>
             {/* <h1>DashBoard Content</h1> */}
@@ -44,13 +59,13 @@ const Index = () => {
                             height={300}
                             locale={frLocale}
                             editable={true}
-                            // select={handleChangeDateValue}
                             selectable={true}
                             headerToolbar={{
                                 left: 'prev,today,next',
-                                // center: 'title',
                                 right: "title"
                             }}
+                            showNonCurrentDates={false}
+                            fixedWeekCount={false}
                         />
                     </div>
                     <div className='dashboard-events-container'>
@@ -99,9 +114,24 @@ const Index = () => {
                         <ChatOutlinedIcon />
                         <h2>Messagerie</h2>
                     </div>
-
+                    <div className='dashboard-conversations-messages-list'>
+                        {initialValueMissingMessage.map((message, index) => (
+                            <div key={index} className='card'>
+                                <div className='flex'>
+                                    <Avatar sx={{ bgcolor: deepOrange[500] }}>N</Avatar>
+                                    <div className="contact-info">
+                                        <p>{message.sender}</p>
+                                        <span>{message.content}</span>
+                                    </div>
+                                </div>
+                                <div className='card-hours'>
+                                    <span>Hier à 17h30</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            </div>
+            </div >
 
         </>
     )

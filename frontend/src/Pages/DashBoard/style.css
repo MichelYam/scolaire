@@ -80,9 +80,56 @@
 }
 
 .todo.even {
-    background-color: #cfcfcf;
+    background-color: #f2f2f2;
 }
 
 .dashboard-conversations {
     flex-grow: 1;
+}
+
+.dashboard-conversations-messages-list {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}
+
+.dashboard-conversations-messages-list .card {
+    display: flex;
+    /* align-items: center; */
+    justify-content: space-between;
+    gap: 10px;
+    height: 50px;
+}
+
+.dashboard-conversations-messages-list .flex {
+    column-gap: 20px;
+}
+
+
+.dashboard-conversations-messages-list .flex .contact-info p {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+}
+.dashboard-conversations-messages-list .flex .contact-info span {
+    color: #AAAAAA;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+}
+
+.dashboard-conversations-messages-list .card .card-hours {
+    display: flex;
+    align-items: flex-start;
+
+}
+
+.dashboard-conversations-messages-list .card .card-hours span {
+    font-size: 12px;
+    color: red;
+    font-weight: 600;
+    letter-spacing: 1px;
+
 }

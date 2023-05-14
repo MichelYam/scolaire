@@ -186,10 +186,12 @@ const Index = ({ logout, firstName, sidebarOnClose }: IProps) => {
                         <Avatar /> My account
                     </MenuItem>
                     <MenuItem onClick={handleProfileClose}>
-                        <ListItemIcon>
-                            <Settings fontSize="small" />
-                        </ListItemIcon>
-                        Settings
+                        <Link to="/profile">
+                            <ListItemIcon>
+                                <Settings fontSize="small" />
+                            </ListItemIcon>
+                            Settings
+                        </Link>
                     </MenuItem>
                     <MenuItem onClick={logout}>
                         <ListItemIcon>

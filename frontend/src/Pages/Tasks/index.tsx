@@ -8,7 +8,6 @@ import Can from '../../Components/Can'
 import { Task } from '../../Redux/features/task/taskSlice'
 import TaskView from './task'
 import moment from 'moment'
-import DeleteIcon from '@mui/icons-material/Delete';
 import "./style.css"
 
 
@@ -17,7 +16,6 @@ const Index = () => {
   const { userInfo } = useAppSelector(selectUser)
   const { tasks } = useAppSelector(selectTask)
   const [edit, setEdit] = useState(false)
-  const [openTask, setOpenTask] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [inputText, setInputText] = useState("");
   const [currentTask, setCurrentTask] = useState<Task>()
@@ -34,14 +32,8 @@ const Index = () => {
     } else {
       dispatch(getMyTasks())
     }
+    console.log(tasks)
   }, [])
-
-  useEffect(() => {
-    if (currentTask) {
-      // setMessages(dispatch(getMessages(currentChat?._id)))
-      // dispatch(getMessages(currentChat?._id))
-    }
-  }, [currentTask]);
 
   const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTaskData({
@@ -53,9 +45,6 @@ const Index = () => {
     e.preventDefault()
     dispatch(createTask(taskData))
     setIsOpen(false)
-  }
-  const deleteTaskByID = (_id: string) => {
-    dispatch(deleteTask({ _id }))
   }
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,11 +89,11 @@ const Index = () => {
                       <span className='task-status'>{task.status}</span>
                     </div>
                   </div>
-                  <div className='task-delete'>
+                  {/* <div className='task-delete'>
                     <Can I="delete" a="Task">
                       <DeleteIcon style={{ color: 'red' }} onClick={() => deleteTaskByID(task._id)} />
                     </Can>
-                  </div>
+                  </div> */}
                 </div>
               })}
             </div>

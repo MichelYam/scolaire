@@ -21,6 +21,7 @@ import { AbilityContext } from "./Components/Can";
 import { buildAbilityFor } from "./config/ability";
 import ProtectedRoute from './Pages/PrivateRoute';
 import AdminRoute from './Pages/AdminRoute';
+import Profile from './Pages/Profile';
 
 function App() {
   const { userInfo } = useAppSelector(selectUser)
@@ -37,6 +38,7 @@ function App() {
               <Route path='/chat' element={<Chat />} />
               <Route path='/events' element={<Events />} />
               <Route path='/tasks' element={<Tasks />} />
+              <Route path='/profile' element={<Profile />} />
               <Route path='/settings' element={<Settings />} />
               <Route element={<AdminRoute />}>
                 <Route path='/users' element={<Users />} />

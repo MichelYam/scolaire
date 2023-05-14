@@ -1,16 +1,15 @@
 import React, { useState } from 'react'
-import SelectField from '../../../Components/Form/selectField'
-import TextAreaField from '../../../Components/Form/textAreaField'
-import { Task } from '../../../Redux/features/task/taskSlice'
-import "../style.css"
 import Avatar from '@mui/material/Avatar'
 import EditIcon from '@mui/icons-material/Edit';
 import CloseIcon from '@mui/icons-material/Close';
 import Button from '@mui/material/Button'
-import { updateTask } from "../../../Redux/features/task/taskAction"
+import { deleteTask, updateTask } from "../../../Redux/features/task/taskAction"
 
 import { useAppDispatch } from '../../../Redux/store'
 import moment from 'moment'
+
+import "../style.css"
+
 interface IProps {
     _id: string
     edit: boolean,
@@ -24,6 +23,8 @@ interface IProps {
     status: string
     createdBy: string
 }
+
+
 const optionsData = [
     {
         label: "en cours",
@@ -64,6 +65,11 @@ const Index = ({ _id, edit, setEdit, userRole, title, description, assignee, dat
             children: `${name.split(' ')[0][0].toLocaleUpperCase()}`,
         };
     }
+
+    const deleteTaskByID = (_id: string) => {
+        dispatch(deleteTask({ _id }))
+    }
+
     return (
         <>
             {
@@ -103,11 +109,15 @@ const Index = ({ _id, edit, setEdit, userRole, title, description, assignee, dat
                                     </div>
                                 </div>
                             </div >
+
                             <div className='group-button'>
-                                <Button variant="outlined" color="error" onClick={() => setEdit(false)}>
+                                <Button variant="outlined" onClick={() => setEdit(false)}>
                                     Annuler
                                 </Button>
-                                <Button variant="contained" color="success" type="submit">
+                                <Button variant="contained" color="error" onClick={() => deleteTaskByID(_id)}>
+                                    Supprimer
+                                </Button>
+                                <Button variant="contained" type="submit">
                                     Confirmer
                                 </Button>
                             </div>

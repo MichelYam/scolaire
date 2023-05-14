@@ -97,11 +97,11 @@
     transition: 0.5s ease-in-out;
 }
 
-.task:hover .task-delete {
+/* .task:hover .task-delete {
     margin-right: 0;
     display: block;
     transition-duration: 0.5s;
-}
+} */
 
 .task-description, .task-date {
     display: flex;
