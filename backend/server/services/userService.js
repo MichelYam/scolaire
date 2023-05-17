@@ -17,6 +17,9 @@ module.exports.createUser = async serviceData => {
       lastName: serviceData.lastName,
       dateOfBirth: serviceData.dateOfBirth,
       email: serviceData.email,
+      country: serviceData.country,
+      city: serviceData.city,
+      codePostal: serviceData.codePostal,
       password: hashPassword,
       role: serviceData.role
     })
@@ -92,7 +95,24 @@ module.exports.updateUserProfile = async serviceData => {
       },
       { new: true }
     )
-
+    // db.collection.updateOne(
+    //   { 
+    //     _id : ObjectId("61d32d82b6cc0e892d912c8c"),
+    //     $or: [ 
+    //         { given_name: { $ne: new_data.given_name }},
+    //         { family_name: { $ne: new_data.family_name }},
+    //         { email: { $ne: new_data.email }},
+    //         { picture: { $ne: new_data.picture }}
+    //     ]
+    //   },
+    //   {
+    //     $set: {
+    //         given_name: new_data.given_name,
+    //         family_name: new_data.family_name,
+    //         email: new_data.email,
+    //         picture:  new_data.picture
+    //     }}
+    //   )
     if (!user) {
       throw new Error('User not found!')
     }

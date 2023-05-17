@@ -12,6 +12,10 @@ const Index = () => {
     email: "",
     dateOfBirth: "",
     password: "",
+    country: "",
+    city: "",
+    codePostal: "",
+    bio: "",
     passwordCheck: "",
     role: "",
   })

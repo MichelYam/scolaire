@@ -3,6 +3,11 @@ export interface IUser {
     firstName: string;
     lastName: string;
     email: string;
+    country: string;
+    city: string;
+    codePostal: string;
+    bio: string;
+    phone: string;
     profileImageUrl: string;
     friendList: IUser[];
     role: string;

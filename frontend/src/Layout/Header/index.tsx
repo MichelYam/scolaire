@@ -183,15 +183,16 @@ const Index = ({ logout, firstName, sidebarOnClose }: IProps) => {
                     anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 >
                     <MenuItem onClick={handleProfileClose}>
-                        <Avatar /> My account
+                        <Avatar sx={{ width: 2, height: 2 }} />
+                        <Link to="/profile">
+                            My account
+                        </Link>
                     </MenuItem>
                     <MenuItem onClick={handleProfileClose}>
-                        <Link to="/profile">
-                            <ListItemIcon>
-                                <Settings fontSize="small" />
-                            </ListItemIcon>
-                            Settings
-                        </Link>
+                        <ListItemIcon>
+                            <Settings fontSize="small" />
+                        </ListItemIcon>
+                        Settings
                     </MenuItem>
                     <MenuItem onClick={logout}>
                         <ListItemIcon>

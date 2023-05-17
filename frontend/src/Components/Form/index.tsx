@@ -19,6 +19,9 @@ const Index = ({ title, isLogin }: IForm) => {
         firstName: '',
         email: '',
         password: '',
+        country: "",
+        city: "",
+        codePostal: "",
         confirmPassword: '',
         remember: false,
     })

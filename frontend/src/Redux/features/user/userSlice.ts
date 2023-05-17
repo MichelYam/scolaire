@@ -3,8 +3,6 @@ import { IUser, INotification } from "../../../Interfaces";
 import { clearStorage } from "../../../utils/TokenStorage";
 import { userLogin, userRegister, getUserDetails, updateUserProfile, getAllUsers, deleteUser, getFriendList, sendFriendRequest, acceptFriendRequest, getFriendRequest, rejectFriendRequest } from './userAction'
 
-type friendList = IUser
-
 export interface IDataAPI {
     isAuthenticated: boolean,
     loading: boolean,

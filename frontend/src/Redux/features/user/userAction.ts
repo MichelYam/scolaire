@@ -11,6 +11,11 @@ export interface IUser {
     password?: string
     firstName: string
     lastName: string
+    country: string;
+    city: string;
+    codePostal: string;
+    phone?: string;
+    bio?: string;
     friendList?: IUser[]
     remember?: boolean
     role?: string
@@ -58,7 +63,7 @@ export const getUserDetails = createAsyncThunk("user/getUserDetails", async (arg
 }
 )
 
-export const updateUserProfile = createAsyncThunk("user/updateUserProfile", async ({ firstName, lastName }: IUser, { rejectWithValue, getState }) => {
+export const updateUserProfile = createAsyncThunk("user/updateUserProfile", async (userData: IUser, { rejectWithValue, getState }) => {
     const { user }: any = getState()
     try {
         const config = {
@@ -66,7 +71,7 @@ export const updateUserProfile = createAsyncThunk("user/updateUserProfile", asyn
                 Authorization: `Bearer ${user.userToken}`,
             },
         }
-        const { data } = await axios.put(`${BASE_URL}/profile`, { firstName, lastName }, config);
+        const { data } = await axios.put(`${BASE_URL}/profile`, userData, config);
         // console.log("update:",data)
         return data
     } catch (error: any) {
