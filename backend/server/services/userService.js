@@ -92,6 +92,13 @@ module.exports.updateUserProfile = async serviceData => {
         firstName: serviceData.body.firstName,
         lastName: serviceData.body.lastName,
         email: serviceData.body.email,
+        profileImageUrl: serviceData.body.profileImageUrl,
+        country: serviceData.body.country,
+        city: serviceData.body.city,
+        codePostal: serviceData.body.codePostal,
+        phone: serviceData.body.phone.trim(),
+        bio: serviceData.body.bio,
+        dateOfBirth: serviceData.body.dateOfBirth,
       },
       { new: true }
     )

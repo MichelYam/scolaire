@@ -11,6 +11,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 import Input from '@mui/material/Input';
 import TextField from '@mui/material/TextField';
 import { updateUserProfile } from '../../Redux/features/user/userAction';
+import moment from 'moment';
 
 const Index = () => {
     const dispatch = useAppDispatch()
@@ -24,6 +25,7 @@ const Index = () => {
         lastName: userInfo?.lastName || "",
         firstName: userInfo?.firstName || "",
         email: userInfo?.email || "",
+        dateOfBirth: userInfo?.dateOfBirth || "",
         city: userInfo?.city || "",
         bio: userInfo?.bio || "",
         phone: userInfo?.phone || "",
@@ -31,7 +33,7 @@ const Index = () => {
         codePostal: userInfo?.codePostal || "",
     })
     const editRef = useRef(null)
-    const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
         setUserData({
             ...userData,
             [event.target.id]: event.target.value,
@@ -41,8 +43,8 @@ const Index = () => {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         dispatch(updateUserProfile(userData))
-        console.log("submited")
-        console.log(userData)
+        // console.log("submited")
+        // console.log(userData)
         setEdit(false)
     }
     return (
@@ -264,13 +266,20 @@ const Index = () => {
                                 </div>
                                 <div className='profile-controle width-half'>
                                     <FormControl>
-                                        <TextField id="phone" label="Téléphone" variant="outlined" value="01 80 52 64 75" />
+                                        <TextField id="phone" label="Téléphone" variant="outlined" value={userData.phone} onChange={handleChangeValue} />
+                                    </FormControl>
+                                </div>
+                            </div>
+                            <div className='flex'>
+                                <div className='profile-controle width-half'>
+                                    <FormControl>
+                                        <TextField id="dateOfBirth" label="Date de naissance" variant="outlined" type='date' value={userData.dateOfBirth} onChange={handleChangeValue} />
                                     </FormControl>
                                 </div>
                             </div>
                             <div className='profile-controle'>
                                 <FormControl>
-                                    <TextField id="bio" label="Bio" variant="outlined" multiline onChange={handleChangeValue} value="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, laborum ratione earum repudiandae omnis quasi numquam ipsum rem! Modi velit ducimus id, provident voluptatibus inventore officiis accusantium eos esse molestiae." />
+                                    <TextField id="bio" label="Bio" variant="outlined" multiline onChange={handleChangeValue} value={userData.bio} />
                                 </FormControl>
                             </div>
                         </div>
@@ -353,12 +362,18 @@ const Index = () => {
                                 </div>
                                 <div className='profile-controle width-half'>
                                     <p>Téléphone</p>
-                                    <p>01 80 52 64 75</p>
+                                    <p>{userData.phone}</p>
+                                </div>
+                            </div>
+                            <div className='flex'>
+                                <div className='profile-controle width-half'>
+                                    <p>Date de naissance</p>
+                                    <p>{moment(userInfo?.dateOfBirth).format('DD/MM/YYYY')}</p>
                                 </div>
                             </div>
                             <div className='profile-controle'>
                                 <p>Bio</p>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, laborum ratione earum repudiandae omnis quasi numquam ipsum rem! Modi velit ducimus id, provident voluptatibus inventore officiis accusantium eos esse molestiae.</p>
+                                <p>{userData.bio}</p>
                             </div>
                         </div>
                     </div>
