@@ -16,6 +16,7 @@ module.exports.createUser = async serviceData => {
       firstName: serviceData.firstName,
       lastName: serviceData.lastName,
       dateOfBirth: serviceData.dateOfBirth,
+      avatar: serviceData.avatar,
       email: serviceData.email,
       country: serviceData.country,
       city: serviceData.city,
@@ -82,44 +83,33 @@ module.exports.getUserProfile = async serviceData => {
   }
 }
 
-module.exports.updateUserProfile = async serviceData => {
+module.exports.updateUserProfile = async req => {
+  const file = req.file ? req.file.filename : null;
+  console.log("test", `${req.protocol}://${req.get('host')}/images/${file}`)
+  // console.log("z", req.file)
   try {
-    const jwtToken = serviceData.headers.authorization.split('Bearer')[1].trim()
-    const decodedJwtToken = jwt.decode(jwtToken)
+    // const jwtToken = req.headers.authorization.split('Bearer')[1].trim()
+    // const decodedJwtToken = jwt.decode(jwtToken)
+    // var fs = require('fs');
+    // var filePath = 'c:/images/pic.png';
+    // fs.unlinkSync(filePath);
     const user = await User.findOneAndUpdate(
-      { _id: decodedJwtToken.id },
+      { _id: req.user.id },
       {
-        firstName: serviceData.body.firstName,
-        lastName: serviceData.body.lastName,
-        email: serviceData.body.email,
-        profileImageUrl: serviceData.body.profileImageUrl,
-        country: serviceData.body.country,
-        city: serviceData.body.city,
-        codePostal: serviceData.body.codePostal,
-        phone: serviceData.body.phone.trim(),
-        bio: serviceData.body.bio,
-        dateOfBirth: serviceData.body.dateOfBirth,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        avatar: file,
+        country: req.body.country,
+        city: req.body.city,
+        codePostal: req.body.codePostal,
+        phone: req.body.phone,
+        bio: req.body.bio,
+        dateOfBirth: req.body.dateOfBirth,
       },
       { new: true }
     )
-    // db.collection.updateOne(
-    //   { 
-    //     _id : ObjectId("61d32d82b6cc0e892d912c8c"),
-    //     $or: [ 
-    //         { given_name: { $ne: new_data.given_name }},
-    //         { family_name: { $ne: new_data.family_name }},
-    //         { email: { $ne: new_data.email }},
-    //         { picture: { $ne: new_data.picture }}
-    //     ]
-    //   },
-    //   {
-    //     $set: {
-    //         given_name: new_data.given_name,
-    //         family_name: new_data.family_name,
-    //         email: new_data.email,
-    //         picture:  new_data.picture
-    //     }}
-    //   )
+
     if (!user) {
       throw new Error('User not found!')
     }

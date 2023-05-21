@@ -4,7 +4,7 @@ const userController = require('../controllers/userController')
 const tokenValidation = require('../middleware/tokenValidation')
 // const authorize = require("../middleware/role")
 // const Role = require('../models/User');
-
+const multer = require("../middleware/multer-config")
 
 router.post('/signup', userController.createUser)
 
@@ -19,7 +19,8 @@ router.post(
 router.put(
   '/profile',
   tokenValidation.validateToken,
-  userController.updateUserProfile
+  multer,
+  userController.updateUserProfile,
 )
 
 router.get(

@@ -13,6 +13,10 @@ import TextField from '@mui/material/TextField';
 import { updateUserProfile } from '../../Redux/features/user/userAction';
 import moment from 'moment';
 
+interface Event<T = EventTarget> {
+    target: T;
+    // ...
+}
 const Index = () => {
     const dispatch = useAppDispatch()
     const { userInfo } = useAppSelector(selectUser)
@@ -21,10 +25,10 @@ const Index = () => {
     // const [editInfo, setEditInfo] = useState(false)
     const [edit, setEdit] = useState(false)
     const [userData, setUserData] = useState({
-        avatar: userInfo?.profileImageUrl || "",
         lastName: userInfo?.lastName || "",
         firstName: userInfo?.firstName || "",
         email: userInfo?.email || "",
+        avatar: userInfo?.avatar || "",
         dateOfBirth: userInfo?.dateOfBirth || "",
         city: userInfo?.city || "",
         bio: userInfo?.bio || "",
@@ -34,17 +38,40 @@ const Index = () => {
     })
     const editRef = useRef(null)
     const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
+        const target = event.target as HTMLInputElement;
         setUserData({
             ...userData,
-            [event.target.id]: event.target.value,
+            [event.target.id]: event.target.id === "avatar" ? target.files![0] : event.target.value,
         })
+    }
+
+    const getImageName = (url: string | null) => {
+        if (userInfo?.avatar) {
+            let imgUrl = url!.split("\\")
+            return imgUrl[imgUrl.length - 1]
+        }
     }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        dispatch(updateUserProfile(userData))
-        // console.log("submited")
-        // console.log(userData)
+
+        const formData = new FormData()
+
+        formData.append("firstName", userData.firstName)
+        formData.append("lastName", userData.lastName)
+        formData.append("email", userData.email)
+        formData.append("avatar", userData.avatar)
+        formData.append("dateOfBirth", userData.dateOfBirth)
+        formData.append("city", userData.city)
+        formData.append("bio", userData.bio)
+        formData.append("phone", userData.phone)
+        formData.append("country", userData.country)
+        formData.append("codePostal", userData.codePostal)
+        // for (var pair of formData.entries()) {
+        //     console.log(pair[0] + ', ' + pair[1]);
+        // }
+
+        dispatch(updateUserProfile(formData))
         setEdit(false)
     }
     return (
@@ -233,12 +260,12 @@ const Index = () => {
                         Annuler
                     </Button>
                 </div>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} encType='multipart/form-data'>
                     <div className='profile-avatar'>
                         <div className='block align-items-center'>
-                            <Avatar sx={{ bgcolor: deepOrange[500], height: '70px', width: '70px' }}>
-                                <input type="file" />
-                            </Avatar>
+                            {/* <Avatar sx={{ bgcolor: deepOrange[500], height: '70px', width: '70px' }}> */}
+                            <input type="file" id='avatar' name='avatar' accept='.jpeg, .png, .jpg' onChange={handleChangeValue} />
+                            {/* </Avatar> */}
                         </div>
                     </div>
                     <div className='profile-info'>
@@ -331,7 +358,11 @@ const Index = () => {
                     <div className='profile-avatar'>
                         <div className='block align-items-center'>
                             <div className='flex align-items-center'>
-                                <Avatar sx={{ bgcolor: deepOrange[500], height: '70px', width: '70px' }}>N</Avatar>
+                                {
+                                    !userData.avatar ?
+                                        <Avatar sx={{ bgcolor: deepOrange[500], height: '70px', width: '70px' }}>N</Avatar> :
+                                        <Avatar src={`./uploads/${getImageName(userInfo!.avatar)}`} sx={{ bgcolor: deepOrange[500], height: '70px', width: '70px' }} />
+                                }
                                 <div className='flex flex-direction-column'>
                                     <p>{[userInfo?.firstName, userInfo?.lastName].join(" ")}</p>
                                     <p>{userInfo?.role}</p>

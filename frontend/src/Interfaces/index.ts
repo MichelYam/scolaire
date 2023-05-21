@@ -9,7 +9,7 @@ export interface IUser {
     dateOfBirth: string
     bio: string
     phone: string
-    profileImageUrl: string
+    avatar: string
     friendList: IUser[]
     role: string
 }

@@ -20,12 +20,12 @@ const Index = ({ message, own, date }: IProps) => {
     return (
         // <li className={own ? "reply" : "sender"}>
         <li>
-            {own ? !userInfo?.profileImageUrl ?
+            {own ? !userInfo?.avatar ?
                 <Avatar sx={{ bgcolor: deepOrange[500] }}>{userInfo?.firstName?.charAt(0).toUpperCase()}</Avatar>
                 :
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
                 :
-                !message.sender.profileImageUrl ?
+                !message.sender.avatar ?
                     <Avatar sx={{ bgcolor: deepOrange[500] }}>{message.sender.firstName?.charAt(0).toUpperCase()}</Avatar>
                     :
 

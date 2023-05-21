@@ -51,7 +51,6 @@ module.exports.getUserProfile = async (req, res) => {
 
 module.exports.updateUserProfile = async (req, res) => {
   let response = {}
-
   try {
     const responseFromService = await userService.updateUserProfile(req)
     response.status = 200

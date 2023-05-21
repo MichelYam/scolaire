@@ -58,7 +58,7 @@ const Index = () => {
           <div className='container'>
             <div className='form-content'>
               <h2 className='title'>Inscription</h2>
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} encType='multipart/form-data'>
                 <div className="form-group">
                   <label htmlFor="firstName">Prénom</label>
                   <input type="text" name='firstName' id='firstName' placeholder="Prénom" onChange={handleChange} required />

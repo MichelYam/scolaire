@@ -9,6 +9,7 @@ export interface IUser {
     _id?: string
     email?: string
     password?: string
+    avatar?: string
     firstName: string
     lastName: string
     country: string;
@@ -44,7 +45,6 @@ export const userLogin = createAsyncThunk("user/login", async ({ email, password
 
 export const getUserDetails = createAsyncThunk("user/getUserDetails", async (arg, { rejectWithValue, getState }) => {
     const { user }: any = getState()
-
     try {
         const config = {
             headers: {
@@ -64,15 +64,17 @@ export const getUserDetails = createAsyncThunk("user/getUserDetails", async (arg
 }
 )
 
-export const updateUserProfile = createAsyncThunk("user/updateUserProfile", async (userData: IUser, { rejectWithValue, getState }) => {
+export const updateUserProfile = createAsyncThunk("user/updateUserProfile", async (formData: {}, { rejectWithValue, getState }) => {
     const { user }: any = getState()
+    console.log("userData", formData)
     try {
         const config = {
             headers: {
+                "content-type": "multipartform-data",
                 Authorization: `Bearer ${user.userToken}`,
             },
         }
-        const { data } = await axios.put(`${BASE_URL}/profile`, userData, config);
+        const { data } = await axios.put(`${BASE_URL}/profile`, formData, config);
         // console.log("update:",data)
         return data
     } catch (error: any) {
