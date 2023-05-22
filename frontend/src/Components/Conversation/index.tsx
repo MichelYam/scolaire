@@ -10,6 +10,7 @@ interface IProps {
     currentUser: IUser | null
     conversation: Room
     onClick: () => void
+
 }
 
 const Index = ({ conversation, currentUser, onClick, currentChat }: IProps) => {
@@ -20,7 +21,12 @@ const Index = ({ conversation, currentUser, onClick, currentChat }: IProps) => {
     const fullName = [user?.firstName, user?.lastName].join(" ")
     return (
         <div key={currentUser?._id} className={`contact ${currentChat?._id === conversation?._id ? "active" : ""}`} onClick={onClick}>
-            <Avatar sx={{ bgcolor: deepOrange[500] }}>N</Avatar>
+            {
+                !user?.avatar ?
+                    <Avatar sx={{ bgcolor: deepOrange[500] }}>N</Avatar>
+                    :
+                    <Avatar src={`../assets/uploads/${user?.avatar}`} />
+            }
             <div className="contact-info">
                 <p>{fullName}</p>
                 {/* <span>{conversation.latestMessage?.content}</span> */}

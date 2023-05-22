@@ -23,13 +23,13 @@ const Index = ({ message, own, date }: IProps) => {
             {own ? !userInfo?.avatar ?
                 <Avatar sx={{ bgcolor: deepOrange[500] }}>{userInfo?.firstName?.charAt(0).toUpperCase()}</Avatar>
                 :
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                <Avatar alt="Remy Sharp" src={`../assets/uploads/${userInfo?.avatar}`} />
                 :
                 !message.sender.avatar ?
                     <Avatar sx={{ bgcolor: deepOrange[500] }}>{message.sender.firstName?.charAt(0).toUpperCase()}</Avatar>
                     :
 
-                    <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                    <Avatar alt="Remy Sharp" src={`../assets/uploads/${userInfo?.avatar}`} />
             }
             <div className='message-content'>
                 <p>{[hours, minutes].join(":")}</p>

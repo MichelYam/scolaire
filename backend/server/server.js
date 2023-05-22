@@ -31,6 +31,7 @@ app.use('/api/v1/event', require('./routes/eventRoutes'))
 app.use('/api/v1/room', require('./routes/roomRoutes'))
 app.use('/api/v1/message', require('./routes/messageRoutes'))
 // app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use("/images", express.static("images"));
 // API Documentation
 // if (process.env.NODE_ENV !== 'production') {
 //   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))

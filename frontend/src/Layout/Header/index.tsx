@@ -21,9 +21,9 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 // import { INotification } from '../../Interfaces';
 import "./style.css"
+import { userInfo } from 'os';
 
 interface IProps {
-    firstName?: string,
     sidebarOnClose: () => void
     // acces: string,
     logout: () => void
@@ -31,13 +31,13 @@ interface IProps {
 
 type INotification = string[]
 
-const Index = ({ logout, firstName, sidebarOnClose }: IProps) => {
+const Index = ({ logout, sidebarOnClose }: IProps) => {
     const [isOpen, setIsOpen] = useState(false)
     const [dropdown, setDropdown] = useState(null);
     const socket = useRef<Socket>();
     const { notifications } = useAppSelector(selectUser)
     const dropdownRef = useRef<HTMLLIElement>(null)
-
+    const { userInfo } = useAppSelector(selectUser)
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [notificaitonAnchorEl, setNotificationAnchorEl] =
         React.useState<null | HTMLElement>(null);
@@ -143,7 +143,11 @@ const Index = ({ logout, firstName, sidebarOnClose }: IProps) => {
                             aria-haspopup="true"
                             aria-expanded={open ? 'true' : undefined}
                         >
-                            <Avatar sx={{ width: 32, height: 32, bgcolor: red[500] }}>{firstName?.charAt(0).toUpperCase()}</Avatar>
+                            {
+                                userInfo?.avatar === "" ?
+                                    <Avatar sx={{ width: 32, height: 32, bgcolor: red[500] }}>{userInfo?.firstName.charAt(0).toUpperCase()}</Avatar> :
+                                    <Avatar src={`../assets/uploads/${userInfo?.avatar}`} sx={{ height: '35px', width: '35px' }} />
+                            }
                         </IconButton>
                     </Tooltip>
                 </Box>

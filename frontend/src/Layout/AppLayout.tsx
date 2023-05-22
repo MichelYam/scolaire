@@ -13,19 +13,17 @@ const AppLayout = () => {
     const dispatch = useAppDispatch()
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const logOut = () => { dispatch(logout()) }
-    const { userInfo } = useAppSelector(selectUser)
 
     useEffect(() => {
         // if (userToken) {
         dispatch(getUserDetails())
         // }
-        console.log(userInfo)
     }, [])
     return (
         <>
             <SideBar logout={logOut} sidebarOpen={sidebarOpen} appRoutes={appRoutes} />
             <div className="content">
-                <Header firstName={userInfo?.firstName} logout={logOut} sidebarOnClose={() => setSidebarOpen(!sidebarOpen)} />
+                <Header logout={logOut} sidebarOnClose={() => setSidebarOpen(!sidebarOpen)} />
                 <div className="test">
                     <Outlet />
                 </div>

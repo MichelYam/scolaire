@@ -36,20 +36,12 @@ const Index = () => {
         country: userInfo?.country || "",
         codePostal: userInfo?.codePostal || "",
     })
-    const editRef = useRef(null)
     const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
         const target = event.target as HTMLInputElement;
         setUserData({
             ...userData,
             [event.target.id]: event.target.id === "avatar" ? target.files![0] : event.target.value,
         })
-    }
-
-    const getImageName = (url: string | null) => {
-        if (userInfo?.avatar) {
-            let imgUrl = url!.split("\\")
-            return imgUrl[imgUrl.length - 1]
-        }
     }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -67,13 +59,10 @@ const Index = () => {
         formData.append("phone", userData.phone)
         formData.append("country", userData.country)
         formData.append("codePostal", userData.codePostal)
-        // for (var pair of formData.entries()) {
-        //     console.log(pair[0] + ', ' + pair[1]);
-        // }
-
         dispatch(updateUserProfile(formData))
         setEdit(false)
     }
+    console.log(userInfo?.avatar)
     return (
         <div className='profile'>
             {/* <h2>Mon Profile</h2>
@@ -359,9 +348,10 @@ const Index = () => {
                         <div className='block align-items-center'>
                             <div className='flex align-items-center'>
                                 {
-                                    !userData.avatar ?
-                                        <Avatar sx={{ bgcolor: deepOrange[500], height: '70px', width: '70px' }}>N</Avatar> :
-                                        <Avatar src={`./uploads/${getImageName(userInfo!.avatar)}`} sx={{ bgcolor: deepOrange[500], height: '70px', width: '70px' }} />
+                                    userData.avatar === "" ?
+                                        <Avatar sx={{ bgcolor: deepOrange[500], height: '70px', width: '70px' }} />
+                                        :
+                                        <Avatar src={`../assets/uploads/${userInfo?.avatar}`} sx={{ height: '70px', width: '70px' }} />
                                 }
                                 <div className='flex flex-direction-column'>
                                     <p>{[userInfo?.firstName, userInfo?.lastName].join(" ")}</p>
