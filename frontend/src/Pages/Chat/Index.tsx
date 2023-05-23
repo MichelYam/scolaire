@@ -23,6 +23,7 @@ import AddIcon from '@mui/icons-material/Add';
 import '../style.css'
 import Button from '@mui/material/Button';
 import ChatContainer from '../../Components/Chat/ChatContainer';
+import Avatar from '@mui/material/Avatar';
 
 type IProps = {
     notification: {}[]
@@ -223,7 +224,7 @@ const Index = () => {
                             <div className='conversation-header'>
                                 <div className='conversation-header-contact'>
                                     <div className='conversation-header-contact-info'>
-                                        <img src="../assets/img/avatar.png" alt="" />
+                                        <Avatar src={`../assets/uploads/${userFullname?.avatar}`} />
                                         <p>{[userFullname?.firstName, userFullname?.lastName].join(" ")}</p>
                                     </div>
                                     <div className='conversation-header-contact-call'>
