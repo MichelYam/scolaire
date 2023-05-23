@@ -43,25 +43,30 @@ const ChatContainer = ({ currentChat, socket, socketConnected, isTyping, setIsTy
     };
 
     useEffect(() => {
+        if (currentChat) {
+            socket.current?.emit("join chat", currentChat._id);
+            dispatch(getMessages(currentChat?._id))
+        }
+
+    }, [currentChat]);
+
+    useEffect(() => {
+        console.log(socketConnected)
         socket.current?.on("message recieved", (newMessageRecieved) => {
-            console.log("newMessageRecieved", newMessageRecieved)
+            // console.log(newMessageRecieved)
             if (!currentChat || currentChat._id !== newMessageRecieved.room._id) {
-                console.log("test 1")
-                if (!notifications.includes(newMessageRecieved)) {
-                    // dispatch(createAlert());
-                    // setNotification([newMessageRecieved, ...notification]);
-                    console.log("test 2")
-
-                    // dispatch(getFriendRequest())
-
-                }
+                // if (!notifications.includes(newMessageRecieved)) {
+                //     dispatch(createNofif());
+                //     // setNotification([newMessageRecieved, ...notification]);
+                // }
             } else {
-                console.log("test 3")
-
-                dispatch(getMessages(currentChat?._id))
+                if (currentChat) {
+                    dispatch(getMessages(currentChat?._id))
+                }
             }
         });
-    }, []);
+
+    });
 
     const handleTypingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewMessage(e.target.value)
@@ -138,7 +143,7 @@ const ChatContainer = ({ currentChat, socket, socketConnected, isTyping, setIsTy
                         {messages && messages.map((message, index) =>
                             // console.log(message.timeStamp)
                             <div key={index} ref={scrollRef}>
-                                {/* <Message message={message.content} own={message.sender === userInfo?._id} date={message.timeStamp} /> */}
+                                <Message message={message} own={message.sender._id === userInfo?._id} date={message.timeStamp} />
                             </div>
                         )}
                     </ul>

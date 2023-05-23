@@ -17,7 +17,7 @@ module.exports.createMessage = async (req) => {
             { new: true }
         )
         let result = await newMessage.save()
-        return result
+        return result.populate("sender")
     } catch (error) {
         console.error('Error in messageService.js', error)
         throw new Error(error)
@@ -28,7 +28,7 @@ module.exports.getMessages = async (req) => {
     try {
         const messages = await Message.find({
             roomId: req.params.roomID,
-        }).populate({ path: 'sender', select: 'profileImageUrl firstName lastName' });
+        }).populate({ path: 'sender', select: 'firstName lastName avatar' });
         return messages
     } catch (error) {
         console.error('Error in messageService.js', error)
