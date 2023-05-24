@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import DropDown from '../../Components/DropDown/Index'
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -186,24 +185,28 @@ const Index = ({ logout, sidebarOnClose }: IProps) => {
                     transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                     anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 >
-                    <MenuItem onClick={handleProfileClose}>
-                        <Avatar sx={{ width: 2, height: 2 }} />
-                        <Link to="/profile">
-                            My account
-                        </Link>
-                    </MenuItem>
+                    <Link to="/profile">
+                        <MenuItem onClick={handleProfileClose}>
+                            <ListItemIcon>
+                                <Avatar />
+                            </ListItemIcon>
+                            Mon profile
+                        </MenuItem>
+                    </Link>
                     <MenuItem onClick={handleProfileClose}>
                         <ListItemIcon>
                             <Settings fontSize="small" />
                         </ListItemIcon>
-                        Settings
+                        Paramètre
                     </MenuItem>
-                    <MenuItem onClick={logout}>
-                        <ListItemIcon>
-                            <Logout fontSize="small" />
-                        </ListItemIcon>
-                        Logout
-                    </MenuItem>
+                    <Link to="/" onClick={logout}>
+                        <MenuItem>
+                            <ListItemIcon>
+                                <Logout fontSize="small" />
+                            </ListItemIcon>
+                            Logout
+                        </MenuItem>
+                    </Link>
                 </Menu>
             </div >
         </div >

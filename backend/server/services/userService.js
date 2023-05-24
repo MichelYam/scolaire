@@ -3,30 +3,45 @@ const Notification = require('../models/Notification')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
-module.exports.createUser = async serviceData => {
+module.exports.createUser = async (req, res) => {
+
+  const { firstName, lastName, city, codePostal, role, email, password, country, dateOfBirth, createdAt } = req;
   try {
-    const user = await User.findOne({ email: serviceData.email })
+    const user = await User.findOne({ email: req.email })
     if (user) {
       throw new Error('Email already exists')
     }
 
-    const hashPassword = await bcrypt.hash(serviceData.password, 12)
-    console.log("info", serviceData)
+    const hashPassword = await bcrypt.hash(req.password, 12)
+    console.log("info", req)
+    // const newUser = new User({
+    //   firstName: req.firstName,
+    //   lastName: req.lastName,
+    //   dateOfBirth: req.dateOfBirth,
+    //   email: req.email,
+    //   country: req.country,
+    //   city: req.city,
+    //   codePostal: req.codePostal,
+    //   password: hashPassword,
+    //   role: req.role
+    // })
     const newUser = new User({
-      firstName: serviceData.firstName,
-      lastName: serviceData.lastName,
-      dateOfBirth: serviceData.dateOfBirth,
-      avatar: serviceData.avatar,
-      email: serviceData.email,
-      country: serviceData.country,
-      city: serviceData.city,
-      codePostal: serviceData.codePostal,
-      password: hashPassword,
-      role: serviceData.role
+      firstName,
+      lastName,
+      dateOfBirth,
+      email,
+      country,
+      city,
+      codePostal,
+      password,
+      role
     })
-
     let result = await newUser.save()
-
+    // const token = createSecretToken(user._id);
+    // res.cookie("token", token, {
+    //   withCredentials: true,
+    //   httpOnly: false,
+    // });
     return result
   } catch (error) {
     console.error('Error in userService.js', error)

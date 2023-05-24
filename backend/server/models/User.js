@@ -1,19 +1,21 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const bcrypt = require('bcrypt');
+
 const ROLES = {
   Admin: 'Admin',
   Tutor: 'Tutor',
   Student: 'Student',
 }
 // Create Schema
-const UserSchema = new Schema({
+const userSchema = new Schema({
   firstName: {
     type: String,
-    required: true
+    required: [true, "Your first name is required"],
   },
   lastName: {
     type: String,
-    required: true
+    required: [true, "Your last name is required"],
   },
   avatar: {
     type: String,
@@ -21,8 +23,8 @@ const UserSchema = new Schema({
   },
   email: {
     type: String,
-    required: true,
-    unique: true
+    required: [true, "Your email address is required"],
+    unique: true,
   },
   dateOfBirth: {
     type: String,
@@ -30,7 +32,7 @@ const UserSchema = new Schema({
   },
   password: {
     type: String,
-    required: true,
+    required: [true, "Your password is required"],
   },
   codePostal: {
     type: String,
@@ -58,11 +60,15 @@ const UserSchema = new Schema({
     ref: 'user'
   }
   ,
-  date: {
+  createdAt: {
     type: Date,
-    default: Date.now
-  }
+    default: new Date(),
+  },
 });
 
-module.exports = User = mongoose.model("user", UserSchema);
+userSchema.pre("save", async function () {
+  this.password = await bcrypt.hash(this.password, 12);
+});
+
+module.exports = User = mongoose.model("user", userSchema);
 module.exports.ROLES = ROLES;

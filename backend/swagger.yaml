@@ -1,0 +1,919 @@
+swagger: "2.0"
+info:
+  title: Learn@home API documentation
+  description: Contains all available API endpoints in this codebase
+  termsOfService: 'http://swagger.io/terms/'
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+host: localhost:3001
+basePath: /api/v1
+tags:
+  - name: transaction
+    description: Everything about your transactions
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+  - name: task
+    description: Everything about your tasks
+  - name: event
+    description: Everything about your events
+  - name: user
+    description: Operations about user
+schemes:
+  - http
+paths:
+  /task/:
+    get:
+      security:
+      - Bearer: []
+      tags:
+        - task
+      summary: Return a list of tasks
+      description: Get all task of user
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+      operationId: getAllTasks
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Task'
+        '404':
+          description: tasks not found
+        '500':
+          description: Internal Server Error
+    post:
+      security:
+      - Bearer: []
+      tags:
+        - task
+      summary: Add a new task 
+      description: Add a new task
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+      operationId: addTask
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Task'
+        '404':
+          description: Invalid transactionId
+        '500':
+          description: Internal Server Error
+  /task/{taskId}:
+    get:
+      security:
+      - Bearer: []
+      tags:
+        - task
+      summary: Find task by ID
+      description: Returns a single task
+      operationId: getTaskById
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+        - name: taskId
+          in: path
+          description: ID of task to return
+          type: string
+          required: true
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Task'
+        '404':
+          description: task not found
+        '500':
+          description: Internal Server Error
+    put:
+      security:
+      - Bearer: []
+      tags:
+        - task
+      summary: Update an existing task by ID
+      description: Update an existing task by ID
+      operationId: updateTask
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+        - name: taskId
+          in: path
+          description: ID of task to return
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Task'
+        '404':
+          description: Invalid taskId
+        '500':
+          description: Internal Server Error
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - task
+      summary: Delete a task by ID
+      description: delete a task by ID
+      operationId: deleteTask
+      parameters:
+      - in: header
+        name: Authorization
+        description: Attach Bearer JWT token
+        type: string
+        required: true
+      - name: taskId
+        in: path
+        description: ID of task to return
+        type: string
+        required: true
+      responses:
+        '404':
+          description: Invalid taskId
+        '500':
+          description: Internal Server Error
+  /event/:
+    get:
+      security:
+      - Bearer: []
+      tags:
+        - event
+      summary: Return a list of events
+      description: Get all event of user
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+      operationId: getAllEvents
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Transaction'
+        '404':
+          description: events not found
+        '500':
+          description: Internal Server Error
+    post:
+      security:
+      - Bearer: []
+      tags:
+        - event
+      summary: Add a new event 
+      description: Add a new event
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+      operationId: addevent
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Event'
+        '404':
+          description: Invalid transactionId
+        '500':
+          description: Internal Server Error
+  /event/{eventId}:
+    get:
+      security:
+      - Bearer: []
+      tags:
+        - event
+      summary: Find event by ID
+      description: Returns a single event
+      operationId: getEventById
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+        - name: eventId
+          in: path
+          description: ID of event to return
+          type: string
+          required: true
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Event'
+        '404':
+          description: event not found
+        '500':
+          description: Internal Server Error
+    put:
+      security:
+      - Bearer: []
+      tags:
+        - event
+      summary: Update an existing event by ID
+      description: Update an existing task by ID
+      operationId: updateEvent
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+        - name: eventId
+          in: path
+          description: ID of event to return
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Event'
+        '404':
+          description: Invalid taskId
+        '500':
+          description: Internal Server Error
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - event
+      summary: Delete a event by ID
+      description: delete a event by ID
+      operationId: deleteEvent
+      parameters:
+      - in: header
+        name: Authorization
+        description: Attach Bearer JWT token
+        type: string
+        required: true
+      - name: eventId
+        in: path
+        description: ID of event to return
+        type: string
+        required: true
+      responses:
+        '404':
+          description: Invalid eventId
+        '500':
+          description: Internal Server Error
+  /room/:
+    get:
+      security:
+      - Bearer: []
+      tags:
+        - event
+      summary: Return a list of rooms
+      description: Get all rooms of user
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+      operationId: getAllRooms
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Room'
+        '404':
+          description: events not found
+        '500':
+          description: Internal Server Error
+    post:
+      security:
+      - Bearer: []
+      tags:
+        - room
+      summary: Add a new room 
+      description: Add a new room
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+      operationId: addRoom
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Room'
+        '404':
+          description: Invalid transactionId
+        '500':
+          description: Internal Server Error
+  /room/{roomId}:
+    get:
+      security:
+      - Bearer: []
+      tags:
+        - room
+      summary: Find room by ID
+      description: Returns a single room
+      operationId: getRoomById
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+        - name: roomId
+          in: path
+          description: ID of room to return
+          type: string
+          required: true
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Room'
+        '404':
+          description: room not found
+        '500':
+          description: Internal Server Error
+    put:
+      security:
+      - Bearer: []
+      tags:
+        - room
+      summary: Update an existing room by ID
+      description: Update an existing task by ID
+      operationId: updateRoom
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+        - name: roomId
+          in: path
+          description: ID of room to return
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Room'
+        '404':
+          description: Invalid roomId
+        '500':
+          description: Internal Server Error
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - room
+      summary: Delete a room by ID
+      description: delete a room by ID
+      operationId: deleteRoom
+      parameters:
+      - in: header
+        name: Authorization
+        description: Attach Bearer JWT token
+        type: string
+        required: true
+      - name: roomId
+        in: path
+        description: ID of room to return
+        type: string
+        required: true
+      responses:
+        '404':
+          description: Invalid eventId
+        '500':
+          description: Internal Server Error
+  /message/:
+    get:
+      security:
+      - Bearer: []
+      tags:
+        - message
+      summary: Return all messages room
+      description: Get all message of room
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+      operationId: getAllMessages
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Message'
+        '404':
+          description: messages not found
+        '500':
+          description: Internal Server Error
+    post:
+      security:
+      - Bearer: []
+      tags:
+        - message
+      summary: Add a new message 
+      description: Add a new message
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+      operationId: addMessage
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Room'
+        '404':
+          description: Invalid messageId
+        '500':
+          description: Internal Server Error
+  /message/{messageId}:
+    put:
+      security:
+      - Bearer: []
+      tags:
+        - message
+      summary: Update an existing message by ID
+      description: Update an existing message by ID
+      operationId: updateMessage
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+        - name: messageId
+          in: path
+          description: ID of message to return
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Message'
+        '404':
+          description: Invalid messageId
+        '500':
+          description: Internal Server Error
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - message
+      summary: Delete a message by ID
+      description: delete a message by ID
+      operationId: deleteMessage
+      parameters:
+      - in: header
+        name: Authorization
+        description: Attach Bearer JWT token
+        type: string
+        required: true
+      - name: messageId
+        in: path
+        description: ID of message to return
+        type: string
+        required: true
+      responses:
+        '404':
+          description: Invalid eventId
+        '500':
+          description: Internal Server Error
+  /account/transactions:
+    get:
+      security:
+      - Bearer: []
+      tags:
+        - transaction
+      summary: Return a list of transactions
+      description: Get all transactions
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+      operationId: getAallTransaction
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Transaction'
+        '404':
+          description: transactions not found
+        '500':
+          description: Internal Server Error
+    post:
+      security:
+      - Bearer: []
+      tags:
+        - transaction
+      summary: Add a new transaction 
+      description: Add a new transaction
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+      operationId: addTransaction
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Transaction'
+        '404':
+          description: Invalid transactionId
+        '500':
+          description: Internal Server Error
+  /account/transactions/{transactionId}:
+    get:
+      security:
+      - Bearer: []
+      tags:
+        - transaction
+      summary: Find transaction by ID
+      description: Returns a single transaction
+      operationId: gettransactionById
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+        - name: transactionId
+          in: path
+          description: ID of transaction to return
+          type: string
+          required: true
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Transaction'
+        '404':
+          description: transaction not found
+        '500':
+          description: Internal Server Error
+    put:
+      security:
+      - Bearer: []
+      tags:
+        - transaction
+      summary: Update an existing transaction by ID
+      description: Update an existing transaction by ID
+      operationId: updateTransaction
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+        - name: transactionId
+          in: path
+          description: ID of transaction to return
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Transaction'
+        '404':
+          description: Invalid transactionId
+        '500':
+          description: Internal Server Error
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - transaction
+      summary: Delete a transaction by ID
+      description: delete a transaction by ID
+      operationId: deletetransaction
+      parameters:
+      - in: header
+        name: Authorization
+        description: Attach Bearer JWT token
+        type: string
+        required: true
+      - name: transactionId
+        in: path
+        description: ID of transaction to return
+        type: string
+        required: true
+      responses:
+        '404':
+          description: Invalid transactionId
+        '500':
+          description: Internal Server Error
+  /user/login:
+    post:
+      tags:
+        - user 
+      summary: Login
+      description: API for Login
+      parameters:
+        - in: body
+          name: body
+          description: Login Payload
+          required: true
+          schema:
+            $ref: '#/definitions/Login'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Login Successfully
+          schema:
+            $ref: '#/definitions/LoginResponse'
+        '400':
+          description: Invalid transactionId
+        '500':
+          description: Internal Server Error
+  /user/signup:
+    post:
+      tags:
+        - user
+      summary: Signup
+      description: API for Signup
+      parameters:
+        - in: body
+          name: body
+          description: Signup Payload
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Signup Successfully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+  /user/profile:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - user
+      summary: User Profile API
+      description: API for fetching a user profile
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: User profile retrieved successully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - user
+      summary: User Profile API
+      description: API for updating a user profile
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+        - in: body
+          name: body
+          description: Update user profile attributes
+          required: true
+          schema:
+            $ref: '#/definitions/UserProfile'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: User profile retrieved successully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+definitions:
+  Transaction:
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: name of transaction
+        Amount: 
+          type: number
+          example: 500
+        comment: 
+          type: string
+        recipient: 
+          type: string
+          example: Dupont
+        created: 
+          type: string
+          example: "01/01/2012"
+      xml:
+        name: transaction
+  Task:
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        title:
+          type: string
+          example: "title of task"
+        description: 
+          type: string
+          example: "description of task"
+        dateDue:
+          type: string
+          example: "10/01/2022"
+        statut:
+          type: string
+          example: "open"
+        assignee: 
+          type: string
+          example: "Jean Dupont"
+        createdBy: 
+          type: string
+          example: "Alex Dupont"
+        created: 
+          type: string
+          example: "01/01/2022"
+      xml:
+        name: task
+  Event:
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        title:
+          type: string
+          example: "title of task"
+        description: 
+          type: string
+          example: "description of task"
+        dateDue:
+          type: string
+          example: "10/01/2022"
+        timeTable:
+          type: string
+          example: "15h30"
+        assignee: 
+          type: string
+          example: "Jean Dupont"
+        createdBy: 
+          type: string
+          example: "Alex Dupont"
+        created: 
+          type: string
+          example: "01/01/2022"
+      xml:
+        name: event
+  Room:
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        users:
+          type: array
+        messages: 
+          type: string
+          example: "description of task"
+        updateAt:
+          type: string
+          example: "10/01/2022"
+        latestMessage:
+          type: string
+          example: "The latest message"
+        created: 
+          type: string
+          example: "01/01/2022"
+      xml:
+        name: room
+  Message:
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        roomId:
+          type: integer
+          format: int64
+          example: 10
+        sender: 
+          type: array
+        content:
+          type: string
+          example: "Message content"
+        timeStamp: 
+          type: string
+          example: "2023-05-09T21:47:33.322+00:00"
+      xml:
+        name: room
+  User:
+    properties:
+      email:
+        type: string
+        description: user email
+      password:
+        type: string
+        description: user password
+      firstName:
+        type: string
+        description: user first name
+      lastName:
+        type: string
+        description: user last name
+  Login:
+    properties:
+      email:
+        type: string
+        description: user email
+      password:
+        type: string
+        description: user password
+  ApiResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object
+        properties:
+          id:
+            type: string
+          email:
+            type: string
+  LoginResponse:
+    type: object
+    properties:
+      token:
+        type: string
+  UserProfile:
+    type: object
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
