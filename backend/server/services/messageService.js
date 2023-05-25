@@ -36,3 +36,36 @@ module.exports.getMessages = async (req) => {
     }
 }
 
+module.exports.updateMessage = async (req, res) => {
+    try {
+        const message = await Message.findOneAndUpdate(
+            { _id: req.user.id },
+
+            {
+                content: req.body.content,
+                update: true
+            })
+        return message.toObject()
+
+    } catch (error) {
+        console.error('Error in messageService.js', error)
+        throw new Error(error)
+    }
+}
+
+module.exports.deleteMessage = async (req, res) => {
+    const { id } = req.params
+
+    try {
+        const message = await Message.findByIdAndDelete(id)
+
+        if (!message) {
+            throw new Error('Message not found!')
+        }
+        return message.toObject()
+
+    } catch (error) {
+        console.error('Error in messageService.js', error)
+        throw new Error(error)
+    }
+}

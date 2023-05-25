@@ -23,6 +23,10 @@ const MessageSchema = new Schema({
         fileName: String
     },
     // readBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    update: {
+        type: Boolean,
+        default: false
+    },
     timeStamp: {
         type: Date,
         required: true,

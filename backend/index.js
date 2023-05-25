@@ -8,7 +8,7 @@ const cors = require('cors')
 // const swaggerDocs = yaml.load('./swagger.yaml')
 const dbConnection = require('./server/database/connection')
 const { Server } = require("socket.io");
-
+const helmet = require("helmet")
 
 require('dotenv').config();
 const PORT = process.env.PORT || 3001
@@ -22,6 +22,14 @@ app.use(cors())
 // Request payload middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+
+app.use(
+    helmet({
+        contentSecurityPolicy: false,
+        frameguard: true
+    })
+);
 
 // Handle custom routes
 app.use('/api/v1/user', require('./server/routes/userRoutes'))
