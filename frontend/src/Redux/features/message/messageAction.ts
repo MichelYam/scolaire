@@ -62,7 +62,7 @@ export const updateMessage = createAsyncThunk('message/updateMessage', async (_i
                 Authorization: `Bearer ${user.userToken}`
             },
         }
-        const { data } = await axios.put(`${BASE_URL}/${_id}`, config)
+        const { data } = await axios.put(`${BASE_URL}/update/${_id}`, config)
         // console.log(data);
 
         return data
@@ -83,7 +83,7 @@ export const deleteMessage = createAsyncThunk('message/deleteMessage', async (_i
                 Authorization: `Bearer ${user.userToken}`
             },
         }
-        const { data } = await axios.delete(`${BASE_URL}/${_id}`, config)
+        const { data } = await axios.delete(`${BASE_URL}/delete/${_id}`, config)
         // console.log(data);
 
         return data

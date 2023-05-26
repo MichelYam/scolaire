@@ -80,7 +80,7 @@ const taskSlice = createSlice({
             })
             .addCase(deleteMessage.fulfilled, (state, { payload }: any) => {
                 state.loading = false
-                state.messages = state.messages.filter(item => item._id === payload.body)
+                state.messages = state.messages.filter(item => item._id !== payload.body._id)
                 state.error = null
             })
             .addCase(deleteMessage.rejected, (state, { payload }: any) => {

@@ -31,3 +31,35 @@ module.exports.getMessages = async (req, res) => {
 
     return res.status(response.status).send(response)
 }
+
+module.exports.updateMessage = async (req, res) => {
+    let response = {}
+    try {
+        const responseFromService = await messageService.updateMessage(req)
+        response.status = 200
+        response.message = 'Get successfully update message'
+        response.body = responseFromService
+    } catch (error) {
+        console.log('Error in messageController.js')
+        response.status = 400
+        response.message = error.message
+    }
+
+    return res.status(response.status).send(response)
+}
+
+module.exports.deleteMessage = async (req, res) => {
+    let response = {}
+    try {
+        const responseFromService = await messageService.deleteMessage(req, res)
+        response.status = 200
+        response.message = 'Get successfully delete message'
+        response.body = responseFromService
+    } catch (error) {
+        console.log('Error in messageController.js')
+        response.status = 400
+        response.message = error.message
+    }
+
+    return res.status(response.status).send(response)
+}

@@ -62,6 +62,7 @@ module.exports.deleteMessage = async (req, res) => {
         if (!message) {
             throw new Error('Message not found!')
         }
+
         return message.toObject()
 
     } catch (error) {

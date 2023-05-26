@@ -181,7 +181,20 @@
     display: flex;
     width: 100%;
     gap: 10px;
+    justify-content: space-between;
     /* position: relative; */
+}
+
+.msg-settings {
+    display: none;
+}
+
+.msg-body ul li:hover {
+    background-color: rgba(236, 236, 236, 0.89);
+}
+
+.msg-body ul li:hover .msg-settings {
+    display: block;
 }
 
 .msg-body ul li.sender {
@@ -378,6 +391,10 @@ li.reply .time {
     flex-direction: column;
 }
 
+.justify-content-space-between {
+    justify-content: space-between;
+}
+
 .edit-btn {
     border: 1px solid #D9D9D9;
     border-radius: 50px;
@@ -403,4 +420,3 @@ li.reply .time {
     color: #a3a3a3;
     font-size: 18px;
 }
-

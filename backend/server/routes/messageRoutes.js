@@ -15,4 +15,15 @@ router.get(
     messageController.getMessages
 )
 
+router.put(
+    "/update/:id",
+    messageController.updateMessage
+)
+
+router.delete(
+    "/delete/:id",
+    tokenValidation.validateToken,
+    messageController.deleteMessage
+)
+
 module.exports = router
