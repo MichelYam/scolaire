@@ -120,11 +120,11 @@ const Index = () => {
   const handleStep = (step: number) => {
     switch (step) {
       case 1:
-        return <FirstStep nextStep={handleNext} handleChange={() => handleChangeStatut} values={newUser} />
+        return <FirstStep nextStep={handleNext} handleChange={(event) => handleChangeStatut(event)} values={newUser} />
       case 2:
-        return <SecondStep nextStep={handleNext} prevStep={handlePrev} handleChange={() => handleChange} values={newUser} />
+        return <SecondStep nextStep={handleNext} prevStep={handlePrev} handleChange={(event) => handleChange(event)} values={newUser} />
       case 3:
-        return <ThirdStep nextStep={handleNext} prevStep={handlePrev} handleChange={() => handleChange} values={newUser} />
+        return <ThirdStep nextStep={handleNext} prevStep={handlePrev} handleChange={(event) => handleChange(event)} values={newUser} />
       default:
         throw new Error("Unknow Step")
     }

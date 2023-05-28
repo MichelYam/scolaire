@@ -2,7 +2,7 @@ import React, { ChangeEventHandler } from 'react'
 
 type IProps = {
     nextStep: () => void
-    handleChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
+    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
     values: any
 }
 const index = ({ nextStep, handleChange, values }: IProps) => {

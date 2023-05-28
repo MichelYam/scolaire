@@ -8,7 +8,7 @@ import React, { ChangeEventHandler } from 'react'
 type IProps = {
     nextStep: () => void
     prevStep: () => void
-    handleChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
+    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
     values: any
 }
 const index = ({ nextStep, prevStep, handleChange, values }: IProps) => {
@@ -22,7 +22,7 @@ const index = ({ nextStep, prevStep, handleChange, values }: IProps) => {
                     label="Pays"
                     size='small'
                     onChange={handleChange}
-                    defaultValue={values.firstName}
+                    defaultValue={values.country}
                     margin="normal"
                     fullWidth
                 />
@@ -34,7 +34,7 @@ const index = ({ nextStep, prevStep, handleChange, values }: IProps) => {
                     label="Ville"
                     size='small'
                     onChange={handleChange}
-                    defaultValue={values.lastName}
+                    defaultValue={values.city}
                     margin="normal"
                     fullWidth
                 />
@@ -46,7 +46,7 @@ const index = ({ nextStep, prevStep, handleChange, values }: IProps) => {
                     label="Code Postal"
                     size='small'
                     onChange={handleChange}
-                    defaultValue={values.lastName}
+                    defaultValue={values.codePostal}
                     margin="normal"
                     fullWidth
                 />
@@ -58,7 +58,7 @@ const index = ({ nextStep, prevStep, handleChange, values }: IProps) => {
                     label="Téléphone"
                     size='small'
                     onChange={handleChange}
-                    defaultValue={values.lastName}
+                    defaultValue={values.phone}
                     margin="normal"
                     fullWidth
                 />

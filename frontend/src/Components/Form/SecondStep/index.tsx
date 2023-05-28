@@ -14,7 +14,7 @@ import FormControl from '@mui/material/FormControl'
 type IProps = {
     nextStep: () => void
     prevStep: () => void
-    handleChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
+    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
     values: IUser
 }
 const Index = ({ handleChange, values }: IProps) => {
@@ -36,7 +36,7 @@ const Index = ({ handleChange, values }: IProps) => {
                     id='firstName'
                     label="Prénom"
                     size='small'
-                    onChange={(event) => handleChange(event)}
+                    onChange={handleChange}
                     defaultValue={values.firstName}
                     margin="normal"
                     fullWidth
@@ -103,6 +103,7 @@ const Index = ({ handleChange, values }: IProps) => {
                 <FilledInput
                     placeholder="Confirmation du mot de passe"
                     id='passwordCheck'
+                    onChange={handleChange}
                     type={showPassword ? 'text' : 'password'}
                     endAdornment={
                         <InputAdornment position="end">
