@@ -156,7 +156,6 @@
     flex: 1 1 auto;
     display: flex;
     flex-direction: column-reverse;
-    padding: 1rem;
     scrollbar-width: none;
 }
 
@@ -174,23 +173,25 @@
 .conversation-content .msg-body ul {
     display: flex;
     flex-direction: column;
-    row-gap: 30px;
+    row-gap: 10px;
 }
 
 .msg-body ul li {
     display: flex;
-    width: 100%;
+    max-width: 100%;
     gap: 10px;
     justify-content: space-between;
+    padding: 1rem;
     /* position: relative; */
 }
 
-.msg-settings {
-    display: none;
-}
 
 .msg-body ul li:hover {
     background-color: rgba(236, 236, 236, 0.89);
+}
+
+.msg-settings{
+    display: none;
 }
 
 .msg-body ul li:hover .msg-settings {

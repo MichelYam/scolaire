@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import Avatar from '@mui/material/Avatar'
 import { deepOrange } from '@mui/material/colors';
 import { INMessage } from '../../Redux/features/message/messageSlice';
@@ -9,6 +9,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import IconButton from '@mui/material/IconButton';
+import Box from '@mui/material/Box';
 
 interface IProps {
     message: INMessage
@@ -32,18 +33,19 @@ const Index = ({ message, own, date }: IProps) => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
     return (
         // <li className={own ? "reply" : "sender"}>
         <li>
             <div className='flex justify-content flex-end'>
                 {own ? !userInfo?.avatar ?
-                    <Avatar sx={{ bgcolor: deepOrange[500] }}>{userInfo?.firstName?.charAt(0).toUpperCase()}</Avatar>
+                    <Avatar sx={{ bgcolor: deepOrange[500], mr: 2 }}>{userInfo?.firstName?.charAt(0).toUpperCase()}</Avatar>
                     :
-                    <Avatar alt="Remy Sharp" src={`../assets/uploads/${userInfo?.avatar}`} /> :
+                    <Avatar alt="Remy Sharp" src={`../assets/uploads/${userInfo?.avatar}`} sx={{ mr: 2 }} /> :
                     !message.sender.avatar ?
-                        <Avatar sx={{ bgcolor: deepOrange[500] }}>{message.sender.firstName?.charAt(0).toUpperCase()}</Avatar>
+                        <Avatar sx={{ bgcolor: deepOrange[500], mr: 2 }}>{message.sender.firstName?.charAt(0).toUpperCase()}</Avatar>
                         :
-                        <Avatar alt="Remy Sharp" src={`../assets/uploads/${message.sender.avatar}`} />
+                        <Avatar alt="Remy Sharp" src={`../assets/uploads/${message.sender.avatar}`} sx={{ mr: 2 }} />
                 }
                 <div className='message-content'>
                     <p>{[hours, minutes].join(":")}</p>
@@ -52,16 +54,19 @@ const Index = ({ message, own, date }: IProps) => {
                 </div>
             </div>
             <div className='msg-settings'>
-                <IconButton
-                    aria-label="more"
-                    id="long-button"
-                    aria-controls={open ? 'long-menu' : undefined}
-                    aria-expanded={open ? 'true' : undefined}
-                    aria-haspopup="true"
-                    onClick={handleClick}
-                >
-                    <MoreVertIcon />
-                </IconButton>
+                <Box>
+                    <IconButton
+                        aria-label="more"
+                        id="long-button"
+                        aria-controls={open ? 'long-menu' : undefined}
+                        aria-expanded={open ? 'true' : undefined}
+                        aria-haspopup="true"
+                        onClick={handleClick}
+                    >
+                        <MoreVertIcon />
+                    </IconButton>
+                </Box>
+
                 <Menu
                     id="long-menu"
                     MenuListProps={{
@@ -72,18 +77,24 @@ const Index = ({ message, own, date }: IProps) => {
                     onClose={handleClose}
                     PaperProps={{
                         style: {
-                            // maxHeight: ITEM_HEIGHT * 4.5,
-                            width: '20ch',
+                            width: '22ch',
+                            position: "absolute"
                         },
                     }}
                 >
-                    {own &&
+                    {own ?
                         <div>
                             <MenuItem key='msg-update' onClick={() => dispatch(updateMessage(message._id))}>
                                 Modifier le message
                             </MenuItem>
                             <MenuItem key='msg-delete' onClick={() => dispatch(deleteMessage(message._id))}>
                                 Supprimer le message
+                            </MenuItem>
+                        </div>
+                        :
+                        <div>
+                            <MenuItem key='msg-update'>
+                                test
                             </MenuItem>
                         </div>
                     }
