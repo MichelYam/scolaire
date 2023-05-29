@@ -22,6 +22,8 @@ import { buildAbilityFor } from "./config/ability";
 import ProtectedRoute from './Pages/PrivateRoute';
 import AdminRoute from './Pages/AdminRoute';
 import Profile from './Pages/Profile';
+import Forgot from './Components/Forgot';
+import Reset from './Components/Reset';
 
 function App() {
   const { userInfo } = useAppSelector(selectUser)
@@ -45,6 +47,8 @@ function App() {
               </Route>
             </Route>
           </Route>
+          <Route path="/forgot" element={<Forgot />} />
+          <Route path="/reset/:token" element={<Reset />} />
           <Route path="*" element={<Error />} />
         </Routes>
       </BrowserRouter>

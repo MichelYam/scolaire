@@ -15,12 +15,15 @@ import './style.css';
 import FirstStep from '../../../Components/Form/FirstStep';
 import SecondStep from '../../../Components/Form/SecondStep';
 import ThirdStep from '../../../Components/Form/ThirdStep';
+import dayjs, { Dayjs } from 'dayjs';
+import moment from 'moment';
 
 
 const steps = ['Vous êtes...', 'Informations personnelles', ''];
 
 const Index = () => {
   const [role, setRole] = useState("")
+  const [date, setDate] = useState<Dayjs | null | Date | string>(dayjs('2022-04-17'));
   const [newUser, setNewUser] = useState({
     firstName: "",
     lastName: "",
@@ -30,6 +33,7 @@ const Index = () => {
     country: "",
     city: "",
     codePostal: "",
+    phone: "",
     bio: "",
     passwordCheck: "",
     role: "",
@@ -92,7 +96,6 @@ const Index = () => {
 
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value)
     setNewUser({
       ...newUser,
       [event.target.id]: event.target.value,
@@ -101,17 +104,23 @@ const Index = () => {
   const handleChangeStatut = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRole(event.target.value)
   }
+  const handleDate = (newValue: any) => {
+    setDate(newValue)
+    // (newValue) => setValue(newValue)
+  }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (newUser.password === newUser.passwordCheck) {
       const newData = {
         ...newUser,
-        role: role
+        role: role,
+        dateOfBirth: moment(date?.toString()).format('DD/MM/YYYY')
       }
-      console.log(newData)
-      // dispatch(userRegister(newData))
-      // navigate("/")
+      dispatch(userRegister(newData))
+      navigate("/")
+    } else {
+      console.log("error")
     }
   }
 
@@ -122,9 +131,9 @@ const Index = () => {
       case 1:
         return <FirstStep nextStep={handleNext} handleChange={(event) => handleChangeStatut(event)} values={newUser} />
       case 2:
-        return <SecondStep nextStep={handleNext} prevStep={handlePrev} handleChange={(event) => handleChange(event)} values={newUser} />
+        return <SecondStep nextStep={handleNext} prevStep={handlePrev} setDate={() => handleDate} handleChange={(event) => handleChange(event)} values={newUser} />
       case 3:
-        return <ThirdStep nextStep={handleNext} prevStep={handlePrev} handleChange={(event) => handleChange(event)} values={newUser} />
+        return <ThirdStep nextStep={handleNext} prevStep={handlePrev} handleSubmit={(event) => handleSubmit(event)} handleChange={(event) => handleChange(event)} values={newUser} />
       default:
         throw new Error("Unknow Step")
     }
@@ -169,12 +178,12 @@ const Index = () => {
                     </React.Fragment>
                   ) : (
                     <React.Fragment>
-                      <form onSubmit={handleSubmit}>
+                      <form onSubmit={handleSubmit} >
                         {handleStep(activeStep + 1)}
                         <Typography sx={{ mt: 2, mb: 1, py: 1 }}>
                           {/* Step {activeStep + 1} */}
                         </Typography>
-                        <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                        {/* <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                           <Button
                             color="inherit"
                             disabled={activeStep === 0}
@@ -186,13 +195,13 @@ const Index = () => {
                           </Button>
                           <Box sx={{ flex: '1 1 auto' }} />
                           {activeStep + 1 !== steps.length ?
-                            <Button type='button' variant="contained" onClick={handleNext} sx={{ ml: 1 }}>
+                            <Button disabled={activeStep === 2} variant="contained" onClick={handleNext} sx={{ ml: 1 }}>
                               Suivant
                             </Button>
-                            : <Button type='submit' variant="contained" sx={{ ml: 1 }}>
+                            : <Button type="submit" onClick={() => handleSubmit} variant="contained" sx={{ ml: 1 }}>
                               S'inscire
                             </Button>}
-                        </Box>
+                        </Box> */}
                       </form>
                     </React.Fragment>
                   )}

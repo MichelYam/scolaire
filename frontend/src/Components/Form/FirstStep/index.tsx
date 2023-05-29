@@ -1,3 +1,4 @@
+import Button from '@mui/material/Button'
 import React, { ChangeEventHandler } from 'react'
 
 type IProps = {
@@ -8,7 +9,7 @@ type IProps = {
 const index = ({ nextStep, handleChange, values }: IProps) => {
     return (
         <>
-        <h2>Vous êtes...</h2>
+            <h2>Vous êtes...</h2>
             <div className='register-statut'>
                 <div className="form-group">
                     <label htmlFor="student">
@@ -41,6 +42,9 @@ const index = ({ nextStep, handleChange, values }: IProps) => {
                     />
                 </div>
             </div>
+            <Button variant="contained" onClick={nextStep} sx={{ ml: 1 }}>
+                Suivant
+            </Button>
         </>
     )
 }

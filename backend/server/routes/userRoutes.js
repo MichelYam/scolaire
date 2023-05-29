@@ -66,5 +66,7 @@ router.delete(
   userController.rejectFriendRequest
 )
 
+router.post('/forgot',  userController.forgotPassword);
+router.post('/reset',  userController.resetPassword);
 
 module.exports = router

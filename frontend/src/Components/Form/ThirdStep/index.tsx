@@ -10,8 +10,10 @@ type IProps = {
     prevStep: () => void
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
     values: any
+    handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void
+
 }
-const index = ({ nextStep, prevStep, handleChange, values }: IProps) => {
+const index = ({ handleSubmit, nextStep, prevStep, handleChange, values }: IProps) => {
     return (
         <>
             <h2>Informations complémentaires</h2>
@@ -49,6 +51,7 @@ const index = ({ nextStep, prevStep, handleChange, values }: IProps) => {
                     defaultValue={values.codePostal}
                     margin="normal"
                     fullWidth
+                    type='number'
                 />
             </FormControl>
             <FormControl sx={{ m: 1, width: '45%' }}>
@@ -61,8 +64,15 @@ const index = ({ nextStep, prevStep, handleChange, values }: IProps) => {
                     defaultValue={values.phone}
                     margin="normal"
                     fullWidth
+                    type='number'
                 />
             </FormControl>
+            <Button variant="contained" onClick={prevStep} sx={{ ml: 1 }}>
+                Retour
+            </Button>
+            <Button type='submit' variant="contained" sx={{ ml: 1 }}>
+                S'inscrire
+            </Button>
         </>
     )
 }
