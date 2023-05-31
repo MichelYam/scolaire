@@ -190,9 +190,9 @@ module.exports.resetPassword = async (req, res) => {
   let response = {}
 
   try {
-    const responseFromService = await userService.resetPassword(req)
+    const responseFromService = await userService.resetPassword(req, res)
     response.status = 200
-    response.message = 'Successfully  reset password'
+    response.message = 'Successfully reset password'
     response.body = responseFromService
   } catch (error) {
     console.log('Error in resetPassword - userController.js')
@@ -208,9 +208,9 @@ module.exports.forgotPassword = async (req, res) => {
   let response = {}
 
   try {
-    const responseFromService = await userService.forgotPassword(req)
+    const responseFromService = await userService.forgotPassword(req, res)
     response.status = 200
-    response.message = 'Successfully send change password request'
+    response.message = 'Successfully send change password email'
     response.body = responseFromService
   } catch (error) {
     console.log('Error in forgotPassword - userController.js')

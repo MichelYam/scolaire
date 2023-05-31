@@ -60,6 +60,11 @@ const userSchema = new Schema({
     ref: 'user'
   }
   ,
+  resetToken: {
+    type: String,
+    default: ''
+  },
+  expireToken: Date,
   createdAt: {
     type: Date,
     default: new Date(),

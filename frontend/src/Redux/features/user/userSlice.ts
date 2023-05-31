@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IUser, INotification } from "../../../Interfaces";
 import { clearStorage } from "../../../utils/TokenStorage";
-import { userLogin, userRegister, getUserDetails, updateUserProfile, getAllUsers, deleteUser, getFriendList, sendFriendRequest, acceptFriendRequest, getFriendRequest, rejectFriendRequest } from './userAction'
+import { userLogin, userRegister, getUserDetails, updateUserProfile, getAllUsers, deleteUser, sendFriendRequest, acceptFriendRequest, getFriendRequest, rejectFriendRequest, forgot, reset } from './userAction'
 
 export interface IDataAPI {
     isAuthenticated: boolean,
@@ -113,20 +113,6 @@ const userSlice = createSlice({
                 state.error = payload
             })
 
-            //Get all users
-            .addCase(getFriendList.pending, (state) => {
-                state.loading = true
-                state.error = null
-            })
-            .addCase(getFriendList.fulfilled, (state, { payload }) => {
-                state.loading = false
-                state.allUsers = payload?.body
-            })
-            .addCase(getFriendList.rejected, (state, { payload }: any) => {
-                state.loading = false
-                state.error = payload
-            })
-
             //Delete user
             .addCase(deleteUser.pending, (state) => {
                 state.loading = true
@@ -140,7 +126,34 @@ const userSlice = createSlice({
                 state.loading = false
                 state.error = payload
             })
-
+            //Forgot
+            .addCase(forgot.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(forgot.fulfilled, (state, { payload }: any) => {
+                state.loading = false
+                state.notifications = state.notifications.filter(item => item._id !== payload.body.id)
+                state.error = null
+            })
+            .addCase(forgot.rejected, (state, { payload }: any) => {
+                state.loading = false
+                state.error = payload
+            })
+            //Reset
+            .addCase(reset.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(reset.fulfilled, (state, { payload }: any) => {
+                state.loading = false
+                state.notifications = state.notifications.filter(item => item._id !== payload.body.id)
+                state.error = null
+            })
+            .addCase(reset.rejected, (state, { payload }: any) => {
+                state.loading = false
+                state.error = payload
+            })
             // Notification Friend Request
             // Send friend Request
             .addCase(sendFriendRequest.pending, (state) => {

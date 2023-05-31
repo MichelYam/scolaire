@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../Redux/store';
 import { selectUser } from '../../utils/selector';
 import { userLogin, userRegister } from '../../Redux/features/user/userAction';
@@ -54,7 +54,9 @@ const Index = ({ title, isLogin }: IForm) => {
             <div className="form-group">
                 <label htmlFor="email">Password </label>
                 <input type="password" id="password" name='password' onChange={handleChangeValue} value={data.password} autoComplete="on" required />
-                <span className='message-help'>Mot de passe oublié ?</span>
+                <Link to={"/forgot"}>
+                    <span className='message-help'>Mot de passe oublié ?</span>
+                </Link>
             </div>
             <div className="input-remember">
                 <input type="checkbox" id="remember" onChange={handleChangeValue} />

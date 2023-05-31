@@ -2,16 +2,27 @@ const User = require('../models/User')
 const Notification = require('../models/Notification')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const nodemailer = require('nodemailer')
+const crypto = require('crypto')
+const dotenv = require('dotenv')
+
+dotenv.config()
+
+const SECRET = process.env.SECRET;
+const HOST = process.env.SMTP_HOST
+const PORT = process.env.SMTP_PORT
+const USER = process.env.SMTP_USER
+const PASS = process.env.SMTP_PASS
+
 
 module.exports.createUser = async (req, res) => {
 
-  const { firstName, lastName, city, codePostal, role, email, password, country, dateOfBirth, createdAt } = req;
+  const { firstName, lastName, city, codePostal, role, email, password, country, dateOfBirth } = req;
   try {
     const user = await User.findOne({ email: req.email })
     if (user) {
       throw new Error('Email already exists')
     }
-
     const hashPassword = await bcrypt.hash(req.password, 12)
     console.log("info", req)
     // const newUser = new User({
@@ -34,6 +45,7 @@ module.exports.createUser = async (req, res) => {
       city,
       codePostal,
       password,
+      resetToken: resetToken,
       role
     })
     let result = await newUser.save()
@@ -319,11 +331,11 @@ module.exports.getFriendRequest = async (req) => {
 module.exports.forgotPassword = (req, res) => {
 
   const { email } = req.body
-
   // NODEMAILER TRANSPORT FOR SENDING POST NOTIFICATION VIA EMAIL
   const transporter = nodemailer.createTransport({
-    host: HOST,
-    port: PORT,
+    host: "smtp-mail.outlook.com",
+    port: 587,
+    secure: false,
     auth: {
       user: USER,
       pass: PASS
@@ -332,59 +344,66 @@ module.exports.forgotPassword = (req, res) => {
       rejectUnauthorized: false
     }
   })
-
-
+  // const user = User.findOne({ email: email })
+  // console.log(user)
   crypto.randomBytes(32, (err, buffer) => {
     if (err) {
       console.log(err)
     }
     const token = buffer.toString("hex")
+
+
     User.findOne({ email: email })
       .then(user => {
         if (!user) {
-          return res.status(422).json({ error: "User does not exist in our database" })
+          throw new Error('User does not exist in our database')
+          // console.log("User does not exist in our database")
+          // return res.status(422).json({ error: "User does not exist in our database" })
         }
         user.resetToken = token
         user.expireToken = Date.now() + 3600000
         user.save().then((result) => {
           transporter.sendMail({
             to: user.email,
-            from: "Accountill <hello@accountill.com>",
-            subject: "Password reset request",
+            from: "test.test1958@outlook.com",
+            subject: "Réinitalisation du mot de passe",
             html: `
                   <p>You requested for password reset from Arc Invoicing application</p>
-                  <h5>Please click this <a href="https://accountill.com/reset/${token}">link</a> to reset your password</h5>
+                  <h5>Please click this <a href="http://localhost:3000/reset/${token}">link</a> to reset your password</h5>
                   <p>Link not clickable?, copy and paste the following url in your address bar.</p>
-                  <p>https://accountill.com/reset/${token}</p>
+                  <p>http://localhost:3000/reset/${token}</p>
                   <P>If this was a mistake, just ignore this email and nothing will happen.</P>
                   `
           })
-          res.json({ message: "check your email" })
+          // res.json({ message: "check your email" })
         }).catch((err) => console.log(err))
 
       })
   })
 }
 
-
-
-module.exports.resetPassword = (req, res) => {
+module.exports.resetPassword = async (req, res) => {
   const newPassword = req.body.password
   const sentToken = req.body.token
-  User.findOne({ resetToken: sentToken, expireToken: { $gt: Date.now() } })
-    .then(user => {
-      if (!user) {
-        return res.status(422).json({ error: "Try again session expired" })
-      }
-      bcrypt.hash(newPassword, 12).then(hashedpassword => {
-        user.password = hashedpassword
-        user.resetToken = undefined
-        user.expireToken = undefined
-        user.save().then((saveduser) => {
-          res.json({ message: "password updated success" })
-        })
-      })
-    }).catch(err => {
-      console.log(err)
-    })
+  const hashedpassword = await bcrypt.hash(newPassword, 12)
+  try {
+    const user = await User.findOneAndUpdate(
+      { resetToken: sentToken, expireToken: { $gt: Date.now() } },
+      {
+        password: hashedpassword,
+        resetToken: undefined,
+        expireToken: undefined
+      },
+      { new: true }
+    )
+
+    if (!user) {
+      throw new Error('User not found!')
+    }
+
+    return user.toObject()
+  } catch (error) {
+    console.error('Error in notificationService.js', error)
+    throw new Error(error)
+  }
 }

@@ -21,8 +21,13 @@ export interface IUser {
     friendList?: IUser[]
     remember?: boolean
     role?: string
+    token?: string
 }
 
+type resetPassword = {
+    password: string
+    token?: string
+};
 export const userLogin = createAsyncThunk("user/login", async ({ email, password, remember }: IUser, { rejectWithValue }) => {
     try {
         const config = {
@@ -140,24 +145,6 @@ export const deleteUser = createAsyncThunk('user/delete', async ({ _id }: IUser,
         }
     }
 })
-export const getFriendList = createAsyncThunk('user/friends', async (arg, { rejectWithValue, getState }) => {
-    const { user }: any = getState()
-    const config = {
-        headers: {
-            Authorization: `Bearer ${user.userToken}`,
-        },
-    }
-    try {
-        const { data } = await axios.get(`${BASE_URL}/friends`, config);
-        return data;
-    } catch (error: any) {
-        if (error.response && error.response.data.message) {
-            return rejectWithValue(error.response.data.message)
-        } else {
-            return rejectWithValue(error.message)
-        }
-    }
-})
 
 
 // notification Friend Request
@@ -236,3 +223,31 @@ export const rejectFriendRequest = createAsyncThunk('notification/rejectFriendRe
         }
     }
 })
+
+export const forgot = createAsyncThunk("user/forgot", async (email: string, { rejectWithValue }) => {
+    try {
+        const { data } = await axios.post(`${BASE_URL}/forgot`, { email: email });
+        return data;
+    } catch (error: any) {
+        if (error.response && error.response.data.message) {
+            return rejectWithValue(error.response.data.message)
+        } else {
+            return rejectWithValue(error.message)
+        }
+    }
+})
+
+export const reset = createAsyncThunk("user/reset", async ({ password, token }: resetPassword, { rejectWithValue }) => {
+    try {
+        const { data } = await axios.post(`${BASE_URL}/reset`, { password, token });
+        return data;
+    } catch (error: any) {
+        if (error.response && error.response.data.message) {
+            return rejectWithValue(error.response.data.message)
+        } else {
+            return rejectWithValue(error.message)
+        }
+    }
+})
+// export const forgot = (formData) => API.post('/users/forgot', formData);
+// export const reset = (formData) => API.post('/users/reset', formData);
