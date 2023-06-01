@@ -24,6 +24,7 @@ const Index = () => {
                     <div className='container'>
                         <div className='form-content'>
                             <h2 className='title'>Connexion</h2>
+                            <div className='error-msg'>{error}</div>
                             <Form title="Se connecter" isLogin={true} />
                             <hr />
                             <Link to={"/register"} className='message-help'>Vous n'avez pas de compte ? cliquez ici</Link>

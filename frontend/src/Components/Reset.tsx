@@ -132,7 +132,7 @@ const Reset = () => {
                       <p style={{ color: "rgb(149 149 149)" }}>votre mot de passe a été réinitialisé avec succès </p>
                       <div >
                         <Button fullWidth variant="contained" sx={{ textTransform: "lowercase", mt: 2 }} onClick={() => navigate('/')}>Continuer</Button>
-                        <Stack sx={{ alignItems: "center" }} spacing={1} direction="row">
+                        <Stack sx={{ alignItems: "center", cursor: "pointer" }} spacing={1} direction="row">
                           <ArrowBackIcon />
                           <Button sx={{ textTransform: "lowercase" }} onClick={() => navigate('/')}>retour connexion</Button>
                         </Stack >

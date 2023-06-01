@@ -23,19 +23,8 @@ module.exports.createUser = async (req, res) => {
     if (user) {
       throw new Error('Email already exists')
     }
-    const hashPassword = await bcrypt.hash(req.password, 12)
-    console.log("info", req)
-    // const newUser = new User({
-    //   firstName: req.firstName,
-    //   lastName: req.lastName,
-    //   dateOfBirth: req.dateOfBirth,
-    //   email: req.email,
-    //   country: req.country,
-    //   city: req.city,
-    //   codePostal: req.codePostal,
-    //   password: hashPassword,
-    //   role: req.role
-    // })
+    // const hashPassword = await bcrypt.hash(req.password, 12)
+
     const newUser = new User({
       firstName,
       lastName,
@@ -332,6 +321,9 @@ module.exports.forgotPassword = (req, res) => {
 
   const { email } = req.body
   // NODEMAILER TRANSPORT FOR SENDING POST NOTIFICATION VIA EMAIL
+  if (!email) {
+    throw new Error('Veuillez remplir le champ')
+  }
   const transporter = nodemailer.createTransport({
     host: "smtp-mail.outlook.com",
     port: 587,
@@ -344,42 +336,40 @@ module.exports.forgotPassword = (req, res) => {
       rejectUnauthorized: false
     }
   })
-  // const user = User.findOne({ email: email })
-  // console.log(user)
-  crypto.randomBytes(32, (err, buffer) => {
-    if (err) {
-      console.log(err)
-    }
-    const token = buffer.toString("hex")
-
-
-    User.findOne({ email: email })
-      .then(user => {
-        if (!user) {
-          throw new Error('User does not exist in our database')
-          // console.log("User does not exist in our database")
-          // return res.status(422).json({ error: "User does not exist in our database" })
-        }
-        user.resetToken = token
-        user.expireToken = Date.now() + 3600000
-        user.save().then((result) => {
-          transporter.sendMail({
-            to: user.email,
-            from: "test.test1958@outlook.com",
-            subject: "Réinitalisation du mot de passe",
-            html: `
-                  <p>You requested for password reset from Arc Invoicing application</p>
-                  <h5>Please click this <a href="http://localhost:3000/reset/${token}">link</a> to reset your password</h5>
-                  <p>Link not clickable?, copy and paste the following url in your address bar.</p>
-                  <p>http://localhost:3000/reset/${token}</p>
-                  <P>If this was a mistake, just ignore this email and nothing will happen.</P>
-                  `
+  try {
+    crypto.randomBytes(32, (err, buffer) => {
+      if (err) {
+        console.log(err)
+      }
+      const token = buffer.toString("hex")
+      User.findOne({ email: email })
+        .then(user => {
+          if (!user) {
+            throw new Error('User does not exist in our database')
+          }
+          user.resetToken = token
+          user.expireToken = Date.now() + 3600000
+          user.save().then((result) => {
+            transporter.sendMail({
+              to: user.email,
+              from: "test.test1958@outlook.com",
+              subject: "Réinitalisation du mot de passe",
+              html: `
+                    <p>You requested for password reset from Arc Invoicing application</p>
+                    <h5>Please click this <a href="http://localhost:3000/reset/${token}">link</a> to reset your password</h5>
+                    <p>Link not clickable?, copy and paste the following url in your address bar.</p>
+                    <p>http://localhost:3000/reset/${token}</p>
+                    <P>If this was a mistake, just ignore this email and nothing will happen.</P>
+                    `
+            })
+            // res.json({ message: "check your email" })
           })
-          // res.json({ message: "check your email" })
-        }).catch((err) => console.log(err))
-
-      })
-  })
+        })
+    })
+  } catch (error) {
+    console.error('Error in userService.js', error)
+    throw new Error(error)
+  }
 }
 
 module.exports.resetPassword = async (req, res) => {

@@ -12,6 +12,11 @@
     width: calc(100% - 78px);
 }
 
+.error-msg {
+    color: red;
+    margin-bottom: 10px;
+}
+
 /*  */
 .home-content {
     height: 60px;
@@ -190,7 +195,7 @@
     background-color: rgba(236, 236, 236, 0.89);
 }
 
-.msg-settings{
+.msg-settings {
     display: none;
 }
 

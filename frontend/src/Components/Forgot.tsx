@@ -10,32 +10,34 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { TextField } from '@mui/material';
-import { useAppDispatch } from '../Redux/store';
+import { Stack, TextField } from '@mui/material';
+import { useAppDispatch, useAppSelector } from '../Redux/store';
 import { forgot } from '../Redux/features/user/userAction';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import { selectUser } from '../utils/selector';
+
 const Forgot = () => {
     const navigate = useNavigate()
     const [email, setEmail] = useState("");
     const [step, setStep] = useState(0)
     const dispatch = useAppDispatch();
     const user = sessionStorage.getItem('userToken')
-
+    const { error } = useAppSelector(selectUser)
     const handleSubmit = (e: { preventDefault: () => void; }) => {
         e.preventDefault()
         dispatch(forgot(email))
-        window.navigator.onLine ? setStep(1) : setStep(2)
+        if (email === "") return
+        if (!error) window.navigator.onLine ? setStep(1) : setStep(2)
+        console.log(error)
     }
 
     const handleChange = (e: { target: { value: React.SetStateAction<string>; }; }) => setEmail(e.target.value);
 
     if (user) navigate('/dashboard')
-    //   if(user) navigate.push('/dashboard')
 
     return (
-
-
         < div className='login' >
             <div className='row'>
                 <div className='half'>
@@ -53,12 +55,13 @@ const Forgot = () => {
                                 <Container component="main" maxWidth="xs">
                                     {step === 0 && (
                                         <div>
-                                            <Typography variant="h6" >
+                                            <Typography sx={{ mt: 2, mb: 2 }} variant="h6" >
                                                 Afin de réinitialiser votre mot de passe, veuillez saisir votre adresse e-mail ci-dessous.
                                                 Nous vous enverrons un lien pour réinitialiser votre mot de passe.
                                             </Typography>
                                             <form noValidate autoComplete="off" onSubmit={handleSubmit}>
                                                 <Grid container spacing={2}>
+                                                    {error && <div className='error-msg'>{error}</div>}
                                                     <TextField
                                                         placeholder="Email"
                                                         id='email'
@@ -73,6 +76,10 @@ const Forgot = () => {
                                                     <Button type="submit" fullWidth variant="contained" color="primary" > Submit </Button>
                                                 </Grid>
                                             </form>
+                                            <Stack sx={{ alignItems: "center", cursor: "pointer" }} spacing={1} direction="row" onClick={() => navigate('/')}>
+                                                <ArrowBackIcon />
+                                                <Button sx={{ textTransform: "lowercase" }} >retour connexion</Button>
+                                            </Stack >
                                         </div>
                                     )}
 
