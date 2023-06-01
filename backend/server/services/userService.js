@@ -374,34 +374,6 @@ module.exports.forgotPassword = async (req, res) => {
     throw new Error(error);
   }
 };
-// crypto.randomBytes(32, (err, buffer) => {
-//   if (err) {
-//     console.log(err);
-//   }
-//   const token = buffer.toString("hex");
-//   User.findOne({ email: email }).then((user) => {
-//     if (!user) {
-//       throw new Error("User does not exist in our database");
-//     }
-//     user.resetToken = token;
-//     user.expireToken = Date.now() + 3600000;
-//     user.save().then((result) => {
-//       transporter.sendMail({
-//         to: user.email,
-//         from: "test.test1958@outlook.com",
-//         subject: "Réinitalisation du mot de passe",
-//         html: `
-//                 <p>You requested for password reset from Arc Invoicing application</p>
-//                 <h5>Please click this <a href="http://localhost:3000/reset/${token}">link</a> to reset your password</h5>
-//                 <p>Link not clickable?, copy and paste the following url in your address bar.</p>
-//                 <p>http://localhost:3000/reset/${token}</p>
-//                 <P>If this was a mistake, just ignore this email and nothing will happen.</P>
-//                 `,
-//       });
-//       // res.json({ message: "check your email" })
-//     });
-//   });
-// });
 module.exports.resetPassword = async (req, res) => {
   const newPassword = req.body.password;
   const sentToken = req.body.token;
