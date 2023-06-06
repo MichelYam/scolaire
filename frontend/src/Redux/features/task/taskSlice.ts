@@ -15,7 +15,7 @@ export interface Task {
 }
 interface ITask {
     loading: boolean,
-    error: string | null;
+    error: any
     tasks: Task[]
 }
 
@@ -59,8 +59,8 @@ const taskSlice = createSlice({
                 state.loading = false
                 state.error = payload
             })
-              // get user tasks assignee
-              .addCase(getMyTasksAssignee.pending, (state) => {
+            // get user tasks assignee
+            .addCase(getMyTasksAssignee.pending, (state) => {
                 state.loading = true
                 state.error = null
             })

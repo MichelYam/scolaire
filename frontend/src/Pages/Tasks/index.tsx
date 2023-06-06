@@ -9,16 +9,25 @@ import { Task } from '../../Redux/features/task/taskSlice'
 import TaskView from './task'
 import moment from 'moment'
 import "./style.css"
-
+import TextField from '@mui/material/TextField'
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateField } from '@mui/x-date-pickers/DateField'
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
+import Select, { SelectChangeEvent } from '@mui/material/Select'
+import MenuItem from '@mui/material/MenuItem'
 
 const Index = () => {
   const dispatch = useAppDispatch()
   const { userInfo } = useAppSelector(selectUser)
-  const { tasks } = useAppSelector(selectTask)
+  const { tasks, error } = useAppSelector(selectTask)
   const [edit, setEdit] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [inputText, setInputText] = useState("");
   const [currentTask, setCurrentTask] = useState<Task>()
+  const [emptyFields, setEmptyFields] = useState<string[]>([])
   const [taskData, setTaskData] = useState({
     title: "",
     description: "",
@@ -32,8 +41,7 @@ const Index = () => {
     } else {
       dispatch(getMyTasks())
     }
-    console.log(tasks)
-  }, [])
+  }, [userInfo?.role])
 
   const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTaskData({
@@ -44,7 +52,11 @@ const Index = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     dispatch(createTask(taskData))
-    setIsOpen(false)
+    if (!error) {
+      setIsOpen(false)
+    } else {
+      setEmptyFields(error)
+    }
   }
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,8 +96,7 @@ const Index = () => {
                       <span>{`par ${isSamePerson} `}</span>
                     </div>
                     <div className='task-date'>
-                      <p className='badge'>{moment(task.dateDue).format('DD/MM/YYYY')}</p>
-                      {/* <p>{task.dateDue.replaceAll("-", "/")}</p> */}
+                      <p className='badge'>{task.dateDue}</p>
                       <span className='task-status'>{task.status}</span>
                     </div>
                   </div>
@@ -111,41 +122,63 @@ const Index = () => {
       <Modal open={isOpen} onClose={() => setIsOpen(false)}>
         <h2>Créer un tâche</h2>
         <form className='create' onSubmit={handleSubmit}>
-          <div className='control-input'>
-            <label htmlFor="title">Titre</label>
-            <input type="text" id='title' onChange={handleChangeValue} />
-          </div>
-          <div className='control-input'>
-            <label htmlFor="dateDue">Date</label>
-            <input type="date" id='dateDue' onChange={handleChangeValue} placeholder="dd-mm-yyyy" />
-          </div>
-          <div className='control-input'>
-            <label htmlFor="description">Description</label>
-            <textarea name="description" id="description" cols={20} rows={5} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+          <FormControl sx={{ m: 1, with: "100%" }}>
+            <TextField id="title" label="Titre *" variant="outlined" onChange={handleChangeValue} error={emptyFields.includes("title") ? true : false} required />
+          </FormControl>
+          <FormControl sx={{ m: 1 }}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={['DateField']}>
+                <DateField
+                  id='dateDue'
+                  label="date d'échéance"
+                  onChange={(e: any) => {
+                    setTaskData({
+                      ...taskData,
+                      dateDue: moment(e?.toString()).format('DD/MM/YYYY')
+                    })
+                  }}
+                  margin="normal"
+                  size='small'
+                  format="DD/MM/YYYY"
+                  required
+                />
+              </DemoContainer>
+            </LocalizationProvider>
+          </FormControl>
+          <FormControl sx={{ m: 1 }}>
+            <TextField id="description" label="Description" variant="outlined" multiline maxRows={4} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
               setTaskData({
                 ...taskData,
                 description: e.target.value
               })
             }} />
-          </div>
-          <div className='control-input-select'>
-            <label htmlFor="assignee">Affectée à </label>
-            <select name="assignee" id="assignee" onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-              setTaskData({
-                ...taskData,
-                assignee: e.target.value
-              })
-            }}>
-              <option value="">Sélectionner un élève</option>
+          </FormControl>
+          <FormControl sx={{ m: 1 }}>
+            <InputLabel id="assignee">Destinataire</InputLabel>
+            <Select
+              labelId="assignee"
+              id="assignee"
+              value={taskData.assignee}
+              label="Destinataire"
+              error={emptyFields.includes("assignee") ? true : false}
+              onChange={(e: SelectChangeEvent) => {
+                setTaskData({
+                  ...taskData,
+                  assignee: e.target.value
+                })
+              }}
+              required
+            >
+              <MenuItem></MenuItem>
               {userInfo?.friendList.map((friend, index) => {
                 const fullName = [friend.firstName, friend.lastName].join(" ")
-                return <option key={index} value={friend.email}>{fullName}</option>
+                return < MenuItem key={index} value={friend.email} >{fullName}</MenuItem>
               })}
-            </select>
-          </div>
+            </Select>
+          </FormControl>
           <button className='button-task' type='submit'>Créer</button>
         </form>
-      </Modal>
+      </Modal >
     </>
   )
 }

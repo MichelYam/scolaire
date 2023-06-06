@@ -23,7 +23,7 @@
     align-items: center;
 }
 
-.task-progress input {
+.task-progress #searchTask {
     border: none;
     background-color: rgb(236, 233, 233);
     border-radius: 15px;
@@ -65,7 +65,7 @@
     cursor: pointer;
     overflow: hidden;
     align-items: center;
-    animation: revealAnimation 1s cubic-bezier(0.5, 0, 0, 1) forwards;
+    /* animation: revealAnimation 1s cubic-bezier(0.5, 0, 0, 1) forwards; */
     transition-duration: 0.5s;
 }
 
@@ -94,7 +94,7 @@
     /* display: none; */
     margin: -16px -46px -16px 16px;
     width: 32px;
-    transition: 0.5s ease-in-out;
+    /* transition: 0.5s ease-in-out; */
 }
 
 /* .task:hover .task-delete {
@@ -147,9 +147,10 @@
 .create {
     display: flex;
     flex-direction: column;
+    width: 500px;
 }
 
-.create .control-input input {
+/* .create .control-input input {
     border: 1px solid #000000;
 }
 
@@ -179,7 +180,7 @@
 .create .control-input textarea {
     padding: 10px;
     outline: none;
-}
+} */
 
 .create .button-task {
     width: 25%;
@@ -214,9 +215,9 @@
     align-items: center;
 }
 
-.task-view-date input, select {
+/* .task-view-date input, select {
     margin-left: 10px;
-}
+} */
 
 .task-assigned div {
     margin-left: 15px;
@@ -263,4 +264,8 @@
 
 .group-button button {
     margin: 0 10px;
+}
+
+.error-border {
+    border: 1px solid red;
 }

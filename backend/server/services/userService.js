@@ -29,7 +29,7 @@ module.exports.createUser = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.email });
     if (user) {
-      throw new Error("Email already exists");
+      throw new Error("L'email existe déjà");
     }
     // const hashPassword = await bcrypt.hash(req.password, 12)
 
@@ -63,13 +63,13 @@ module.exports.loginUser = async (serviceData) => {
     const user = await User.findOne({ email: serviceData.email });
 
     if (!user) {
-      throw new Error("User not found!");
+      throw new Error("Ce compte n'existe pas");
     }
 
     const isValid = await bcrypt.compare(serviceData.password, user.password);
 
     if (!isValid) {
-      throw new Error("Password is invalid");
+      throw new Error("Le mot de passe est incorrect");
     }
 
     const token = jwt.sign(

@@ -93,7 +93,7 @@ const Index = ({ handleChange, prevStep, nextStep, values, setDate }: IProps) =>
                             onChange={setDate}
                             margin="normal"
                             size='small'
-                            format="DD-MM-YYYY"
+                            format="DD/MM/YYYY"
                         />
                     </DemoContainer>
                 </LocalizationProvider>
