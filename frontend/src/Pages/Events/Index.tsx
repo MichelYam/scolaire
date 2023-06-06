@@ -19,11 +19,21 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import frLocale from '@fullcalendar/core/locales/fr';
 import './Style.css'
+import InputLabel from '@mui/material/InputLabel'
+import Select, { SelectChangeEvent } from '@mui/material/Select'
+import MenuItem from '@mui/material/MenuItem'
+import TextField from '@mui/material/TextField'
+import { TimeField } from '@mui/x-date-pickers/TimeField'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo/DemoContainer'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import dayjs, { Dayjs } from 'dayjs'
+import { DateField } from '@mui/x-date-pickers/DateField'
 const Index = () => {
   const dispatch = useAppDispatch()
   const { userInfo } = useAppSelector(selectUser)
   const [isOpen, setIsOpen] = useState(false)
-
+  const [value, setValue] = React.useState<Dayjs | null>(dayjs('2022-04-17T15:30'));
   const { events } = useAppSelector(selectEvent)
   const [eventData, setEventData] = useState({
     title: "",
@@ -55,14 +65,10 @@ const Index = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const newDate = moment(eventData.date + eventData.timetable, 'YYYY-MM-DDLT').toISOString();
+    // console.log(eventData, newDate)
     dispatch(createEvent({ ...eventData, date: newDate }))
     setIsOpen(false)
   }
-
-  // const handleEventClick = (info: any) => {
-  //   console.log(info.event._def)
-
-  // }
 
   return (
     <>
@@ -125,44 +131,75 @@ const Index = () => {
       <Modal open={isOpen} onClose={() => setIsOpen(false)}>
         <h2>Créer un événement</h2>
         <form className='create' onSubmit={handleSubmit}>
-          <div className='control-input'>
-            <label htmlFor="title">Titre</label>
-            <input type="text" id='title' onChange={handleChangeValue} />
-          </div>
-          <div className='control-input'>
-            <label htmlFor="description">Description</label>
-            <textarea name="description" id="description" cols={20} rows={5} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+          <FormControl sx={{ m: 1, with: "100%" }}>
+            <TextField id="title" label="Titre" variant="outlined" onChange={handleChangeValue} required />
+          </FormControl>
+          <FormControl sx={{ m: 1 }}>
+            <TextField id="description" label="Description" variant="outlined" multiline maxRows={4} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
               setEventData({
                 ...eventData,
                 description: e.target.value
               })
             }} />
-          </div>
-          <div>
-            <div className='control-input'>
-              <label htmlFor="date">Date</label>
-              <input type="date" id='date' value={eventData.date} onChange={handleChangeValue} />
-            </div>
-            <div className='control-input'>
-              <label htmlFor="timetable">Horaire</label>
-              <input type="time" id='timetable' value={eventData.timetable} onChange={handleChangeValue} />
-            </div>
-          </div>
-          <div className='control-input'>
-            <label htmlFor="assignee">Affectée à </label>
-            <select name="assignee" id="assignee" onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-              setEventData({
-                ...eventData,
-                assignee: e.target.value
-              })
-            }}>
-              <option value="">Sélectionner un élève</option>
+          </FormControl>
+          <FormControl>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={['DateField']}>
+                <DateField
+                  id='dateDue'
+                  label="date d'échéance"
+                  onChange={(e: any) => {
+                    setEventData({
+                      ...eventData,
+                      date: moment(e?.toString()).format('DD/MM/YYYY')
+                    })
+                  }}
+                  margin="normal"
+                  size='small'
+                  format="DD/MM/YYYY"
+                  required
+                />
+              </DemoContainer>
+            </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={['TimeField', 'TimeField', 'TimeField']}>
+                <TimeField
+                  label="Horaire"
+                  id='timetable'
+                  onChange={(newValue: any) => {
+                    setEventData({
+                      ...eventData,
+                      timetable: [newValue?.$H, newValue?.$m].join(':')
+                    })
+                  }}
+                  format="HH:mm"
+                  required
+                />
+              </DemoContainer>
+            </LocalizationProvider>
+          </FormControl>
+          <FormControl sx={{ m: 1 }}>
+            <InputLabel id="assignee">Destinataire</InputLabel>
+            <Select
+              labelId="assignee"
+              id="assignee"
+              value={eventData.assignee}
+              label="Destinataire"
+              onChange={(e: SelectChangeEvent) => {
+                setEventData({
+                  ...eventData,
+                  assignee: e.target.value
+                })
+              }}
+              required
+            >
+              <MenuItem></MenuItem>
               {userInfo?.friendList.map((friend, index) => {
                 const fullName = [friend.firstName, friend.lastName].join(" ")
-                return <option key={index} value={friend.email}>{fullName}</option>
+                return < MenuItem key={index} value={friend.email} >{fullName}</MenuItem>
               })}
-            </select>
-          </div>
+            </Select>
+          </FormControl>
           <div className='group-btn'>
             <Button onClick={() => setIsOpen(false)} variant="contained">Annuler</Button>
             <Button type='submit' variant="contained">Créer</Button>
