@@ -11,6 +11,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 
+import './style.css';
+import moment from 'moment';
 interface IProps {
     message: INMessage
     own: boolean
@@ -20,6 +22,8 @@ interface IProps {
 const Index = ({ message, own, date }: IProps) => {
     const { userInfo } = useAppSelector(selectUser)
     const todayDate = new Date()
+    const yesterday = new Date(todayDate)
+    yesterday.setDate(yesterday.getDate() - 1);
     const formatedDate = new Date(date)
     const hours = formatedDate.getHours()
     const minutes = formatedDate.getMinutes()
@@ -35,7 +39,6 @@ const Index = ({ message, own, date }: IProps) => {
     };
 
     return (
-        // <li className={own ? "reply" : "sender"}>
         <li>
             <div className='flex justify-content flex-end'>
                 {own ? !userInfo?.avatar ?
@@ -48,7 +51,16 @@ const Index = ({ message, own, date }: IProps) => {
                         <Avatar alt="Remy Sharp" src={`../assets/uploads/${message.sender.avatar}`} sx={{ mr: 2 }} />
                 }
                 <div className='message-content'>
-                    <p>{[hours, minutes].join(":")}</p>
+                    <div>
+                        <p className='msg-author'>{[message.sender.firstName, message.sender.lastName].join(" ")}</p>
+                        {todayDate.toDateString() === formatedDate.toDateString() ?
+                            <p className='msg-timer'>Aujourd’hui à {moment(date).format("HH:mm")}</p> :
+                            yesterday.toDateString() === formatedDate.toDateString() ?
+                                <p className='msg-timer'>Hier à {moment(date).format("HH:mm")}</p>
+                                : <p className='msg-timer'>{moment(date).format("DD/MM/YYYY HH:mm")}</p>}
+                        {/* <p className='msg-timer'>{moment(date).format("DD/MM/YYYY HH:mm")}</p> */}
+                        {/* <p>{[hours, minutes].join(":")}</p> */}
+                    </div>
                     <p className='message-container'>{message.content}</p>
 
                 </div>
@@ -100,7 +112,7 @@ const Index = ({ message, own, date }: IProps) => {
                     }
                 </Menu>
             </div>
-        </li>
+        </li >
     )
 }
 

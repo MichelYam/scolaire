@@ -234,10 +234,10 @@ const Index = () => {
                                     </div>
                                 </div>
                             </div>
+                            {!messages.length && <div className='welcome-msg'>Envoyer lui un message pour commencer la discussion.</div>}
                             <div className='conversation-content'>
                                 <div className="msg-body">
                                     <ul>
-                                        {!messages.length && <span>Envoyer lui un message pour commencer la discussion.</span>}
                                         {messages && messages.map((message, index) =>
                                             // console.log(message.timeStamp)
                                             <div key={index} ref={scrollRef}>

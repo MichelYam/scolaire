@@ -1,0 +1,13 @@
+.message-content div {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+}
+.msg-author{
+    font-size: 18px;
+    font-weight: 500;
+}
+.msg-timer {
+    font-size: 11px;
+    color: rgb(143, 142, 142);
+}

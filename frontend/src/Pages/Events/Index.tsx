@@ -1,10 +1,7 @@
 import React, { createRef, useEffect, useState } from 'react'
 // import { eventMockData } from '../../data/eventsData'
-
-import Calendar from '../../Components/Calendar'
 import Can from '../../Components/Can'
 import { Modal } from '../../Components/Modal'
-import Form from '../../Components/Form'
 import { useAppDispatch, useAppSelector } from '../../Redux/store'
 import { selectEvent, selectUser } from '../../utils/selector'
 import { createEvent, getMyEvents } from '../../Redux/features/event/eventAction'
@@ -13,12 +10,10 @@ import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button'
 import moment from 'moment'
 import FullCalendar from '@fullcalendar/react'
-import { DateSelectArg, formatDate } from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import frLocale from '@fullcalendar/core/locales/fr';
-import './Style.css'
 import InputLabel from '@mui/material/InputLabel'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
@@ -29,6 +24,9 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo/DemoContainer'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs, { Dayjs } from 'dayjs'
 import { DateField } from '@mui/x-date-pickers/DateField'
+import './Style.css'
+
+
 const Index = () => {
   const dispatch = useAppDispatch()
   const { userInfo } = useAppSelector(selectUser)

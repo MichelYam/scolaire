@@ -347,7 +347,12 @@ li.reply .time {
     width: 10%;
 }
 
-.conversation-option i {}
+.welcome-msg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+}
 
 .chat-search {
     display: flex;
