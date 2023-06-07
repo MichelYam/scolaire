@@ -25,8 +25,6 @@ const Index = ({ message, own, date }: IProps) => {
     const yesterday = new Date(todayDate)
     yesterday.setDate(yesterday.getDate() - 1);
     const formatedDate = new Date(date)
-    const hours = formatedDate.getHours()
-    const minutes = formatedDate.getMinutes()
     const dispatch = useAppDispatch()
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -58,8 +56,6 @@ const Index = ({ message, own, date }: IProps) => {
                             yesterday.toDateString() === formatedDate.toDateString() ?
                                 <p className='msg-timer'>Hier à {moment(date).format("HH:mm")}</p>
                                 : <p className='msg-timer'>{moment(date).format("DD/MM/YYYY HH:mm")}</p>}
-                        {/* <p className='msg-timer'>{moment(date).format("DD/MM/YYYY HH:mm")}</p> */}
-                        {/* <p>{[hours, minutes].join(":")}</p> */}
                     </div>
                     <p className='message-container'>{message.content}</p>
 
@@ -117,43 +113,3 @@ const Index = ({ message, own, date }: IProps) => {
 }
 
 export default Index
-
-
-{/* < li className="sender">
-        <p> Hey, Are you there? </p>
-        <span className="time">10:06 am</span>
-    </li>
-    <li className="sender">
-        <p> Hey, Are you there? </p>
-        <span className="time">10:16 am</span>
-    </li>
-    <li className="repaly">
-        <p> Last Minute Festive Packages From Superbreak</p>
-        <span className="time">10:20 am</span>
-    </li>
-    <li className="sender">
-        <p> Hey, Are you there? </p>
-        <span className="time">10:26 am</span>
-    </li>
-    <li className="sender">
-        <p> Hey, Are you there? </p>
-        <span className="time">10:32 am</span>
-    </li>
-    <li className="repaly">
-        <p>Last Minute Festive Packages From Superbreak</p>
-        <span className="time">10:35 am</span>
-    </li>
-    <li>
-        <div className="divider">
-            <h6>Today</h6>
-        </div>
-    </li>
-
-    <li className="repaly">
-        <p> Last Minute Festive Packages From Superbreak</p>
-        <span className="time">10:36 am</span>
-    </li>
-    <li className="repaly">
-        <p>Last Minute Festive Packages From Superbreak</p>
-        <span className="time">junt now</span>
-    </li> */}
