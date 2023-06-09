@@ -38,7 +38,7 @@ const Index = () => {
     const { rooms } = useAppSelector(selectRoom)
     const [email, setEmail] = useState("")
     const [newMessage, setNewMessage] = useState("")
-    const [onlineUsers, setOnlineUsers] = useState([]);
+    const [onlineUsers, setOnlineUsers] = useState<any>([]);
     const [isOpen, setIsOpen] = useState(false)
     const [currentChat, setCurrentChat] = useState<Room>();
     const [typing, setTyping] = useState(false);
@@ -69,13 +69,15 @@ const Index = () => {
 
     useEffect(() => {
         socket.current?.emit("addUser", userInfo?._id);
-        // socket.current?.on("getUsers", (users) => {
-        //     setOnlineUsers(
-        //         userInfo?.friendsList.filter((f) => users.some((u: { userId: any; }) => u.userId === f))
-        //     );
-        // });
-    }, [userInfo]);
+    }, []);
 
+    // useEffect(() => {
+    //     socket.current.on("getUsers", users => {
+    //         // console.log(users);
+    //         setIsOnline(users.some((u) => u.userId === friend._id));
+    //     })
+    // }, [friend._id])
+    // console.log(onlineUsers)
     useEffect(() => {
         dispatch(getMyRooms())
     }, [userInfo?._id]);
@@ -213,7 +215,7 @@ const Index = () => {
                         <div className='contact-list'>
                             {rooms &&
                                 filteredData.map((room, index) =>
-                                    <Conversation key={index} currentChat={currentChat} conversation={room} currentUser={userInfo} onClick={() => setCurrentChat(room)} />
+                                    <Conversation key={index} currentChat={currentChat} conversation={room} currentUser={userInfo} socket={socket} onClick={() => setCurrentChat(room)} onlineUsers={onlineUsers} />
                                 )
                             }
                         </div>

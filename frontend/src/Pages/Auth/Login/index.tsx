@@ -8,7 +8,6 @@ import './style.css';
 
 const Index = () => {
     const { userToken, error } = useAppSelector(selectUser)
-    console.log(error)
     if (userToken) return <Navigate to="/dashboard" />;
     return (
         <div className='login'>
