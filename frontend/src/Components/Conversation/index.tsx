@@ -1,12 +1,10 @@
-import React, { RefObject, useEffect, useRef, useState } from 'react'
+import React, { RefObject, useEffect, useState } from 'react'
 import { IUser } from '../../Interfaces';
 import { Room } from '../../Redux/features/room/roomSlice';
 import './style.css';
 import Avatar from '@mui/material/Avatar';
 import { deepOrange } from '@mui/material/colors';
-import { Socket, io } from 'socket.io-client';
-import { useAppSelector } from '../../Redux/store';
-import { selectUser } from '../../utils/selector';
+import { Socket } from 'socket.io-client';
 import Badge from '@mui/material/Badge';
 import { styled } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
@@ -20,7 +18,15 @@ interface IProps {
 
 }
 
-const StyledBadge = styled(Badge)(({ theme }) => ({
+const StyledOnlineBadge = styled(Badge)(({ theme }) => ({
+    '& .MuiBadge-badge': {
+        backgroundColor: '#44b700',
+        color: '#44b700',
+        // color: '#44b700',
+        boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    },
+}));
+const StyledOfflineBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
         backgroundColor: '#CBCBCB',
         color: '#44b700',
@@ -42,41 +48,56 @@ const Index = ({ conversation, currentUser, onClick, currentChat, socket }: IPro
 
     useEffect(() => {
         socket.current?.on("getUsers", users => {
-            console.log(users)
             setIsOnline(users.some((u: any) => u.userId === friend?._id));
         });
-        console.log("users", isOnline);
     }, [friend?._id]);
 
-    // console.log("isOnline", isOnline)
     return (
         <div key={currentUser?._id} className={`contact ${currentChat?._id === conversation?._id ? "active" : ""}`} onClick={onClick}>
             {
                 !friend?.avatar ?
-                    <StyledBadge
+                    isOnline ?
+                        < StyledOnlineBadge
 
-                        overlap="circular"
-                        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                        variant="dot"
-                    >
-                        <Avatar sx={{ bgcolor: deepOrange[500] }}>N</Avatar>
-                        {isOnline && <p>je suis connecté</p>}
-                    </StyledBadge>
+                            overlap="circular"
+                            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                            variant="dot"
+                        >
+                            <Avatar sx={{ bgcolor: deepOrange[500] }}>N</Avatar>
+                        </StyledOnlineBadge>
+                        :
+                        < StyledOfflineBadge
+
+                            overlap="circular"
+                            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                            variant="dot"
+                        >
+                            <Avatar sx={{ bgcolor: deepOrange[500] }}>N</Avatar>
+                        </StyledOfflineBadge>
                     :
-                    <StyledBadge
-                        overlap="circular"
-                        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                        variant="dot"
-                    >
-                        <Avatar src={`../assets/uploads/${friend?.avatar}`} />
-                        {isOnline && <p>je suis connecté</p>}
-                    </StyledBadge>
+                    isOnline ?
+                        < StyledOnlineBadge
+
+                            overlap="circular"
+                            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                            variant="dot"
+                        >
+                            <Avatar src={`../assets/uploads/${friend?.avatar}`} />
+                        </StyledOnlineBadge>
+                        :
+                        <StyledOfflineBadge
+                            overlap="circular"
+                            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                            variant="dot"
+                        >
+                            <Avatar src={`../assets/uploads/${friend?.avatar}`} />
+                        </StyledOfflineBadge>
             }
             <div className="contact-info">
                 <p>{[friend?.firstName, friend?.lastName].join(" ")}</p>
                 {/* <span>{conversation.latestMessage?.content}</span> */}
             </div>
-        </div>
+        </div >
     )
 }
 

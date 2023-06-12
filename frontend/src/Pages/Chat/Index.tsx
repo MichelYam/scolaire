@@ -71,13 +71,6 @@ const Index = () => {
         socket.current?.emit("addUser", userInfo?._id);
     }, []);
 
-    // useEffect(() => {
-    //     socket.current.on("getUsers", users => {
-    //         // console.log(users);
-    //         setIsOnline(users.some((u) => u.userId === friend._id));
-    //     })
-    // }, [friend._id])
-    // console.log(onlineUsers)
     useEffect(() => {
         dispatch(getMyRooms())
     }, [userInfo?._id]);
