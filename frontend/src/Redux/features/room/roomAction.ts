@@ -3,7 +3,7 @@ import axios from "axios";
 import { IUser } from "../user/userAction";
 import { INMessage } from "../message/messageSlice";
 
-const BASE_URL = "http://localhost:3001/api/v1/room";
+const BASE_URL = "http://localhost:3001/api/v1/rooms";
 
 interface IRoomParams {
     _id: string
@@ -21,7 +21,7 @@ export const createRoom = createAsyncThunk("room/new", async (receiverId: string
                 Authorization: `Bearer ${user.userToken}`
             },
         }
-        const { data } = await axios.post(`${BASE_URL}/new`, { receiverId }, config)
+        const { data } = await axios.post(`${BASE_URL}`, { receiverId }, config)
         return data
     } catch (error: any) {
         if (error.response && error.response.data.message) {
@@ -81,7 +81,7 @@ export const updateRoom = createAsyncThunk("user/updateRoom", async (roomData: I
                 Authorization: `Bearer ${user.userToken}`,
             },
         }
-        const { data } = await axios.put(`${BASE_URL}/profile`, roomData, config);
+        const { data } = await axios.put(`${BASE_URL}/${roomData._id}`, roomData, config);
         // console.log("update:",data)
         return data
     } catch (error: any) {
@@ -97,7 +97,7 @@ export const updateRoom = createAsyncThunk("user/updateRoom", async (roomData: I
 export const deleteRoom = createAsyncThunk('user/delete', async (_id: IRoomParams, { rejectWithValue }) => {
 
     try {
-        const { data } = await axios.delete(`${BASE_URL}/delete/${_id._id}`, { data: _id });
+        const { data } = await axios.delete(`${BASE_URL}/${_id._id}`, { data: _id });
         return data;
     } catch (error: any) {
         if (error.response && error.response.data.message) {

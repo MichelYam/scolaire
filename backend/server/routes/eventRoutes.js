@@ -7,14 +7,14 @@ const { ROLES } = require("../models/User")
 
 
 router.post(
-    '/create',
+    '/',
     tokenValidation.validateToken,
     verifyRoles(ROLES.Tutor, ROLES.Admin),
     eventController.createEvent,
 )
 
 router.get(
-    '/myEvents',
+    '/',
     // tokenValidation.validateToken,
     eventController.getUserEvents
 )
@@ -27,7 +27,7 @@ router.put(
 )
 
 router.delete(
-    "/delete/:id",
+    "/:id",
     // tokenValidation.validateToken,
     verifyRoles(ROLES.Tutor, ROLES.Admin),
     eventController.deleteEvent,

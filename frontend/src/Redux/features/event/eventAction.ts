@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const BASE_URL = "http://localhost:3001/api/v1/event";
+const BASE_URL = "http://localhost:3001/api/v1/events";
 
 interface IEventParams {
     _id?: string
@@ -23,7 +23,7 @@ export const createEvent = createAsyncThunk("event/create", async ({ title, desc
                 Authorization: `Bearer ${user.userToken}`
             },
         }
-        const { data } = await axios.post(`${BASE_URL}/create`, { title, description, date, assignee, createdBy, timetable }, config)
+        const { data } = await axios.post(`${BASE_URL}/`, { title, description, date, assignee, createdBy, timetable }, config)
         // console.log(data);
 
         return data.body
@@ -44,7 +44,7 @@ export const getMyEvents = createAsyncThunk('event/myEvents', async (arg, { reje
                 Authorization: `Bearer ${user.userToken}`
             },
         }
-        const { data } = await axios.get(`${BASE_URL}/myEvents`, config)
+        const { data } = await axios.get(`${BASE_URL}/`, config)
         // console.log(data);
 
         return data
@@ -65,7 +65,7 @@ export const updateEvent = createAsyncThunk("user/updateEvent", async (eventData
                 Authorization: `Bearer ${user.userToken}`,
             },
         }
-        const { data } = await axios.put(`${BASE_URL}/profile`, eventData, config);
+        const { data } = await axios.put(`${BASE_URL}/${eventData._id}`, eventData, config);
         // console.log("update:",data)
         return data
     } catch (error: any) {
@@ -81,7 +81,7 @@ export const updateEvent = createAsyncThunk("user/updateEvent", async (eventData
 export const deleteEvent = createAsyncThunk('user/delete', async (_id: IEventParams, { rejectWithValue }) => {
 
     try {
-        const { data } = await axios.delete(`${BASE_URL}/delete/${_id._id}`, { data: _id });
+        const { data } = await axios.delete(`${BASE_URL}/${_id._id}`, { data: _id });
         return data;
     } catch (error: any) {
         if (error.response && error.response.data.message) {

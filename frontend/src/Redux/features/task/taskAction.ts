@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const BASE_URL = "http://localhost:3001/api/v1/task";
+const BASE_URL = "http://localhost:3001/api/v1/tasks";
 
 interface ITaskParams {
     _id?: string
@@ -22,7 +22,7 @@ export const createTask = createAsyncThunk("task/create", async ({ title, descri
                 Authorization: `Bearer ${user.userToken}`
             },
         }
-        const { data } = await axios.post(`${BASE_URL}/create`, { title, description, dateDue, assignee, createdBy }, config)
+        const { data } = await axios.post(`${BASE_URL}`, { title, description, dateDue, assignee, createdBy }, config)
         // console.log(data);
 
         return data.body
@@ -43,7 +43,7 @@ export const getMyTasks = createAsyncThunk('task/myTasks', async (arg, { rejectW
                 Authorization: `Bearer ${user.userToken}`
             },
         }
-        const { data } = await axios.post(`${BASE_URL}/myTasks`, arg, config)
+        const { data } = await axios.post(`${BASE_URL}/`, arg, config)
         // console.log(data);
 
         return data
@@ -101,7 +101,7 @@ export const updateTask = createAsyncThunk("user/updateTask", async (taskData: I
 export const deleteTask = createAsyncThunk('user/delete', async (_id: ITaskParams, { rejectWithValue }) => {
 
     try {
-        const { data } = await axios.delete(`${BASE_URL}/delete/${_id._id}`, { data: _id });
+        const { data } = await axios.delete(`${BASE_URL}/${_id._id}`, { data: _id });
         return data;
     } catch (error: any) {
         if (error.response && error.response.data.message) {

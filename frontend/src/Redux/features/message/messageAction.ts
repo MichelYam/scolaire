@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { IUser } from "../../../Interfaces";
 
-const BASE_URL = "http://localhost:3001/api/v1/message";
+const BASE_URL = "http://localhost:3001/api/v1/messages";
 
 interface IMessageParams {
     _id?: string
@@ -12,7 +12,7 @@ interface IMessageParams {
     timestamps?: string
 }
 
-export const createMessage = createAsyncThunk("task/create", async ({ roomId, sender, content }: IMessageParams, { rejectWithValue, getState }) => {
+export const createMessage = createAsyncThunk("message/create", async ({ roomId, sender, content }: IMessageParams, { rejectWithValue, getState }) => {
 
     const { user }: any = getState()
     try {
@@ -21,7 +21,7 @@ export const createMessage = createAsyncThunk("task/create", async ({ roomId, se
                 Authorization: `Bearer ${user.userToken}`
             },
         }
-        const { data } = await axios.post(`${BASE_URL}/new`, { roomId, sender, content }, config)
+        const { data } = await axios.post(`${BASE_URL}/`, { roomId, sender, content }, config)
         return data.body
     } catch (error: any) {
         if (error.response && error.response.data.message) {
@@ -61,7 +61,7 @@ export const updateMessage = createAsyncThunk('message/updateMessage', async (_i
                 Authorization: `Bearer ${user.userToken}`
             },
         }
-        const { data } = await axios.put(`${BASE_URL}/update/${_id}`, config)
+        const { data } = await axios.put(`${BASE_URL}/${_id}`, config)
         // console.log(data);
 
         return data
@@ -82,7 +82,7 @@ export const deleteMessage = createAsyncThunk('message/deleteMessage', async (_i
                 Authorization: `Bearer ${user.userToken}`
             },
         }
-        const { data } = await axios.delete(`${BASE_URL}/delete/${_id}`, config)
+        const { data } = await axios.delete(`${BASE_URL}/${_id}`, config)
         // console.log(data);
 
         return data

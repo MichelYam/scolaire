@@ -104,7 +104,7 @@ const Index = () => {
                             <div key={index} className={`todo ${index % 2 === 0 ? "even" : ""}`}>
                                 <p className='todo-description'>{task.description}</p>
                                 <p>par {task.createdBy}</p>
-                                <p>{moment(task.dateDue).format("DD/MM/YYYY")}</p>
+                                <p>{task.dateDue}</p>
                             </div>
                         ))}
                     </div>

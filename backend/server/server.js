@@ -25,11 +25,11 @@ app.use(express.json({ extended: false }))
 app.use(express.urlencoded({ extended: true }))
 
 // Handle custom routes
-app.use('/api/v1/user', require('./routes/userRoutes'))
-app.use('/api/v1/task', require('./routes/taskRoutes'))
-app.use('/api/v1/event', require('./routes/eventRoutes'))
-app.use('/api/v1/room', require('./routes/roomRoutes'))
-app.use('/api/v1/message', require('./routes/messageRoutes'))
+app.use('/api/v1/users', require('./routes/userRoutes'))
+app.use('/api/v1/tasks', require('./routes/taskRoutes'))
+app.use('/api/v1/events', require('./routes/eventRoutes'))
+app.use('/api/v1/rooms', require('./routes/roomRoutes'))
+app.use('/api/v1/messages', require('./routes/messageRoutes'))
 // app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use("/images", express.static("images"));
 // API Documentation

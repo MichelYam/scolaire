@@ -3,7 +3,7 @@ import axios from "axios";
 import { saveStorage } from "../../../utils/TokenStorage";
 import { INotification } from "../../../Interfaces";
 
-const BASE_URL = "http://localhost:3001/api/v1/user";
+const BASE_URL = "http://localhost:3001/api/v1/users";
 
 export interface IUser {
     _id?: string

@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { IUser } from "../user/userAction";
 
-const BASE_URL = "http://localhost:3001/api/v1/notification";
+const BASE_URL = "http://localhost:3001/api/v1/notifications";
 
 interface INotificationParams {
     _id: string
@@ -19,7 +19,7 @@ export const sendFriendRequest = createAsyncThunk("notification/new", async (rec
                 Authorization: `Bearer ${user.userToken}`
             },
         }
-        const { data } = await axios.post(`${BASE_URL}/new`, receiverId, config)
+        const { data } = await axios.post(`${BASE_URL}`, receiverId, config)
         // console.log(data);
 
         return data
@@ -60,7 +60,7 @@ export const acceptFriendRequest = createAsyncThunk("notification/new", async (r
                 Authorization: `Bearer ${user.userToken}`
             },
         }
-        const { data } = await axios.post(`${BASE_URL}/new`, receiverId, config)
+        const { data } = await axios.post(`${BASE_URL}`, receiverId, config)
         // console.log(data);
 
         return data.body
@@ -75,7 +75,7 @@ export const acceptFriendRequest = createAsyncThunk("notification/new", async (r
 export const rejectFriendRequest = createAsyncThunk('notification/delete', async (id: INotificationParams, { rejectWithValue }) => {
 
     try {
-        const { data } = await axios.delete(`${BASE_URL}/delete/${id._id}`, { data: id });
+        const { data } = await axios.delete(`${BASE_URL}/${id._id}`, { data: id });
         return data;
     } catch (error: any) {
         if (error.response && error.response.data.message) {

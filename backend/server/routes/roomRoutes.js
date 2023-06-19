@@ -17,12 +17,12 @@ router.get(
     roomController.getUserRoomByID
 )
 router.post(
-    '/new',
+    '/',
     tokenValidation.validateToken,
     roomController.createRoom
 )
 router.put(
-    '/updateRoom',
+    '/',
     roomController.updateRoom
 )
 // router.put(
