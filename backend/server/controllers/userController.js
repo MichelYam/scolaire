@@ -24,7 +24,10 @@ module.exports.loginUser = async (req, res) => {
     response.message = "User successfully logged in";
     response.body = responseFromService;
     console.log("responseFromService", responseFromService);
-    res.cookie("jwt", responseFromService.token, {secure: true, httpOnly: true})
+    res.cookie("jwt", responseFromService.token, {
+      secure: true,
+      httpOnly: true,
+    });
   } catch (error) {
     console.error("Error in loginUser (userController.js)");
     response.status = 400;

@@ -19,7 +19,7 @@
     background: #3e5475;
 }
 
-.form-control {
+/* .form-control {
     display: block;
     width: 100%;
     padding: 0.375rem 0.75rem;
@@ -33,16 +33,16 @@
     appearance: none;
     border-radius: 0.375rem;
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-}
+} */
 
-.form-group {
+/* .form-group {
     padding: 0 12px;
 }
 
 .form-group label {
     display: block;
     margin: 16px 0 10px 0;
-}
+} */
 
 .row {
     display: flex;
@@ -151,7 +151,7 @@
     width: 100%;
 }
 
-.control-input {
+/* .control-input {
     display: flex;
     flex-direction: column;
     margin-bottom: 10px;
@@ -173,7 +173,7 @@
     width: 250px;
     outline: none;
     margin: 0;
-}
+} */
 
 .group-btn {
     width: 100%;
@@ -192,4 +192,3 @@
 .align-items-center {
     align-items: center;
 }
-

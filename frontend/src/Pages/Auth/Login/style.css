@@ -37,6 +37,12 @@
     justify-content: center;
 }
 
+.form-button {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
 .legends {
     width: 100%;
     height: 100%;
@@ -55,11 +61,13 @@
 .legends span {
     font-size: 42px;
 }
+
 .legends img {
     width: 490px;
     height: 410px;
     object-fit: cover;
 }
+
 .message-help {
     margin-top: 10px;
     color: #478FFB;

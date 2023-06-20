@@ -19,7 +19,7 @@
     object-fit: cover;
 }
 
-.form-group, .form-group-btn {
+/* .form-group, .form-group-btn {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -38,7 +38,7 @@
     border-radius: 5px;
     border: none;
     background-color: #ddd;
-}
+} */
 
 .register-btn {
     display: flex;

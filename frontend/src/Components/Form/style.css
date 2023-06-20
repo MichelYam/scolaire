@@ -15,7 +15,7 @@ form {
     font-size: 24px;
 }
 
-.form-group input {
+/* .form-group input {
     height: 60px;
     padding: 0 10px;
     font-size: 24px;
@@ -26,7 +26,7 @@ form {
 
 .form-group input:focus {
     outline: none;
-}
+} */
 
 .form-group-btn {
     align-items: center;

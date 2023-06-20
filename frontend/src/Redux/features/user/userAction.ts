@@ -10,12 +10,12 @@ export interface IUser {
     email?: string
     password?: string
     avatar?: string
-    firstName: string
-    lastName: string
-    country: string;
-    city: string;
-    dateOfBirth: string;
-    codePostal: string;
+    firstName?: string
+    lastName?: string
+    country?: string;
+    city?: string;
+    dateOfBirth?: string;
+    codePostal?: string;
     phone?: string;
     bio?: string;
     friendList?: IUser[]

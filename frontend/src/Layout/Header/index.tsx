@@ -8,7 +8,7 @@ import { io, Socket } from 'socket.io-client';
 import { useAppDispatch, useAppSelector } from '../../Redux/store';
 import { selectUser } from '../../utils/selector';
 // import { deleteNotification } from '../../Redux/features/notification/notificationAction';
-import { acceptFriendRequest, rejectFriendRequest, getFriendRequest } from '../../Redux/features/user/userAction';
+import { acceptFriendRequest, rejectFriendRequest, getFriendRequest, getUserDetails } from '../../Redux/features/user/userAction';
 import { createRoom } from '../../Redux/features/room/roomAction';
 import Avatar from '@mui/material/Avatar';
 import { red } from '@mui/material/colors';
@@ -31,11 +31,8 @@ interface IProps {
 type INotification = string[]
 
 const Index = ({ logout, sidebarOnClose }: IProps) => {
-    const [isOpen, setIsOpen] = useState(false)
-    const [dropdown, setDropdown] = useState(null);
     const socket = useRef<Socket>();
     const { notifications } = useAppSelector(selectUser)
-    const dropdownRef = useRef<HTMLLIElement>(null)
     const { userInfo } = useAppSelector(selectUser)
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [notificaitonAnchorEl, setNotificationAnchorEl] =
@@ -47,7 +44,9 @@ const Index = ({ logout, sidebarOnClose }: IProps) => {
     useEffect(() => {
         socket.current = io("ws://localhost:8900");
     }, []);
-
+    useEffect(() => {
+        dispatch(getUserDetails())
+    }, [])
     // useEffect(() => {
     //     socket.current?.on("getNotification", (data) => {
     //         // setNotifications((prev) => [...prev, data]);
@@ -100,7 +99,7 @@ const Index = ({ logout, sidebarOnClose }: IProps) => {
         <div className='menu-top'>
             <div className="home-content">
                 <i className='bx bx-menu' onClick={sidebarOnClose} />
-                <span className="text">Drop Down Sidebar</span>
+                {/* <span className="text">Drop Down Sidebar</span> */}
             </div>
             <div className='topmenu'>
                 <Button

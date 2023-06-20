@@ -12,11 +12,11 @@ router.post(
   taskController.createTask
 );
 
-router.post("/", tokenValidation.validateToken, taskController.getUserTasks);
+router.get("/", tokenValidation.validateToken, taskController.getUserTasks);
 
 router.get("/:id", tokenValidation.validateToken, taskController.getTaskById);
 
-router.post(
+router.get(
   "/myTasksAssignee",
   tokenValidation.validateToken,
   taskController.getUserTasksAssignee

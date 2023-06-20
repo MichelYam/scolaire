@@ -58,15 +58,15 @@ module.exports.createUser = async (req, res) => {
   }
 };
 
-module.exports.loginUser = async (serviceData) => {
+module.exports.loginUser = async (data) => {
   try {
-    const user = await User.findOne({ email: serviceData.email });
+    const user = await User.findOne({ email: data.email });
 
     if (!user) {
       throw new Error("Ce compte n'existe pas");
     }
 
-    const isValid = await bcrypt.compare(serviceData.password, user.password);
+    const isValid = await bcrypt.compare(data.password, user.password);
 
     if (!isValid) {
       throw new Error("Le mot de passe est incorrect");
@@ -89,10 +89,10 @@ module.exports.loginUser = async (serviceData) => {
   }
 };
 
-module.exports.getUserProfile = async (serviceData) => {
-  // console.log(serviceData.headers.authorization.split('Bearer')[1].trim())
+module.exports.getUserProfile = async (data) => {
+  // console.log(data.headers.authorization.split('Bearer')[1].trim())
   try {
-    const jwtToken = serviceData.headers.authorization
+    const jwtToken = data.headers.authorization
       .split("Bearer")[1]
       .trim();
     const decodedJwtToken = jwt.decode(jwtToken);

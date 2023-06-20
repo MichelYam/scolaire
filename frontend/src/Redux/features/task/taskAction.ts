@@ -43,7 +43,7 @@ export const getMyTasks = createAsyncThunk('task/myTasks', async (arg, { rejectW
                 Authorization: `Bearer ${user.userToken}`
             },
         }
-        const { data } = await axios.post(`${BASE_URL}/`, arg, config)
+        const { data } = await axios.get(`${BASE_URL}/`, config)
         // console.log(data);
 
         return data

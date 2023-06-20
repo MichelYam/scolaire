@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import SideBar from '../../Components/SideBar/index';
 
 import { contactMockData } from '../../data/mockData'
 import Conversation from '../../Components/Conversation/index'
@@ -9,7 +8,6 @@ import { selectMessage, selectRoom, selectUser } from '../../utils/selector';
 import { createRoom, getMyRooms } from '../../Redux/features/room/roomAction';
 
 import { Modal } from '../../Components/Modal';
-import InputField from '../../Components/Form/inputField';
 import { io, Socket } from 'socket.io-client';
 import { createMessage, getMessages } from '../../Redux/features/message/messageAction';
 import { sendFriendRequest } from '../../Redux/features/user/userAction';

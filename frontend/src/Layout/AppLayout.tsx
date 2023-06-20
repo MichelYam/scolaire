@@ -11,13 +11,11 @@ import Header from "./Header";
 import "./style.css";
 const AppLayout = () => {
     const dispatch = useAppDispatch()
-    const [sidebarOpen, setSidebarOpen] = useState(false)
+    const [sidebarOpen, setSidebarOpen] = useState(true)
     const logOut = () => { dispatch(logout()) }
 
     useEffect(() => {
-        // if (userToken) {
         dispatch(getUserDetails())
-        // }
     }, [])
     return (
         <>

@@ -32,11 +32,11 @@ app.use(
 );
 
 // Handle custom routes
-app.use('/api/v1/user', require('./server/routes/userRoutes'))
-app.use('/api/v1/task', require('./server/routes/taskRoutes'))
-app.use('/api/v1/event', require('./server/routes/eventRoutes'))
-app.use('/api/v1/room', require('./server/routes/roomRoutes'));
-app.use('/api/v1/message', require('./server/routes/messageRoutes'))
+app.use('/api/v1/users', require('./server/routes/userRoutes'))
+app.use('/api/v1/tasks', require('./server/routes/taskRoutes'))
+app.use('/api/v1/events', require('./server/routes/eventRoutes'))
+app.use('/api/v1/rooms', require('./server/routes/roomRoutes'));
+app.use('/api/v1/messages', require('./server/routes/messageRoutes'))
 
 // API Documentation
 // if (process.env.NODE_ENV !== 'production') {

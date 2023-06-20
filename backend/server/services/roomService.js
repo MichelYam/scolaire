@@ -63,29 +63,29 @@ module.exports.getUserRoomByID = async (req) => {
     }
 }
 
-module.exports.updateRoom = async serviceData => {
-    try {
-        const jwtToken = serviceData.headers.authorization.split('Bearer')[1].trim()
-        const decodedJwtToken = jwt.decode(jwtToken)
-        const task = await User.findOneAndUpdate(
-            { _id: decodedJwtToken.id },
-            {
-                firstName: serviceData.body.firstName,
-                lastName: serviceData.body.lastName
-            },
-            { new: true }
-        )
+// module.exports.updateRoom = async serviceData => {
+//     try {
+//         const jwtToken = serviceData.headers.authorization.split('Bearer')[1].trim()
+//         const decodedJwtToken = jwt.decode(jwtToken)
+//         const task = await User.findOneAndUpdate(
+//             { _id: decodedJwtToken.id },
+//             {
+//                 firstName: serviceData.body.firstName,
+//                 lastName: serviceData.body.lastName
+//             },
+//             { new: true }
+//         )
 
-        if (!task) {
-            throw new Error('Room not found!')
-        }
+//         if (!task) {
+//             throw new Error('Room not found!')
+//         }
 
-        return task.toObject()
-    } catch (error) {
-        console.error('Error in taskService.js', error)
-        throw new Error(error)
-    }
-}
+//         return task.toObject()
+//     } catch (error) {
+//         console.error('Error in taskService.js', error)
+//         throw new Error(error)
+//     }
+// }
 
 module.exports.deleteRoom = async req => {
     try {

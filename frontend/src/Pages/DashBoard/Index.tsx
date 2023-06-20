@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../Redux/store';
-import { selectEvent, selectTask } from '../../utils/selector';
+import { selectEvent, selectTask, selectUser } from '../../utils/selector';
 import { getMyTasks } from '../../Redux/features/task/taskAction';
 import { getMyEvents } from '../../Redux/features/event/eventAction';
 import moment from 'moment';
