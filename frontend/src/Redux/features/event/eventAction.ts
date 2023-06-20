@@ -16,7 +16,7 @@ interface IEventParams {
 export const createEvent = createAsyncThunk("event/create", async ({ title, description, assignee, date, timetable }: IEventParams, { rejectWithValue, getState }) => {
 
     const { user }: any = getState()
-    const createdBy = user.userInfo.email
+    const createdBy = [user.userInfo.firstName, user.userInfo.lastName].join(" ")
     try {
         const config = {
             headers: {

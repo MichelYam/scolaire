@@ -15,7 +15,7 @@ interface ITaskParams {
 export const createTask = createAsyncThunk("task/create", async ({ title, description, assignee, dateDue }: ITaskParams, { rejectWithValue, getState }) => {
 
     const { user }: any = getState()
-    const createdBy = user.userInfo.email
+    const createdBy = [user.userInfo.firstName, user.userInfo.lastName].join(" ")
     try {
         const config = {
             headers: {

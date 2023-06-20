@@ -76,7 +76,9 @@
 }
 
 .todo .todo-description {
-    width: 65%;
+    /* overflow: hidden; */
+    text-overflow: ellipsis;
+    width: 50%;
 }
 
 .todo.even {
@@ -112,6 +114,7 @@
     font-size: 18px;
     line-height: 22px;
 }
+
 .dashboard-conversations-messages-list .flex .contact-info span {
     color: #AAAAAA;
     font-style: normal;
