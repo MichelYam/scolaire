@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { createTask, deleteTask, getMyTasks, getMyTasksAssignee } from "./taskAction"
+import { createTask, deleteTask, getMyTasks, getMyTasksCreated } from "./taskAction"
+import { IUser } from "../../../Interfaces";
 
 
 export interface Task {
@@ -8,7 +9,7 @@ export interface Task {
     description: string,
     assignee: string,
     dateDue: string,
-    createdBy: string,
+    createdBy: IUser,
     date: string;
     status: string,
     type: 'Task'
@@ -60,16 +61,16 @@ const taskSlice = createSlice({
                 state.error = payload
             })
             // get user tasks assignee
-            .addCase(getMyTasksAssignee.pending, (state) => {
+            .addCase(getMyTasksCreated.pending, (state) => {
                 state.loading = true
                 state.error = null
             })
-            .addCase(getMyTasksAssignee.fulfilled, (state, { payload }: any) => {
+            .addCase(getMyTasksCreated.fulfilled, (state, { payload }: any) => {
                 state.loading = false
                 state.tasks = payload?.body
                 state.error = null
             })
-            .addCase(getMyTasksAssignee.rejected, (state, { payload }: any) => {
+            .addCase(getMyTasksCreated.rejected, (state, { payload }: any) => {
                 state.loading = false
                 state.error = payload
             })

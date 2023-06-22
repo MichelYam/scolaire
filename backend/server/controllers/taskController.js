@@ -48,10 +48,11 @@ module.exports.getTaskById = async (req, res) => {
   return res.status(response.status).send(response);
 };
 
-module.exports.getUserTasksAssignee = async (req, res) => {
+module.exports.getUserTasksCreated = async (req, res) => {
   let response = {};
+  console.log("ceci est un test")
   try {
-    const responseFromService = await taskService.getUserTasksAssignee(req);
+    const responseFromService = await taskService.getUserTasksCreated(req);
     response.status = 200;
     response.message = "Successfully got user tasks";
     response.body = responseFromService;

@@ -103,7 +103,7 @@ const Index = () => {
                         {tasks.map((task, index) => (
                             <div key={index} className={`todo ${index % 2 === 0 ? "even" : ""}`}>
                                 <p className='todo-description'>{task.description}</p>
-                                <p>par {task.createdBy}</p>
+                                <p>par {[task.createdBy.firstName, task.createdBy.lastName].join(" ")}</p>
                                 <p>{task.dateDue}</p>
                             </div>
                         ))}

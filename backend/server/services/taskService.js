@@ -1,6 +1,6 @@
 const Task = require("../models/task");
 const jwt = require("jsonwebtoken");
-
+const mongoose = require("mongoose");
 module.exports.createTask = async (req) => {
   const emptyFields = [];
   const { title, assignee, dateDue } = req.body;
@@ -33,27 +33,8 @@ module.exports.getUserTasks = async (req) => {
     const tasks = await Task.find({
       assignee: decodedJwtToken.email,
       status: "en cours",
-    });
-    // const tasks = await Task.aggregate([
-    //     {
+    }).populate("createdBy");
 
-    //         $match: {
-    //             assignee: decodedJwtToken.email,
-    //             status: "en cours",
-    //         }
-    //     },
-    //     {
-    //         $project: {
-    //             title: "$title",
-    //             description: "$description",
-    //             assignee: "$assignee",
-    //             status: "$status",
-    //             createdBy: "$createdBy",
-    //             dateDue: "$dateDue",
-    //             date: { $dateToString: { format: "%d/%m/%Y", date: "$date" } },
-    //         }
-    //     }
-    // ])
     if (!tasks) {
       throw new Error("Tasks not found!");
     }
@@ -78,28 +59,15 @@ module.exports.getTaskById = async (req) => {
   }
 };
 
-module.exports.getTaskById = async (req) => {
+module.exports.getUserTasksCreated = async (req) => {
+  // const jwtToken = req.headers.authorization.split("Bearer")[1].trim();
+  // const decodedJwtToken = jwt.decode(jwtToken);
   const { id } = req.params;
-  try {
-    const tasks = await Task.find({ _id: id });
-    if (!tasks) {
-      throw new Error("Tasks not found!");
-    }
-    return tasks;
-  } catch (error) {
-    console.error("Error in userService.js", error);
-    throw new Error(error);
-  }
-};
-
-module.exports.getUserTasksAssignee = async (req) => {
-  const jwtToken = req.headers.authorization.split("Bearer")[1].trim();
-  const decodedJwtToken = jwt.decode(jwtToken);
   try {
     const tasks = await Task.find({
-      createdBy: decodedJwtToken.email,
+      createdBy: id,
       status: "en cours",
-    });
+    }).populate("createdBy");
     if (!tasks) {
       throw new Error("Tasks not found!");
     }

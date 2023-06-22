@@ -5,30 +5,30 @@ const Schema = mongoose.Schema;
 const TaskSchema = new Schema({
   title: {
     type: String,
-    required: true
+    required: true,
   },
   description: {
     type: String,
   },
   dateDue: {
-    type: String
+    type: String,
   },
   assignee: {
     type: String,
-    required: true
+    required: true,
   },
   createdBy: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
   },
   status: {
     type: String,
-    default: "en cours"
+    default: "en cours",
   },
   date: {
     type: Date,
-    default: Date.now()
-  }
-}
-);
+    default: Date.now(),
+  },
+});
 
 module.exports = Task = mongoose.model("task", TaskSchema);

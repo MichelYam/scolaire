@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Modal } from '../../Components/Modal'
 import { useAppDispatch, useAppSelector } from '../../Redux/store'
-import { createTask, deleteTask, getMyTasks, getMyTasksAssignee } from "../../Redux/features/task/taskAction"
+import { createTask, deleteTask, getMyTasks, getMyTasksCreated } from "../../Redux/features/task/taskAction"
 import { selectTask, selectUser } from '../../utils/selector'
 import { Task } from '../../Redux/features/task/taskSlice'
 import TaskView from './task'
@@ -36,8 +36,8 @@ const Index = () => {
   })
 
   useEffect(() => {
-    if (userInfo?.role === "Tutor") {
-      dispatch(getMyTasksAssignee())
+    if (userInfo?.role.toLocaleLowerCase() === "tutor") {
+      dispatch(getMyTasksCreated())
     } else {
       dispatch(getMyTasks())
     }
@@ -87,7 +87,8 @@ const Index = () => {
             <div className='task-list'>
               {!tasks.length && <span>Vous n'avez pas de devoir pour l'instant</span>}
               {filteredData.map((task, index) => {
-                const isSamePerson = task.createdBy === userInfo?.email ? "moi" : task.createdBy
+                // console.log(task)
+                const isSamePerson = task.createdBy._id === userInfo?._id ? "moi" : [task.createdBy.firstName, task.createdBy.lastName].join(" ")
                 return <div key={index} className='task' onClick={() => setCurrentTask(task)}>
                   <div className='task-content'>
                     <div className='task-description'>

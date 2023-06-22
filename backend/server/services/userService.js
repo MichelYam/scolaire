@@ -114,14 +114,7 @@ module.exports.getUserProfile = async (data) => {
 
 module.exports.updateUserProfile = async (req) => {
   const file = req.file ? req.file.filename : null;
-  console.log("test", `${req.protocol}://${req.get("host")}/images/${file}`);
-  // console.log("z", req.file)
   try {
-    // const jwtToken = req.headers.authorization.split('Bearer')[1].trim()
-    // const decodedJwtToken = jwt.decode(jwtToken)
-    // var fs = require('fs');
-    // var filePath = 'c:/images/pic.png';
-    // fs.unlinkSync(filePath);
     const user = await User.findOneAndUpdate(
       { _id: req.user.id },
       {

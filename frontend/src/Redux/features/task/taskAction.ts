@@ -15,7 +15,8 @@ interface ITaskParams {
 export const createTask = createAsyncThunk("task/create", async ({ title, description, assignee, dateDue }: ITaskParams, { rejectWithValue, getState }) => {
 
     const { user }: any = getState()
-    const createdBy = [user.userInfo.firstName, user.userInfo.lastName].join(" ")
+    // const createdBy = [user.userInfo.firstName, user.userInfo.lastName].join(" ")
+    const createdBy = user.userInfo._id
     try {
         const config = {
             headers: {
@@ -56,7 +57,7 @@ export const getMyTasks = createAsyncThunk('task/myTasks', async (arg, { rejectW
     }
 })
 
-export const getMyTasksAssignee = createAsyncThunk('task/myTasksAssignee', async (arg, { rejectWithValue, getState }) => {
+export const getMyTasksCreated = createAsyncThunk('task/getMyTasksCreated', async (arg, { rejectWithValue, getState }) => {
     const { user }: any = getState()
     try {
         const config = {
@@ -64,7 +65,7 @@ export const getMyTasksAssignee = createAsyncThunk('task/myTasksAssignee', async
                 Authorization: `Bearer ${user.userToken}`
             },
         }
-        const { data } = await axios.post(`${BASE_URL}/myTasksAssignee`, arg, config)
+        const { data } = await axios.get(`${BASE_URL}/myTasksCreated/${user.userInfo._id}`, config)
         // console.log(data);
 
         return data

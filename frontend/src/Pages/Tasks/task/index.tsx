@@ -9,6 +9,7 @@ import { useAppDispatch } from '../../../Redux/store'
 import moment from 'moment'
 
 import "../style.css"
+import { IUser } from '../../../Interfaces';
 
 interface IProps {
     _id: string
@@ -21,7 +22,7 @@ interface IProps {
     date: string
     dateDue: string
     status: string
-    createdBy: string
+    createdBy: IUser
 }
 
 
@@ -84,7 +85,7 @@ const Index = ({ _id, edit, setEdit, userRole, title, description, assignee, dat
                                 <div className='task-view-assigne'>
                                     <div className='task-assigned'>
                                         <p>Assigné par :</p>
-                                        <Avatar {...stringAvatar(createdBy)} />
+                                        {/* <Avatar {...stringAvatar(createdBy)} /> */}
                                     </div>
                                     <p>Donné a <span>{assignee}</span> le : <span>{date}</span> </p>
                                 </div>
@@ -133,7 +134,7 @@ const Index = ({ _id, edit, setEdit, userRole, title, description, assignee, dat
                             <div className='task-view-assigne'>
                                 <div className='task-assigned'>
                                     <p>Assigné par :</p>
-                                    <Avatar {...stringAvatar(createdBy)} />
+                                    {/* <Avatar {...stringAvatar(createdBy)} /> */}
                                     {/* <p>{createdBy}</p> */}
                                 </div>
                                 <p>Donné a <span>{assignee}</span> le : <span>{moment(date).format('DD/MM/YYYY')}</span> </p>

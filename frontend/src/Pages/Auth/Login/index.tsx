@@ -33,6 +33,7 @@ const Index = () => {
     }
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        // console.log(data)
         dispatch(userLogin(data));
     }
 
@@ -84,7 +85,7 @@ const Index = () => {
                                     <div className='message-help'>Mot de passe oublié ?</div>
                                 </Link>
                                 <FormGroup>
-                                    <FormControlLabel control={<Checkbox onChange={handleChangeValue} />} label="Se sourvenir de moi" />
+                                    <FormControlLabel control={<Checkbox id='remember' name='remember' onChange={handleChangeValue} />} label="Se sourvenir de moi" />
                                 </FormGroup>
                                 <div className='form-button'>
                                     <Button type='submit' variant="contained">Se connecter</Button>

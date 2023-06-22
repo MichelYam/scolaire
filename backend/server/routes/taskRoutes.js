@@ -17,9 +17,9 @@ router.get("/", tokenValidation.validateToken, taskController.getUserTasks);
 router.get("/:id", tokenValidation.validateToken, taskController.getTaskById);
 
 router.get(
-  "/myTasksAssignee",
-  tokenValidation.validateToken,
-  taskController.getUserTasksAssignee
+  "/myTasksCreated/:id",
+  // tokenValidation.validateToken,
+  taskController.getUserTasksCreated
 );
 
 router.put(
@@ -31,7 +31,7 @@ router.put(
 
 router.delete(
   "/:id",
-  // tokenValidation.validateToken,
+  tokenValidation.validateToken,
   verifyRoles(ROLES.Tutor, ROLES.Admin),
   taskController.deleteTask
 );
