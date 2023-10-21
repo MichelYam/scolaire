@@ -101,11 +101,6 @@ const Index = () => {
                       <span className='task-status'>{task.status}</span>
                     </div>
                   </div>
-                  {/* <div className='task-delete'>
-                    <Can I="delete" a="Task">
-                      <DeleteIcon style={{ color: 'red' }} onClick={() => deleteTaskByID(task._id)} />
-                    </Can>
-                  </div> */}
                 </div>
               })}
             </div>

@@ -5,12 +5,14 @@ import CloseIcon from '@mui/icons-material/Close';
 import Button from '@mui/material/Button'
 import { deleteTask, updateTask } from "../../../Redux/features/task/taskAction"
 
-import { useAppDispatch } from '../../../Redux/store'
+import { useAppDispatch, useAppSelector } from '../../../Redux/store'
 import moment from 'moment'
 
 import "../style.css"
 import { IUser } from '../../../Interfaces';
-
+import Can from '../../../Components/Can';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { selectUser } from '../../../utils/selector';
 interface IProps {
     _id: string
     edit: boolean,
@@ -38,6 +40,7 @@ const optionsData = [
 ]
 const Index = ({ _id, edit, setEdit, userRole, title, description, assignee, date, dateDue, status, createdBy }: IProps) => {
     const dispatch = useAppDispatch()
+    const { userInfo } = useAppSelector(selectUser)
     const [data, setData] = useState({
         _id: _id,
         title: title,
@@ -128,14 +131,25 @@ const Index = ({ _id, edit, setEdit, userRole, title, description, assignee, dat
                     <div className='task-container'>
                         <div className='task-view-header'>
                             <h2>{title}</h2>
-                            {userRole === "Tutor" ? <button className='edit' onClick={() => setEdit(!edit)}><EditIcon /></button > : ""}
+                            <div>
+                                {/* {userRole === "Tutor" ? <button className='edit' onClick={() => setEdit(!edit)}><EditIcon /></button > : ""} */}
+                                <Can I="update" a="Task">
+                                    <EditIcon onClick={() => setEdit(!edit)} />
+                                </Can>
+                                {/* <div className='task-delete'> */}
+                                <Can I="delete" a="Task">
+                                    <DeleteIcon style={{ color: 'red' }} onClick={() => deleteTaskByID(_id)} />
+                                </Can>
+                                {/* </div> */}
+                            </div>
                         </div >
                         <div className='task-view-body'>
                             <div className='task-view-assigne'>
                                 <div className='task-assigned'>
                                     <p>Assigné par :</p>
                                     {/* <Avatar {...stringAvatar(createdBy)} /> */}
-                                    {/* <p>{createdBy}</p> */}
+                                    <Avatar src={`../assets/uploads/${userInfo?.avatar}`} sx={{ height: '35px', width: '35px' }} />
+                                    <p>{createdBy._id === userInfo?._id ? "moi" : [createdBy.firstName, createdBy.lastName].join(" ")}</p>
                                 </div>
                                 <p>Donné a <span>{assignee}</span> le : <span>{moment(date).format('DD/MM/YYYY')}</span> </p>
                             </div>
